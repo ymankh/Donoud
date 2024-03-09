@@ -8,10 +8,55 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "public/vite.svg",
-      "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
+      "src": "/icon48.svg",
+      "sizes": "48x48",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "/icon72.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon96.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon128.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon256.svg",
+      "sizes": "256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/Screenshot.png",
+      "sizes": "1297x1011",
+      "type": "image/gif",
+      "form_factor": "wide",
+      "label": "Donoud"
+    },
+    {
+      "src": "/Screenshot.png",
+      "sizes": "1297x1011",
+      "type": "image/gif",
+      "label": "Donoud"
     }
   ]
 }

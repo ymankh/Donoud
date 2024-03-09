@@ -1,0 +1,1 @@
+self.addEventListener('install', event=> console.log("server instated", event))
