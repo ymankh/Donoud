@@ -1,0 +1,17 @@
+{
+  "name": "donoud",
+  "short_name": "DoNoud",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "public/vite.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
