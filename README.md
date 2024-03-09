@@ -1,8 +1,36 @@
-# React + Vite
+# Donoud To-Do List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Donoud is a simple to-do list app built using React. It allows users to create tasks, edit them, and add details to them. The app uses local storage to store the data locally, ensuring that tasks are persisted even after the browser is closed.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create tasks: Users can easily create new tasks to organize their work.
+- Edit tasks: Tasks can be edited to update their titles or details as needed.
+- Add details: Users can add additional details to tasks to provide more context or information.
+- Local storage: Data is stored locally using the browser's local storage, ensuring persistence across sessions.
+
+## Installation
+
+To run the app locally, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Navigate to the project directory.
+3. Install dependencies by running `npm install`.
+4. Start the development server by running `npm run dev`.
+5. Access the app in your browser at `http://localhost:5173`.
+
+## Usage
+
+1. Launch the app in your browser.
+2. Click on the "Add Task" button to create a new task.
+3. Click on a task to edit its title or details.
+4. Use the input fields and buttons provided to make changes.
+5. Changes are automatically saved to local storage.
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or improvements, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.
