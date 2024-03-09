@@ -1,0 +1,53 @@
+.delete {
+  font-size: 0.4rem;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.no-lists {
+  width: 200px;
+  margin-left: 25%;
+}
+
+button .delete {
+  margin-bottom: 3px;
+  width: 1rem;
+  transform: translate(-6.5px, -5px);
+}
+
+.task {
+  transition: 0.1s;
+}
+.task:hover {
+  background: rgb(249, 249, 294, 0.1);
+  border-radius: 10px !important;
+}
+
+#root {
+  background-color: rgb(120, 51, 112);
+  min-height: 100vh;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #000000e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-new {
+  width: clamp(50%, 700px, 90%);
+  height: min(50%, 300px);
+
+  margin: auto;
+  padding: 0 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
