@@ -10,12 +10,19 @@ const TaskLists = () => {
   return (
     <>
       <TaskList tasks={tasks} />
+
       <Container>
-        <Accordion>
-          {oldTasks.map((tasks) => (
-            <OldTaskList key={tasks[0]} tasks={tasks[1]} />
-          ))}
-        </Accordion>
+        <div className="container py-5 h-100">
+          <div className="row  d-flex justify-content-center align-items-center h-100">
+            <div className="col col-lg-8 col-xl-6">
+              <Accordion>
+                {oldTasks.map((tasks) => (
+                  <OldTaskList key={tasks[0]} tasks={tasks[1]} />
+                ))}
+              </Accordion>
+            </div>
+          </div>
+        </div>
       </Container>
     </>
   );
