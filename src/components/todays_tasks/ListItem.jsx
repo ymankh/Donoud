@@ -54,7 +54,7 @@ const ListItem = ({
           className="form-check-input me-3"
           type="checkbox"
           checked={task.done}
-          onChange={() => markTaskFinished(task.id)}
+          onChange={() => markTaskFinished(task)}
         />
         <div className="row" onClick={handleEditTask}>
           <div
@@ -68,7 +68,7 @@ const ListItem = ({
           </div>
         </div>
 
-        <DeleteButton onClick={() => deleteTask(task.id)} />
+        <DeleteButton onClick={() => deleteTask(task)} />
       </motion.li>
     </>
   );

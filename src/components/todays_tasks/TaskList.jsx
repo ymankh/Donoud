@@ -2,13 +2,8 @@ import ListItem from "./ListItem";
 import AddTaskForm from "../AddTaskForm";
 import NoListImage from "../shared/NoListImage";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
 
-const formattedDate = () => {
-  const date = new Date();
-  return `today is ${date.getFullYear()}/${
-    date.getMonth() + 1
-  }/${date.getDate()}`;
-};
 const container = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
@@ -22,7 +17,7 @@ const container = {
 };
 
 // eslint-disable-next-line react/prop-types
-const TaskList = ({ tasks=[{}] }) => {
+const TaskList = ({ tasks = [{}] }) => {
   return (
     <section id="notes">
       <div className="container py-5 h-100 ">
@@ -33,7 +28,9 @@ const TaskList = ({ tasks=[{}] }) => {
                 <p className="mb-2">
                   <span className="h2 me-2">Today&rsquo;s Tasks</span>
                 </p>
-                <p className="text-muted pb-2">{formattedDate()}</p>
+                <p className="text-muted pb-2">
+                  {format(new Date(), "EE, d MMM")}
+                </p>
 
                 <AddTaskForm />
                 <div className="mb-3 form-check"></div>

@@ -17,8 +17,15 @@ function makeTasks(tasks = [{ date: "" }]) {
   return tasks.map((task) => ({ ...task, date: new Date(task.date) }));
 }
 
+// eslint-disable-next-line react/prop-types
 export const TasksContextProvider = ({ children }) => {
-  const todaysTasksName = "tasks" + formattedDate();
+  const [editedTask, setEditedTask] = useState({});
+  const [todaysTasksName, setTodaysTasksName] = useState(
+    "tasks" + formattedDate()
+  );
+  function updateTodaysTaskName() {
+    setTodaysTasksName("tasks" + formattedDate());
+  }
   // Load tasks from local storage or use default tasks if local storage is empty
   let initialTasks = [];
   try {
@@ -30,8 +37,9 @@ export const TasksContextProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState(initialTasks);
   const [oldTasks, setOldTasks] = useState([]);
-  useEffect(() => {
-    // get all old tasks days.
+  const updateOldTasks = () => {
+    updateTodaysTaskName();
+    clearStorageFormEmptyArras()
     try {
       setOldTasks(
         Object.entries(localStorage)
@@ -41,26 +49,54 @@ export const TasksContextProvider = ({ children }) => {
     } catch (error) {
       setOldTasks([]);
     }
-  }, [todaysTasksName]);
+  };
+  useEffect(() => {
+    // get all old tasks days.
+    updateOldTasks();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Save tasks to local storage whenever tasks state changes
   useEffect(() => {
     localStorage.setItem("tasks" + formattedDate(), JSON.stringify(tasks));
   }, [tasks]);
 
-  const markTaskFinished = (id) => {
-    setTasks((previousTasks) => {
-      const newTasks = previousTasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
+  const markTaskFinished = (finishedTask) => {
+    updateTodaysTaskName();
+    console.log(finishedTask);
+    const taskStorageName = getTaskStorageName(finishedTask);
+    if (taskStorageName === todaysTasksName) {
+      setTasks((previous) => {
+        const newTasks = previous.map((task) =>
+          task.id === finishedTask.id ? { ...task, done: !task.done } : task
+        );
+        return newTasks;
+      });
+    } else {
+      const tasks = getTasksByStorageName(taskStorageName);
+      const updatedTasks = tasks.map((task) =>
+        task.id === finishedTask.id ? { ...task, done: !task.done } : task
       );
-      return newTasks;
-    });
+      saveUpdatedTaskInStorage(taskStorageName, updatedTasks);
+    }
   };
 
-  const deleteTask = (id) => {
-    setTasks((previousTasks) => {
-      const newTasks = previousTasks.filter((task) => task.id !== id);
-      return newTasks;
-    });
+  const deleteTask = (deletedTask) => {
+    updateTodaysTaskName();
+    const taskStorageName = getTaskStorageName(deletedTask);
+    if (taskStorageName === todaysTasksName)
+      setTasks((previousTasks) => {
+        const newTasks = previousTasks.filter(
+          (task) => task.id !== deletedTask.id
+        );
+        return newTasks;
+      });
+    else {
+      const taskStorage = getTasksByStorageName(taskStorageName);
+      const updatedTasks = taskStorage.filter(
+        (task) => task.id !== deletedTask.id
+      );
+      saveUpdatedTaskInStorage(taskStorageName, updatedTasks);
+    }
   };
 
   const addTask = (task) => {
@@ -76,26 +112,29 @@ export const TasksContextProvider = ({ children }) => {
     });
   };
 
-  const [editedTask, setEditedTask] = useState({});
+  function saveUpdatedTaskInStorage(taskStorageName, updatedTasks) {
+    if (updatedTasks.length === 0) localStorage.removeItem(taskStorageName);
+    else localStorage.setItem(taskStorageName, JSON.stringify(updatedTasks));
+    updateOldTasks();
+  }
+
+  function getTaskStorageName(task) {
+    return "tasks" + formattedDate(task.date);
+  }
   const saveEditedTask = () => {
-    const storageItemName = "tasks" + formattedDate(editedTask.date);
-    console.log(storageItemName);
-    const updatedTasks = makeTasks(
-      JSON.parse(localStorage.getItem(storageItemName))
-    ).map((task) => (task.id === editedTask.id ? editedTask : task));
-
-    if (todaysTasksName === storageItemName) {
-      setTasks(updatedTasks);
-    } else {
-      setOldTasks((prevues) =>
-        prevues.map((tasks) => tasks[0] === storageItemName)
-          ? [storageItemName, updatedTasks]
-          : tasks
+    updateTodaysTaskName();
+    const taskStorageName = getTaskStorageName(editedTask);
+    if (taskStorageName === todaysTasksName) {
+      setTasks((prevues) =>
+        prevues.map((task) => (task.id === editedTask.id ? editedTask : task))
       );
-      localStorage.setItem(storageItemName, JSON.stringify(updatedTasks));
+    } else {
+      const tasks = getTasksByStorageName(taskStorageName);
+      const updatedTasks = tasks.map((task) =>
+        task.id === editedTask.id ? editedTask : task
+      );
+      saveUpdatedTaskInStorage(taskStorageName, updatedTasks);
     }
-
-    console.log(updatedTasks);
   };
 
   return (
@@ -117,3 +156,17 @@ export const TasksContextProvider = ({ children }) => {
 };
 
 export default TasksContext;
+
+function getTasksByStorageName(taskStorageName) {
+  return makeTasks(JSON.parse(localStorage.getItem(taskStorageName)));
+}
+
+function clearStorageFormEmptyArras(){
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      const value = localStorage.getItem(key);
+      if (!value || value === "null" || value === "undefined" || value === "" || (Array.isArray(value) && value.length === 0) ) {
+        localStorage.removeItem(key);
+      }
+    });
+  }

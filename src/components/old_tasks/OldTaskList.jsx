@@ -17,6 +17,7 @@ const container = {
   },
 };
 
+// eslint-disable-next-line react/prop-types
 const OldTaskList = ({ tasks = [{}] }) => {
   return (
     <section id="notes">
