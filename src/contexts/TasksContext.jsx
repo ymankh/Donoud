@@ -51,7 +51,8 @@ export const TasksContextProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    // get all old tasks days.
+    // get all old tasks days and remove junk.
+    clearStorageFormEmptyArras()
     updateOldTasks();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -164,7 +165,8 @@ function getTasksByStorageName(taskStorageName) {
 function clearStorageFormEmptyArras(){
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
-      const value = localStorage.getItem(key);
+      const value = JSON.parse(localStorage.getItem(key));
+      console.log(value);
       if (!value || value === "null" || value === "undefined" || value === "" || (Array.isArray(value) && value.length === 0) ) {
         localStorage.removeItem(key);
       }

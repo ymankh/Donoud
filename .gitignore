@@ -28,3 +28,6 @@ capacitor.config.json
 
 
 
+
+*.md
+ionic.config.json
