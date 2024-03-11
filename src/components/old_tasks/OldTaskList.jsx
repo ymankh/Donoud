@@ -1,7 +1,7 @@
 import ListItem from "../todays_tasks/ListItem";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-
+import { Accordion } from "react-bootstrap";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -18,32 +18,21 @@ const container = {
 // eslint-disable-next-line react/prop-types
 const OldTaskList = ({ tasks = [{}] }) => {
   return (
-    <section id="notes">
-      <div className="container py-5 h-100 ">
-        <div className="row  d-flex justify-content-center align-items-center h-100">
-          <div className="col col-lg-8 col-xl-6">
-            <div className="card rounded-3">
-              <div className="card-body p-4">
-                <p className="mb-2">
-                  <span className="h5 me-2">{format(tasks[0].date, "E, d MMM")} </span>
-                </p>
-                <div className="mb-3 form-check"></div>
-                <motion.ul
-                  variants={container}
-                  initial="hidden"
-                  animate="visible"
-                  className="list-group rounded-0"
-                >
-                  {tasks.map((task) => (
-                    <ListItem key={task.id} task={task} />
-                  ))}
-                </motion.ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <Accordion.Item eventKey={tasks[0].date}>
+      <Accordion.Header>{format(tasks[0].date, "E, d MMM")} </Accordion.Header>
+      <Accordion.Body>
+        <motion.ul
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="list-group rounded-0"
+        >
+          {tasks.map((task) => (
+            <ListItem key={task.id} task={task} />
+          ))}
+        </motion.ul>
+      </Accordion.Body>
+    </Accordion.Item>
   );
 };
 

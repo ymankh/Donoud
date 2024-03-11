@@ -6,6 +6,7 @@ import { TasksContextProvider } from "./contexts/TasksContext";
 import "bootstrap/dist/css/bootstrap.css";
 import { ModalContextProvider } from "./contexts/ModalContext";
 import ModalComponent from "./components/ModalComponent";
+import Test from "./test/Test";
 
 function App() {
   return (
@@ -13,8 +14,11 @@ function App() {
       <ModalContextProvider>
         <ToastContainer position="top-center" theme="colored" />
         <Navbar />
-        <TaskLists />
-        <ModalComponent />
+         <TaskLists />
+        <div className="container">
+        <Test />
+        </div>
+        <ModalComponent /> 
       </ModalContextProvider>
     </TasksContextProvider>
   );

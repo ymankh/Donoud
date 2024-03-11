@@ -63,7 +63,6 @@ export const TasksContextProvider = ({ children }) => {
 
   const markTaskFinished = (finishedTask) => {
     updateTodaysTaskName();
-    console.log(finishedTask);
     const taskStorageName = getTaskStorageName(finishedTask);
     if (taskStorageName === todaysTasksName) {
       setTasks((previous) => {
@@ -166,7 +165,6 @@ function clearStorageFormEmptyArras(){
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
       const value = JSON.parse(localStorage.getItem(key));
-      console.log(value);
       if (!value || value === "null" || value === "undefined" || value === "" || (Array.isArray(value) && value.length === 0) ) {
         localStorage.removeItem(key);
       }
