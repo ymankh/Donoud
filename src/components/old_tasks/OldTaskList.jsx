@@ -1,10 +1,8 @@
 import ListItem from "../todays_tasks/ListItem";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
 
-const formattedDate = () => {
-  const date = new Date();
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-};
+
 const container = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
@@ -27,7 +25,7 @@ const OldTaskList = ({ tasks = [{}] }) => {
             <div className="card rounded-3">
               <div className="card-body p-4">
                 <p className="mb-2">
-                  <span className="h5 me-2">{formattedDate(tasks[0].date)} tasks</span>
+                  <span className="h5 me-2">{format(tasks[0].date, "E, d MMM")} </span>
                 </p>
                 <div className="mb-3 form-check"></div>
                 <motion.ul
