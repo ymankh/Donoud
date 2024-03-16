@@ -6,7 +6,6 @@ import { TasksContextProvider } from "./contexts/TasksContext";
 import "bootstrap/dist/css/bootstrap.css";
 import { ModalContextProvider } from "./contexts/ModalContext";
 import ModalComponent from "./components/ModalComponent";
-import Test from "./test/Test";
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
         <Navbar />
          <TaskLists />
         <div className="container">
-        <Test />
         </div>
         <ModalComponent /> 
       </ModalContextProvider>

@@ -3,7 +3,7 @@ import TasksContext from "../contexts/TasksContext";
 import { Bounce, toast } from "react-toastify";
 
 function randomEmoji() {
-  const emojis = ["😐", "😑", "🙄", "🙅‍♀️", "🤷‍♂️", "💁‍♂️", "🚶‍♂️","👀", "🤦‍♀️"]
+  const emojis = ["😐", "😑", "😬", "🙄", "🙅‍♀️", "🤷‍♂️", "💁‍♂️", "🚶‍♂️","👀", "🤦‍♀️"]
   return emojis[Math.floor(Math.random() * emojis.length)];
 }
 

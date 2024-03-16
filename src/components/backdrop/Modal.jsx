@@ -30,7 +30,6 @@ const Modal = () => {
   const { saveEditedTask, editedTask, setEditedTask } = useContext(TasksContext);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("This is a form");
     saveEditedTask();
     close()
   };
