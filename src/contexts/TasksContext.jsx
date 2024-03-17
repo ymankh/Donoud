@@ -39,12 +39,13 @@ export const TasksContextProvider = ({ children }) => {
   const [oldTasks, setOldTasks] = useState([]);
   const updateOldTasks = () => {
     updateTodaysTaskName();
-    clearStorageFormEmptyArras()
+    clearStorageFormEmptyArras();
     try {
       setOldTasks(
         Object.entries(localStorage)
           .filter((tasks) => tasks[0] !== todaysTasksName)
           .map((tasks) => [tasks[0], makeTasks(JSON.parse(tasks[1]))])
+          .sort((a, b) => a[1][0]["date"] - b[1][0]["date"])
       );
     } catch (error) {
       setOldTasks([]);
@@ -52,9 +53,9 @@ export const TasksContextProvider = ({ children }) => {
   };
   useEffect(() => {
     // get all old tasks days and remove junk.
-    clearStorageFormEmptyArras()
+    clearStorageFormEmptyArras();
     updateOldTasks();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Save tasks to local storage whenever tasks state changes
   useEffect(() => {
@@ -161,12 +162,18 @@ function getTasksByStorageName(taskStorageName) {
   return makeTasks(JSON.parse(localStorage.getItem(taskStorageName)));
 }
 
-function clearStorageFormEmptyArras(){
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      const value = JSON.parse(localStorage.getItem(key));
-      if (!value || value === "null" || value === "undefined" || value === "" || (Array.isArray(value) && value.length === 0) ) {
-        localStorage.removeItem(key);
-      }
-    });
-  }
+function clearStorageFormEmptyArras() {
+  const keys = Object.keys(localStorage);
+  keys.forEach((key) => {
+    const value = JSON.parse(localStorage.getItem(key));
+    if (
+      !value ||
+      value === "null" ||
+      value === "undefined" ||
+      value === "" ||
+      (Array.isArray(value) && value.length === 0)
+    ) {
+      localStorage.removeItem(key);
+    }
+  });
+}
