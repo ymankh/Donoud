@@ -45,7 +45,7 @@ export const TasksContextProvider = ({ children }) => {
         Object.entries(localStorage)
           .filter((tasks) => tasks[0] !== todaysTasksName)
           .map((tasks) => [tasks[0], makeTasks(JSON.parse(tasks[1]))])
-          .sort((a, b) => a[1][0]["date"] - b[1][0]["date"])
+          .sort((a, b) => b[1][0]["date"] - a[1][0]["date"])
       );
     } catch (error) {
       setOldTasks([]);

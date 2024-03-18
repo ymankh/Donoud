@@ -24,7 +24,7 @@ const TaskList = ({ tasks = [{}] }) => {
         <div className="row  d-flex justify-content-center align-items-center h-100">
           <div className="col col-lg-8 col-xl-6">
             <div className="card rounded-3">
-              <div className="card-body p-4">
+              <div className="card-body p-4 shadow">
                 <p className="mb-2">
                   <span className="h2 me-2">Today&rsquo;s Tasks</span>
                 </p>
