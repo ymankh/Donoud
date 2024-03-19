@@ -1,0 +1,30 @@
+import { Note, Task } from "@mui/icons-material";
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+const BottomNavigator = () => {
+  const [value, setValue] = useState("notes");
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(`/${value}`);
+  }, [value]);
+  return (
+    <Paper
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 5000 }}
+      elevation={3}
+    >
+      <BottomNavigation
+        sx={{ bgcolor: "#2b3035" }}
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+      >
+        <BottomNavigationAction label="Notes" value="notes" icon={<Note />} />
+        <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} />
+      </BottomNavigation>
+    </Paper>
+  );
+};
+
+export default BottomNavigator;
