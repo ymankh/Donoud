@@ -135,7 +135,7 @@ const AddTaskForm = () => {
       praying: ["صلاة", "pray", "صلي"],
       learning: ["learn", "study", "تعلم", "محاضره", "محاضرة"],
       gratitude: ["يمان", "yaman", "yman", "Yman", "Yaman"],
-      writing: ["كتابة", "write","Write", "أكتب", "اكتب"]
+      writing: ["كتابة", "write","Write", "أكتب", "اكتب"],
     };
     
     const showToast = (sentence) => {

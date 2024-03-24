@@ -15,6 +15,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Tasks from "./pages/tasks/Tasks";
 import Notes from "./pages/notes/Notes";
+import NoteEdit from "./pages/notes/NoteEdit";
 
 const darkTheme = createTheme({
   palette: {
@@ -34,6 +35,7 @@ function App() {
             <Routes>
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/notes" element={<Notes />} />
+              <Route path="/notes/:noteId" element={<NoteEdit/>}/>
               <Route
                 path="*"
                 element={
