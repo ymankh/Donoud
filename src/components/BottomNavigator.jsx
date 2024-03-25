@@ -3,7 +3,7 @@ import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const BottomNavigator = () => {
-  const [value, setValue] = useState("notes");
+  const [value, setValue] = useState("tasks");
   const navigate = useNavigate();
   useEffect(() => {
     navigate(`/${value}`);
