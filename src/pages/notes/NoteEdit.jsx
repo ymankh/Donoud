@@ -19,6 +19,7 @@ import { Paper } from "@mui/material";
 import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NoteContext from "../../contexts/NoteContext";
+import {motion} from "framer-motion"
 
 const NoteEdit = () => {
   const { noteId } = useParams();
@@ -29,7 +30,15 @@ const NoteEdit = () => {
     e.preventDefault();
   };
   return (
-    <>
+    <motion.div
+    animate={{
+      opacity: 1,
+    }}
+    initial={{
+      opacity: 0,
+    }}
+    exit={{ opacity: 0, x: 100 }}
+  >
       <div className=" container mt-4">
         <form onSubmit={handleSubmit}>
           <div>
@@ -70,6 +79,7 @@ const NoteEdit = () => {
                   updateNote(note);
                   navigate("/notes");
                 }}
+                disabled={note.text === ""}
               >
                 Save
               </button>
@@ -84,7 +94,7 @@ const NoteEdit = () => {
               </button>
               <button
                 onClick={() => navigate("/notes")}
-                className="btn btn-secondary "
+                className="btn btn-secondary"
               >
                 Cancel
               </button>
@@ -93,7 +103,7 @@ const NoteEdit = () => {
         </form>
       </div>
       <div className="my-4 p-4"></div>
-    </>
+    </motion.div>
   );
 };
 

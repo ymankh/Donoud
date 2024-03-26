@@ -15,6 +15,7 @@ import DeleteNoteButton from "./DeleteNoteButton";
 import "../../../index.css";
 import { useContext } from "react";
 import NoteContext from "../../../contexts/NoteContext";
+import { motion } from "framer-motion";
 // function truncateString(str) {
 //   if (str.length <= 150) {
 //     return str;
@@ -24,11 +25,21 @@ import NoteContext from "../../../contexts/NoteContext";
 // }
 
 // eslint-disable-next-line react/prop-types
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
+
+// eslint-disable-next-line react/prop-types
 const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
   const navigate = useNavigate();
   const { deleteNote } = useContext(NoteContext);
   return (
-    <div className="note">
+    <motion.div className="note" variants={item} exit={item} transition={{duration: 0.1}}>
       <span
         onClick={() => {
           navigate(`${note.id}`);
@@ -54,7 +65,7 @@ const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
         <DeleteNoteButton onClick={() => deleteNote(note)} />
       </div>
       <ModalComponent />
-    </div>
+    </motion.div>
   );
 };
 

@@ -17,6 +17,7 @@ import Tasks from "./pages/tasks/Tasks";
 import Notes from "./pages/notes/Notes";
 import NoteEdit from "./pages/notes/NoteEdit";
 import { NoteContextProvider } from "./contexts/NoteContext";
+import AnimatedRoutes from "./components/AnimatedRoutes";
 
 const darkTheme = createTheme({
   palette: {
@@ -34,19 +35,7 @@ function App() {
             <BrowserRouter>
               <ToastContainer position="top-center" theme="colored" />
               <Navbar />
-              <Routes>
-                <Route path="/tasks" element={<Tasks />} />
-                <Route path="/notes" element={<Notes />} />
-                <Route path="/notes/:noteId" element={<NoteEdit />} />
-                <Route
-                  path="*"
-                  element={
-                    <>
-                      <h1>Note Found</h1>
-                    </>
-                  }
-                />
-              </Routes>
+              <AnimatedRoutes/>
               <BottomNavigator />
             </BrowserRouter>
           </NoteContextProvider>
