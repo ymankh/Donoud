@@ -107,7 +107,54 @@ function writingSentences() {
     "your dedication makes me so proud. 📚🌟",
     "I'm proud of your courage to share your thoughts. 🕊️📓",
     "each step you take toward your goals fills me with pride. 📖🌟",
-    "you inspire others. ✨📝"
+    "you inspire others. ✨📝",
+  ];
+  return sentences[Math.floor(Math.random() * sentences.length)];
+}
+
+function familySentences() {
+  const sentences = [
+    "Family's foundation, your presence enriches each moment. ❤️👨‍👩‍👧‍👦",
+    "Your love and support bless your family immensely. 🏠❤️",
+    "Invaluable to your family, your kindness strengthens bonds. 💎👨‍👩‍👧‍👦",
+    "Your laughter brightens, your love nurtures, family is complete. 🌟👨‍👩‍👧‍👦",
+    "Family thrives, you're the heart and soul. 💪❤️",
+    "Family's joy, your presence paints life with colors. 🌷👨‍👩‍👧‍👦",
+    "You're family's strength, the light in darkness. 💪🌟",
+    "Your family's treasure, your love fills each day. ❤️🌟",
+    "Your family's masterpiece, your essence enriches every moment. 🎨👨‍👩‍👧‍👦",
+    "Beloved in your family, you make every day brighter. ❤️🌟",
+  ];
+  return sentences[Math.floor(Math.random() * sentences.length)];
+}
+
+function mealSentences() {
+  const sentences = [
+    "Enjoy your meal! 🍽️ Bon appétit!",
+    "Wishing you a delicious meal! 🍲",
+    "May your meal be as delightful as your company! 🥂",
+    "Bon appétit! May every bite bring you joy. 🍴",
+    "Hope you savor every flavor! Enjoy your meal! 🍽️",
+    "Wishing you a fantastic dining experience! 🍷🍽️",
+    "May your meal be filled with laughter and good conversations! 🍲😊",
+    "Sending you best wishes for a tasty meal! 🥗",
+    "Enjoy your feast! 🍖🍗",
+    "May your meal be a delicious delight! 🍽️🎉",
+  ];
+  return sentences[Math.floor(Math.random() * sentences.length)];
+}
+
+function workSentences() {
+  const sentences = [
+    "Thank you for your dedication and hard work! 🙏",
+    "Your hard work hasn't gone unnoticed. Thank you! 🌟",
+    "We appreciate your tireless efforts. Thank you for your hard work! 💼",
+    "Your commitment to excellence is truly commendable. Thank you! 👏",
+    "Thank you for going above and beyond with your hard work! 🚀",
+    "Your hard work and dedication make all the difference. Thank you! 🌟",
+    "Your diligence and perseverance are valued. Thank you for your hard work! 💪",
+    "Thank you for putting in the extra effort. Your hard work is appreciated! 👍",
+    "Your hard work is noticed and deeply appreciated. Thank you! 🌟"
   ];
   return sentences[Math.floor(Math.random() * sentences.length)];
 }
@@ -135,17 +182,30 @@ const AddTaskForm = () => {
       praying: ["صلاة", "pray", "صلي"],
       learning: ["learn", "study", "تعلم", "محاضره", "محاضرة"],
       gratitude: ["يمان", "yaman", "yman", "Yman", "Yaman"],
-      writing: ["كتابة", "write","Write", "أكتب", "اكتب"],
+      writing: ["كتابة", "write", "Write", "أكتب", "اكتب"],
+      family: [
+        "شموخ",
+        "نوف",
+        "امي",
+        "دودي",
+        " الما",
+        "شهومي",
+        "نواف",
+        "معن",
+        "ثائر",
+      ],
+      work: ["جلي", "تكنيس", "مساعدة", "طبخ", "شغل", "ترتيب", "تنطيف"],
+      meal: ["عشاء", "طعام", "اكل", "شوربة", "تناول", "فطور", "غداء"],
     };
-    
+
     const showToast = (sentence) => {
       toast.success(sentence, { transition: Bounce });
     };
-    
+
     const checkTask = (task, keywords) => {
       return keywords.some((word) => task.includes(word));
     };
-    
+
     const handleTask = (task) => {
       for (const [taskName, keywords] of Object.entries(taskKeywords)) {
         if (checkTask(task, keywords)) {
@@ -154,26 +214,32 @@ const AddTaskForm = () => {
         }
       }
     };
-    
+
     const getSentenceForTask = (taskName) => {
       switch (taskName) {
-        case 'reading':
+        case "reading":
           return readingSentence();
-        case 'writing':
+        case "writing":
           return writingSentences();
-        case 'meditating':
+        case "meditating":
           return meditationSentence();
-        case 'praying':
+        case "praying":
           return prayerSentences();
-        case 'learning':
+        case "learning":
           return learningSentences();
-        case 'gratitude':
+        case "gratitude":
           return gratitudeSentences();
+        case "family":
+          return familySentences();
+        case "meal":
+          return mealSentences();
+        case "work":
+          return workSentences();
         default:
-          return '';
+          return "";
       }
     };
-    
+
     handleTask(task);
 
     addTask(task);

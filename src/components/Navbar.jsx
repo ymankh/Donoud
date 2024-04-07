@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GiSwan } from "react-icons/gi";
 import { toast } from "react-toastify";
+import FilterContext from "../contexts/FilterContext";
+
+const sentences = [
+  "Cease interfering with the swan's territory! 🛑",
+  "Quit disturbing the swan's serene environment! ❌",
+  "Desist from agitating the swan! 🚫",
+  "Halt provoking the swan's tranquility! 🛑",
+  "Refrain from bothering the graceful swan! 🦢",
+  "Stop irritating the elegant swan! 😡",
+  "Cease disrupting the swan's peaceful demeanor! 🚫",
+  "Quit bothering the majestic swan! 🛑",
+  "Desist from disturbing the swan's graceful glide! ❌",
+  "Halt interfering with the serene presence of the swan! 🦢",
+];
 
 const Navbar = () => {
   const [clicksCounter, setClickCounter] = useState(0);
-  const sentences = [
-    "Cease interfering with the swan's territory! 🛑",
-    "Quit disturbing the swan's serene environment! ❌",
-    "Desist from agitating the swan! 🚫",
-    "Halt provoking the swan's tranquility! 🛑",
-    "Refrain from bothering the graceful swan! 🦢",
-    "Stop irritating the elegant swan! 😡",
-    "Cease disrupting the swan's peaceful demeanor! 🚫",
-    "Quit bothering the majestic swan! 🛑",
-    "Desist from disturbing the swan's graceful glide! ❌",
-    "Halt interfering with the serene presence of the swan! 🦢",
-  ];
-
+  const { filter, setFilter } = useContext(FilterContext);
   // Function to generate a random index
   const getRandomIndex = () => {
     return sentences[Math.floor(Math.random() * sentences.length)];
@@ -50,6 +52,21 @@ const Navbar = () => {
           </span>{" "}
           DoNoud
         </span>
+        <form
+          className="d-flex"
+          role="search"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <input
+            className="form-control me-1"
+            style={{width:"150px"}}
+            type="search"
+            placeholder="Filter"
+            aria-label="Search"
+            onChange={(e) => setFilter(e.target.value)}
+            value={filter}
+          />
+        </form>
       </div>
     </nav>
   );

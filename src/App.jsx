@@ -18,6 +18,7 @@ import Notes from "./pages/notes/Notes";
 import NoteEdit from "./pages/notes/NoteEdit";
 import { NoteContextProvider } from "./contexts/NoteContext";
 import AnimatedRoutes from "./components/AnimatedRoutes";
+import { FilterContextProvider } from "./contexts/FilterContext";
 
 const darkTheme = createTheme({
   palette: {
@@ -32,12 +33,14 @@ function App() {
       <TasksContextProvider>
         <ModalContextProvider>
           <NoteContextProvider>
-            <BrowserRouter>
-              <ToastContainer position="top-center" theme="colored" />
-              <Navbar />
-              <AnimatedRoutes/>
-              <BottomNavigator />
-            </BrowserRouter>
+            <FilterContextProvider>
+              <BrowserRouter>
+                <ToastContainer position="top-center" theme="colored" />
+                <Navbar />
+                <AnimatedRoutes />
+                <BottomNavigator />
+              </BrowserRouter>
+            </FilterContextProvider>
           </NoteContextProvider>
         </ModalContextProvider>
       </TasksContextProvider>

@@ -7,6 +7,7 @@ import NoteContext from "../../contexts/NoteContext";
 import { useNavigate } from "react-router-dom";
 import NoNoteImage from "./components/NoNoteImage";
 import { motion } from "framer-motion";
+import FilterContext from "../../contexts/FilterContext";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -21,7 +22,9 @@ const container = {
 };
 
 const Notes = () => {
-  const { notes, createNewNote } = useContext(NoteContext);
+  const { notes: allNotes, createNewNote } = useContext(NoteContext);
+  const { filter } = useContext(FilterContext);
+  const notes = allNotes.filter((note) => note.text.includes(filter));
   const navigate = useNavigate();
   return (
     <motion.div

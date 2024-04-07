@@ -3,13 +3,17 @@ import TasksContext from "../contexts/TasksContext";
 import OldTaskList from "./old_tasks/OldTaskList";
 import TaskList from "./todays_tasks/TaskList";
 import { Accordion, Container } from "react-bootstrap";
+import FilterContext from "../contexts/FilterContext";
 
 const TaskLists = () => {
+  const { filter } = useContext(FilterContext);
   const { tasks: allTasks } = useContext(TasksContext);
   const today = new Date().toDateString();
   const tasks = [];
   // Group tasks by date
   const oldTasks = allTasks.reduce((acc, task) => {
+    if (!task["task"].includes(filter)) return acc;
+
     // Get the date string in YYYY-MM-DD format
     const dateKey = task.date.toDateString();
 
@@ -32,15 +36,17 @@ const TaskLists = () => {
   return (
     <>
       <TaskList tasks={tasks} />
-      
+
       <Container>
         <div className="container py-5 h-100 ">
           <div className="row  d-flex justify-content-center align-items-center h-100">
             <div className="col col-lg-8 col-xl-6">
               <Accordion className="shadow">
-                {Object.entries(oldTasks).sort((a, b) => new Date(b[0]) - new Date(a[0])).map(([key, tasks]) => {
-                  return <OldTaskList key={key} tasks={tasks} />;
-                })}
+                {Object.entries(oldTasks)
+                  .sort((a, b) => new Date(b[0]) - new Date(a[0]))
+                  .map(([key, tasks]) => {
+                    return <OldTaskList key={key} tasks={tasks} />;
+                  })}
               </Accordion>
             </div>
           </div>

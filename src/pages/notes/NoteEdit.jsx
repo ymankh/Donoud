@@ -16,10 +16,10 @@ import {
 import "@mdxeditor/editor/style.css";
 
 import { Paper } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NoteContext from "../../contexts/NoteContext";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
 
 const NoteEdit = () => {
   const { noteId } = useParams();
@@ -29,21 +29,24 @@ const NoteEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+  const textAreaRef = useRef(null);
   return (
     <motion.div
-    animate={{
-      opacity: 1,
-    }}
-    initial={{
-      opacity: 0,
-    }}
-    exit={{ opacity: 0, x: 100 }}
-  >
+      animate={{
+        opacity: 1,
+      }}
+      initial={{
+        opacity: 0,
+      }}
+      exit={{ opacity: 0, x: 100 }}
+    >
       <div className=" container mt-4">
         <form onSubmit={handleSubmit}>
           <div>
-            <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh" }}>
+            <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh" }} onClick={()=> {textAreaRef.current.focus()}}>
               <MDXEditor
+                ref={textAreaRef}
+                autoFocus={true}
                 onChange={(text) => setNote({ ...note, text })}
                 className="dark-theme"
                 contentEditableClassName="prose"
