@@ -1,3 +1,4 @@
+import { App } from "@capacitor/app";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -14,22 +15,25 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-
 import { Paper } from "@mui/material";
-import { useContext, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import NoteContext from "../../contexts/NoteContext";
 import { motion } from "framer-motion";
 
 const NoteEdit = () => {
+  const [isActive, setIsActive] = useState(false);
   const { noteId } = useParams();
-  const { getNoteById, deleteNote, updateNote } = useContext(NoteContext);
+  const { getNoteById, updateNote } = useContext(NoteContext);
   const [note, setNote] = useState(getNoteById(noteId));
-  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
   const textAreaRef = useRef(null);
+  useEffect(() => {
+    updateNote(note);
+  }, [note]);
   return (
     <motion.div
       animate={{
@@ -43,11 +47,23 @@ const NoteEdit = () => {
       <div className=" container mt-4">
         <form onSubmit={handleSubmit}>
           <div>
-            <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh" }} onClick={()=> {textAreaRef.current.focus()}}>
+            <Paper
+              elevation={4}
+              sx={{ width: "auto", minHeight: "70vh" }}
+              onClick={() => {
+                if (isActive) return;
+                textAreaRef.current.focus();
+              }}
+            >
               <MDXEditor
                 ref={textAreaRef}
                 autoFocus={true}
-                onChange={(text) => setNote({ ...note, text })}
+                onFocus={() => setIsActive(true)}
+                onBlur={() => setIsActive(false)}
+                onChange={(text) => {
+                  setNote({ ...note, text });
+                  updateNote(note);
+                }}
                 className="dark-theme"
                 contentEditableClassName="prose"
                 plugins={[
@@ -74,7 +90,7 @@ const NoteEdit = () => {
               />
             </Paper>
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="btn-group">
               <button
                 className="btn btn-primary"
@@ -102,7 +118,7 @@ const NoteEdit = () => {
                 Cancel
               </button>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
       <div className="my-4 p-4"></div>

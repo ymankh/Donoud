@@ -33,7 +33,11 @@ export const NoteContextProvider = ({ children }) => {
   };
   const updateNote = (updatedNote) => {
     setNotes((previous) =>
-      previous.map((note) => (note.id === updatedNote.id ? updatedNote : note))
+      previous.map((note) =>
+        note.id === updatedNote.id
+          ? { ...updatedNote, lastChange: new Date() }
+          : note
+      )
     );
   };
   const getNoteById = (id) => notes.find((note) => note.id.toString() === id);
@@ -43,6 +47,7 @@ export const NoteContextProvider = ({ children }) => {
       text: "",
       date: new Date(),
       lastChange: new Date(),
+      isPined: false,
     };
     setNotes((previous) => [
       ...previous,
@@ -51,9 +56,20 @@ export const NoteContextProvider = ({ children }) => {
     return newNote.id;
   };
 
+  function deleteEmptyNotes() {
+    setNotes((previous) => previous.filter((note) => note.text !== ""));
+  }
+
   return (
     <NoteContext.Provider
-      value={{ notes, getNoteById, deleteNote, updateNote, createNewNote }}
+      value={{
+        notes,
+        getNoteById,
+        deleteNote,
+        updateNote,
+        createNewNote,
+        deleteEmptyNotes,
+      }}
     >
       {children}
     </NoteContext.Provider>

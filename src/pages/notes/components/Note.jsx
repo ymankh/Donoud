@@ -16,16 +16,7 @@ import "../../../index.css";
 import { useContext } from "react";
 import NoteContext from "../../../contexts/NoteContext";
 import { motion } from "framer-motion";
-// function truncateString(str) {
-//   if (str.length <= 150) {
-//     return str;
-//   } else {
-//     return str.slice(0, 150) + "...";
-//   }
-// }
-
-// eslint-disable-next-line react/prop-types
-
+import PinNoteButton from "./PinNoteButton";
 const item = {
   hidden: { y: 20, opacity: 0 },
   visible: {
@@ -37,18 +28,31 @@ const item = {
 // eslint-disable-next-line react/prop-types
 const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
   const navigate = useNavigate();
-  const { deleteNote } = useContext(NoteContext);
+  const { deleteNote, updateNote } = useContext(NoteContext);
   return (
-    <motion.div className="note" variants={item} exit={item} transition={{duration: 0.1}}>
+    <motion.div
+      className="note"
+      variants={item}
+      exit={item}
+      transition={{ duration: 0.1 }}
+    >
+      <div className="note-heder">
+        <small style={{ fontSize: "0.6em" }}></small>
+        <PinNoteButton
+          onClick={() => updateNote({ ...note, isPined: !note.isPined })}
+          active={Boolean(note.isPined)}
+        />
+      </div>
       <span
         onClick={() => {
           navigate(`${note.id}`);
         }}
-        style={{ display: "block", height: "110px" }}
+        style={{ display: "block", fontSize: ".8em", height: "110px" }}
       >
         <MDXEditor
           className="dark-theme"
           markdown={note.text}
+          style={{}}
           plugins={[
             headingsPlugin(),
             listsPlugin(),
@@ -61,7 +65,9 @@ const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
         />
       </span>
       <div className="note-footer">
-        <small>{format(note.date, "yyy MMM d p")}</small>
+        <small style={{ fontSize: "0.6em" }}>
+          {format(note.date, "yyy MMM d p")}
+        </small>
         <DeleteNoteButton onClick={() => deleteNote(note)} />
       </div>
       <ModalComponent />

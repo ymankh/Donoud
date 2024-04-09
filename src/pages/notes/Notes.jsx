@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import Note from "./components/Note";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import NoteContext from "../../contexts/NoteContext";
 import { useNavigate } from "react-router-dom";
 import NoNoteImage from "./components/NoNoteImage";
@@ -22,10 +22,29 @@ const container = {
 };
 
 const Notes = () => {
-  const { notes: allNotes, createNewNote } = useContext(NoteContext);
+
+  const {
+    notes: allNotes,
+    createNewNote,
+    deleteEmptyNotes,
+  } = useContext(NoteContext);
   const { filter } = useContext(FilterContext);
-  const notes = allNotes.filter((note) => note.text.includes(filter));
+  const notes = allNotes
+    .filter((note) => note.text.includes(filter))
+    .sort((a, b) => b.date - a.date)
+    .sort((a, b) => {
+      if (Boolean(a.isPined) !== Boolean(b.isPined)) {
+        // Sort pinned before not pined
+        return a.isPined ? -1 : 1;
+      } else {
+        // If both are not pinned, no further sorting needed
+        return 0;
+      }
+    });
   const navigate = useNavigate();
+  useEffect(() => {
+    deleteEmptyNotes();
+  }, []);
   return (
     <motion.div
       animate={{
