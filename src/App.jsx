@@ -9,13 +9,10 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Tasks from "./pages/tasks/Tasks";
-import Notes from "./pages/notes/Notes";
-import NoteEdit from "./pages/notes/NoteEdit";
 import { NoteContextProvider } from "./contexts/NoteContext";
 import AnimatedRoutes from "./components/AnimatedRoutes";
 import { FilterContextProvider } from "./contexts/FilterContext";

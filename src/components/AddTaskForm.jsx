@@ -154,7 +154,7 @@ function workSentences() {
     "Your hard work and dedication make all the difference. Thank you! 🌟",
     "Your diligence and perseverance are valued. Thank you for your hard work! 💪",
     "Thank you for putting in the extra effort. Your hard work is appreciated! 👍",
-    "Your hard work is noticed and deeply appreciated. Thank you! 🌟"
+    "Your hard work is noticed and deeply appreciated. Thank you! 🌟",
   ];
   return sentences[Math.floor(Math.random() * sentences.length)];
 }
@@ -178,22 +178,12 @@ const AddTaskForm = () => {
 
     const taskKeywords = {
       reading: ["read", "قراءة", "book"],
-      meditating: ["meditate", "تامل", "تأمل", "تنفس"],
+      meditating: ["meditate", "تامل", "تامل", "تنفس"],
       praying: ["صلاة", "pray", "صلي"],
       learning: ["learn", "study", "تعلم", "محاضره", "محاضرة"],
       gratitude: ["يمان", "yaman", "yman", "Yman", "Yaman"],
       writing: ["كتابة", "write", "Write", "أكتب", "اكتب"],
-      family: [
-        "شموخ",
-        "نوف",
-        "امي",
-        "دودي",
-        " الما",
-        "شهومي",
-        "نواف",
-        "معن",
-        "ثائر",
-      ],
+      family: "شموخ نوف امي دودي الما شهومي نواف معن ثائر".split(" "),
       work: ["جلي", "تكنيس", "مساعدة", "طبخ", "شغل", "ترتيب", "تنطيف"],
       meal: ["عشاء", "طعام", "اكل", "شوربة", "تناول", "فطور", "غداء"],
     };
