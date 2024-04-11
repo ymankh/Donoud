@@ -10,9 +10,7 @@ import {
 import ModalComponent from "../../../components/ModalComponent";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import "../../../index.css";
 import DeleteNoteButton from "./DeleteNoteButton";
-import "../../../index.css";
 import { useContext } from "react";
 import NoteContext from "../../../contexts/NoteContext";
 import { motion } from "framer-motion";

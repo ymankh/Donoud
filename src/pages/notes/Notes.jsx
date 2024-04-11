@@ -56,7 +56,7 @@ const Notes = () => {
       exit={{ opacity: 0, x: 100 }}
     >
       <Fab
-        color="secondary"
+        color="primary"
         style={{
           margin: 0,
           top: "auto",

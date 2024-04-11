@@ -1,4 +1,3 @@
-import { App } from "@capacitor/app";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -22,7 +21,6 @@ import NoteContext from "../../contexts/NoteContext";
 import { motion } from "framer-motion";
 
 const NoteEdit = () => {
-  const [isActive, setIsActive] = useState(false);
   const { noteId } = useParams();
   const { getNoteById, updateNote } = useContext(NoteContext);
   const [note, setNote] = useState(getNoteById(noteId));
@@ -30,7 +28,6 @@ const NoteEdit = () => {
     e.preventDefault();
   };
 
-  const textAreaRef = useRef(null);
   useEffect(() => {
     updateNote(note);
   }, [note]);
@@ -50,16 +47,11 @@ const NoteEdit = () => {
             <Paper
               elevation={4}
               sx={{ width: "auto", minHeight: "70vh" }}
-              onClick={() => {
-                if (isActive) return;
-                textAreaRef.current.focus();
-              }}
+              className="mdx-container"
             >
               <MDXEditor
-                ref={textAreaRef}
+                style={{ minHeight: "80vh" }}
                 autoFocus={true}
-                onFocus={() => setIsActive(true)}
-                onBlur={() => setIsActive(false)}
                 onChange={(text) => {
                   setNote({ ...note, text });
                   updateNote(note);
@@ -90,35 +82,6 @@ const NoteEdit = () => {
               />
             </Paper>
           </div>
-          {/* <div className="row">
-            <div className="btn-group">
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  updateNote(note);
-                  navigate("/notes");
-                }}
-                disabled={note.text === ""}
-              >
-                Save
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => {
-                  deleteNote(note);
-                  navigate("/notes");
-                }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => navigate("/notes")}
-                className="btn btn-secondary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div> */}
         </form>
       </div>
       <div className="my-4 p-4"></div>

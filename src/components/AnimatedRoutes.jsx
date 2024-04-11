@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Tasks from "../pages/tasks/Tasks";
 import NoteEdit from "../pages/notes/NoteEdit";
 import Notes from "../pages/notes/Notes";
+import { NotFound } from "./NotFound";
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
@@ -12,9 +13,7 @@ const AnimatedRoutes = () => {
       <Route
         path="*"
         element={
-          <>
-            <h1>Note Found</h1>
-          </>
+          <NotFound/>
         }
       />
     </Routes>
