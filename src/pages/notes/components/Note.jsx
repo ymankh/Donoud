@@ -32,7 +32,8 @@ const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
       className="note"
       variants={item}
       exit={item}
-      transition={{ duration: 0.1 }}
+      transition={{ duration: 0.2 }}
+      layout="position"
     >
       <div className="note-heder">
         <small style={{ fontSize: "0.6em" }}></small>
