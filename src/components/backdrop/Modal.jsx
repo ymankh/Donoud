@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import Backdrop from "./Backdrop";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ModalContext from "../../contexts/ModalContext";
 import TasksContext from "../../contexts/TasksContext";
+import { useLocation } from "react-router-dom";
+import { Notes } from "@mui/icons-material";
 
 const dropIn = {
   hidden: {
@@ -27,12 +29,17 @@ const dropIn = {
 
 const Modal = () => {
   const { close } = useContext(ModalContext);
-  const { saveEditedTask, editedTask, setEditedTask } = useContext(TasksContext);
+  const { saveEditedTask, editedTask, setEditedTask } =
+    useContext(TasksContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     saveEditedTask();
-    close()
+    close();
   };
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname.includes("notes")) close();
+  }, [location]);
   return (
     <Backdrop onClick={close}>
       <motion.div
@@ -54,7 +61,9 @@ const Modal = () => {
               id="taskContent"
               placeholder="ex water the planet..."
               value={editedTask.task}
-              onChange={e => setEditedTask({...editedTask, task:e.target.value })}
+              onChange={(e) =>
+                setEditedTask({ ...editedTask, task: e.target.value })
+              }
             />
           </div>
           <div className="mb-3">
@@ -66,15 +75,17 @@ const Modal = () => {
               id="taskDetails"
               rows="3"
               value={editedTask.details}
-              onChange={e => setEditedTask({...editedTask, details:e.target.value })}
+              onChange={(e) =>
+                setEditedTask({ ...editedTask, details: e.target.value })
+              }
             ></textarea>
           </div>
           <div className="btn-group ">
-            <button type="submit" className="btn btn-outline-primary">
-              Save changes
+            <button type="submit" className="btn btn-primary">
+              Save added changes
             </button>
-            <button onClick={close} className="btn btn-outline-secondary ">
-              Close without save
+            <button onClick={close} className="btn btn-outline-primary ">
+              Cancel
             </button>
           </div>
         </form>

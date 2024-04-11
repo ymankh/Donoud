@@ -59,7 +59,7 @@ button .delete {
 }
 
 .note {
-  background-color: #0057b3;
+  background-color: #272727;
   border-radius: 10px;
   padding: 0.5rem 1.2rem 0rem 0.8rem;
   display: flex;
@@ -73,7 +73,7 @@ button .delete {
 .note-footer {
   display: flex;
   align-items: center;
-  background: linear-gradient(0deg, #0057b3 0%, #0057b3 70%, #0057b300 100%);
+  background: linear-gradient(0deg, #272727 0%, #272727 70%, #0057b300 100%);
   justify-content: space-between;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -88,7 +88,7 @@ button .delete {
   background: linear-gradient(
     270deg,
     #0057b300 100%,
-    #0057b3 50%,
+    #272727 50%,
     #0057b300 0%
   );
   justify-content: space-between;

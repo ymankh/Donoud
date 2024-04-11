@@ -47,10 +47,8 @@ const NoteEdit = () => {
             <Paper
               elevation={4}
               sx={{ width: "auto", minHeight: "70vh" }}
-              className="mdx-container"
             >
               <MDXEditor
-                style={{ minHeight: "80vh" }}
                 autoFocus={true}
                 onChange={(text) => {
                   setNote({ ...note, text });
