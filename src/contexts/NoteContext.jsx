@@ -40,7 +40,13 @@ export const NoteContextProvider = ({ children }) => {
       )
     );
   };
-  const getNoteById = (id) => notes.find((note) => note.id.toString() === id);
+  const getNoteById = (id) => {
+    try {
+      return notes.find((note) => note.id.toString() === id);
+    } catch (error) {
+      throw new Error(`There is no note with the ID ${id}`);
+    }
+  };
   const createNewNote = () => {
     const newNote = {
       id: v4(),
