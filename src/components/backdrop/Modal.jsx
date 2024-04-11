@@ -4,7 +4,6 @@ import { useContext, useEffect } from "react";
 import ModalContext from "../../contexts/ModalContext";
 import TasksContext from "../../contexts/TasksContext";
 import { useLocation } from "react-router-dom";
-import { Notes } from "@mui/icons-material";
 
 const dropIn = {
   hidden: {
@@ -80,13 +79,15 @@ const Modal = () => {
               }
             ></textarea>
           </div>
-          <div className="btn-group ">
-            <button type="submit" className="btn btn-primary">
-              Save added changes
-            </button>
-            <button onClick={close} className="btn btn-outline-primary ">
-              Cancel
-            </button>
+          <div className="row">
+            <div className="btn-group ">
+              <button type="submit" className="btn btn-primary col-8">
+                Save
+              </button>
+              <button onClick={close} className="btn btn-outline-primary col-4">
+                Cancel
+              </button>
+            </div>
           </div>
         </form>
       </motion.div>
