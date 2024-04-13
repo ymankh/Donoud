@@ -45,7 +45,9 @@ const TaskLists = () => {
                 {Object.entries(oldTasks)
                   .sort((a, b) => new Date(b[0]) - new Date(a[0]))
                   .map(([key, tasks]) => {
-                    return <OldTaskList key={key} tasks={tasks} />;
+                    return (
+                      <OldTaskList key={key} tasks={tasks} eventKey={key} />
+                    );
                   })}
               </Accordion>
             </div>

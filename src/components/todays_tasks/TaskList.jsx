@@ -18,6 +18,10 @@ const container = {
 
 // eslint-disable-next-line react/prop-types
 const TaskList = ({ tasks = [{}] }) => {
+  tasks.sort((a, b) => {
+    if (!a.done && b.done) return -1;
+    else return 0;
+  });
   return (
     <section id="notes">
       <div className="container py-5 h-100 ">

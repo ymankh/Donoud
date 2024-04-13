@@ -48,6 +48,7 @@ const ListItem = ({
       <motion.li
         variants={item}
         exit={item}
+        layout
         className="task list-group-item border-0 d-flex align-items-center ps-0"
       >
         <input

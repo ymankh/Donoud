@@ -16,9 +16,13 @@ const container = {
 };
 
 // eslint-disable-next-line react/prop-types
-const OldTaskList = ({ tasks = [{}] }) => {
+const OldTaskList = ({ tasks = [{}],eventKey }) => {
+  tasks.sort((a, b) => {
+    if (!a.done && b.done) return -1;
+    else return 0;
+  });
   return (
-    <Accordion.Item eventKey={tasks[0].date} >
+    <Accordion.Item eventKey={eventKey}>
       <Accordion.Header>{format(tasks[0].date, "E, d MMM")} </Accordion.Header>
       <Accordion.Body>
         <motion.ul
