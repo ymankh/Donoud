@@ -1,6 +1,6 @@
 # Donoud To-Do List App
 
-Donoud is a simple to-do list app built using React. It allows users to create tasks, edit them, and add details to them. The app uses local storage to store the data locally, ensuring that tasks are persisted even after the browser is closed.
+Donoud is a simple to-do list app built using React. It allows users to create tasks, edit them, add details to them, and take notes. The app also features filtering options for both notes and tasks, enabling users to efficiently organize their work and thoughts.
 
 ## Features
 
@@ -8,6 +8,8 @@ Donoud is a simple to-do list app built using React. It allows users to create t
 - Edit tasks: Tasks can be edited to update their titles or details as needed.
 - Add details: Users can add additional details to tasks to provide more context or information.
 - Local storage: Data is stored locally using the browser's local storage, ensuring persistence across sessions.
+- Note-taking capability: Users can take notes within the app to jot down thoughts, ideas, or reminders.
+- Filtering: The app provides filtering options for both tasks and notes, allowing users to quickly find what they need.
 
 ## Installation
 
@@ -26,6 +28,7 @@ To run the app locally, follow these steps:
 3. Click on a task to edit its title or details.
 4. Use the input fields and buttons provided to make changes.
 5. Changes are automatically saved to local storage.
+6. Use the filtering options to efficiently organize and find tasks and notes.
 
 ## Contributing
 

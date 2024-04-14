@@ -1,13 +1,14 @@
 import { Container } from "react-bootstrap";
 import Note from "./components/Note";
-import { Fab } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useContext, useEffect } from "react";
+import Fab from "@mui/material/Fab";
+import { useContext, useEffect, useState } from "react";
 import NoteContext from "../../contexts/NoteContext";
 import { useNavigate } from "react-router-dom";
 import NoNoteImage from "./components/NoNoteImage";
 import { motion } from "framer-motion";
 import FilterContext from "../../contexts/FilterContext";
+import SortBar from "./components/SortBar";
+import NoteAdd from "@mui/icons-material/NoteAdd";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -22,6 +23,9 @@ const container = {
 };
 
 const Notes = () => {
+  const sortOptions = ["Date created", "Date modified"];
+  const [orderReversed, setOrderReversed] = useState(false);
+  const [sortValue, setSortValue] = useState(sortOptions[0]);
 
   const {
     notes: allNotes,
@@ -31,7 +35,13 @@ const Notes = () => {
   const { filter } = useContext(FilterContext);
   const notes = allNotes
     .filter((note) => note.text.includes(filter))
-    .sort((a, b) => b.date - a.date)
+    .sort((a, b) => {
+      let difference = 0;
+      if (sortValue == "Date created") difference = b.date - a.date;
+      else difference = b.lastChange - a.lastChange;
+      if (orderReversed) return -difference;
+      return difference;
+    })
     .sort((a, b) => {
       if (Boolean(a.isPined) !== Boolean(b.isPined)) {
         // Sort pinned before not pined
@@ -55,6 +65,13 @@ const Notes = () => {
       }}
       exit={{ opacity: 0, x: 100 }}
     >
+      <SortBar
+        sortOptions={sortOptions}
+        value={sortValue}
+        setValue={setSortValue}
+        orderReversed={orderReversed}
+        setOrderReversed={setOrderReversed}
+      />
       <Fab
         color="primary"
         style={{
@@ -71,7 +88,7 @@ const Notes = () => {
           navigate(newNoteId);
         }}
       >
-        <AddIcon />
+        <NoteAdd />
       </Fab>
       <Container>
         <div className="m-2" />

@@ -33,6 +33,7 @@
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
+    "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-manifest": "^1.0.5",
