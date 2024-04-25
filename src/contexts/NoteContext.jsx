@@ -14,6 +14,10 @@ function makeNotes(notes) {
 }
 
 export const NoteContextProvider = ({ children }) => {
+  const sortOptions = ["Date created", "Date modified"];
+  const [orderReversed, setOrderReversed] = useState(false);
+  const [sortValue, setSortValue] = useState(sortOptions[0]);
+
   let initialNotes = [];
   try {
     initialNotes = makeNotes(localStorage.getItem("notes"));
@@ -75,6 +79,11 @@ export const NoteContextProvider = ({ children }) => {
         updateNote,
         createNewNote,
         deleteEmptyNotes,
+        orderReversed,
+        setOrderReversed,
+        sortValue,
+        setSortValue,
+        sortOptions,
       }}
     >
       {children}

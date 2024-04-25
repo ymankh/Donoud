@@ -23,14 +23,12 @@ const container = {
 };
 
 const Notes = () => {
-  const sortOptions = ["Date created", "Date modified"];
-  const [orderReversed, setOrderReversed] = useState(false);
-  const [sortValue, setSortValue] = useState(sortOptions[0]);
-
   const {
     notes: allNotes,
     createNewNote,
     deleteEmptyNotes,
+    sortValue,
+    orderReversed,
   } = useContext(NoteContext);
   const { filter } = useContext(FilterContext);
   const notes = allNotes
@@ -65,13 +63,7 @@ const Notes = () => {
       }}
       exit={{ opacity: 0, x: 100 }}
     >
-      <SortBar
-        sortOptions={sortOptions}
-        value={sortValue}
-        setValue={setSortValue}
-        orderReversed={orderReversed}
-        setOrderReversed={setOrderReversed}
-      />
+      <SortBar />
       <Fab
         color="primary"
         style={{

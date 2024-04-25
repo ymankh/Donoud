@@ -5,7 +5,7 @@ const DeleteButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="btn btn-danger rounded-circle btn-sm delete"
+      className="btn rounded-circle btn-sm delete"
       style={{ marginLeft: "auto" }}
     >
       <MdDeleteForever className="delete" />

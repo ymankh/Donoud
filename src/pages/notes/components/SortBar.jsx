@@ -4,15 +4,18 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { FaArrowDown } from "react-icons/fa6";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import NoteContext from "../../../contexts/NoteContext";
 
-function SortBar({
-  sortOptions,
-  value,
-  setValue,
-  orderReversed,
-  setOrderReversed,
-}) {
+function SortBar() {
+  const {
+    sortOptions,
+    sortValue: value,
+    setSortValue: setValue,
+    orderReversed,
+    setOrderReversed,
+  } = useContext(NoteContext);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

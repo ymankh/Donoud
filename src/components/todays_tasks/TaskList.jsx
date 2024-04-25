@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Confetti from "react-confetti";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 function congratsTasksFinished() {
   const sentences = [
@@ -37,6 +38,7 @@ const container = {
 
 // eslint-disable-next-line react/prop-types
 const TaskList = ({ tasks = [{}] }) => {
+  const { width, height } = useWindowSize();
   const [celebrating, setCelebrating] = useState(false);
   tasks.sort((a, b) => {
     if (!a.done && b.done) return -1;
@@ -47,17 +49,29 @@ const TaskList = ({ tasks = [{}] }) => {
   useEffect(() => {
     if (!isMounted) {
       setIsMounted(true);
-      setAllTasksDone(!tasks.some((task) => !task.done));
+      if (tasks.length > 0) setAllTasksDone(!tasks.some((task) => !task.done));
       return;
     }
     if (tasks.every((task) => task.done) && !celebrating && !allTasksDone) {
       toast.success(congratsTasksFinished());
       setCelebrating(true);
+      setAllTasksDone(true);
+      setTimeout(() => {
+        setCelebrating(false);
+      }, 10 * 1000);
     }
   }, [tasks]);
   return (
     <section id="notes">
-      <Confetti numberOfPieces={800} recycle={false} run={celebrating} />
+      {celebrating && (
+        <Confetti
+          numberOfPieces={800}
+          recycle={false}
+          run={celebrating}
+          width={width}
+          height={height}
+        />
+      )}
       <div className="container py-5 h-100 ">
         <div className="row  d-flex justify-content-center align-items-center h-100">
           <div className="col col-lg-8 col-xl-6">
@@ -69,10 +83,8 @@ const TaskList = ({ tasks = [{}] }) => {
                 <p className="text-muted pb-2">
                   {format(new Date(), "EE, d MMM")}
                 </p>
-
                 <AddTaskForm />
                 <div className="mb-3 form-check"></div>
-
                 <motion.ul
                   variants={container}
                   initial="hidden"
