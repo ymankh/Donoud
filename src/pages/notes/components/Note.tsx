@@ -7,11 +7,12 @@ import {
   tablePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
+import { Note as NoteType } from "../../../contexts/NoteContext";
 import ModalComponent from "../../../components/ModalComponent";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import DeleteNoteButton from "./DeleteNoteButton";
-import { useContext } from "react";
+import { FC, useContext } from "react";
 import NoteContext from "../../../contexts/NoteContext";
 import { motion } from "framer-motion";
 import PinNoteButton from "./PinNoteButton";
@@ -24,21 +25,23 @@ const item = {
 };
 
 // eslint-disable-next-line react/prop-types
-const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
+const Note: FC<{ note: NoteType }> = ({ note }) => {
   const navigate = useNavigate();
-  const { deleteNote, updateNote } = useContext(NoteContext);
+  const { deleteNote, updateNote } = useContext(NoteContext)!;
   return (
     <motion.div
       className="note"
       variants={item}
-      exit={item}
+      exit={item.hidden}
       transition={{ duration: 0.2 }}
       layout="position"
     >
       <div className="note-heder">
         <small style={{ fontSize: "0.6em" }}></small>
         <PinNoteButton
-          onClick={() => updateNote({ ...note, isPined: !note.isPined })}
+          onClick={() =>
+            updateNote({ ...note, isPined: !note.isPined } as NoteType)
+          }
           active={Boolean(note.isPined)}
         />
       </div>
@@ -51,7 +54,6 @@ const Note = ({ note = { text: "some text", id: "1", date: new Date() } }) => {
         <MDXEditor
           className="dark-theme"
           markdown={note.text}
-          style={{}}
           plugins={[
             headingsPlugin(),
             listsPlugin(),

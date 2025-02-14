@@ -1,6 +1,10 @@
+import { FC, MouseEventHandler } from "react";
 import { TiPinOutline, TiPin } from "react-icons/ti";
 
-const PinNoteButton = ({ onClick, active }) => {
+const PinNoteButton: FC<{
+  onClick: MouseEventHandler<SVGElement>;
+  active: boolean;
+}> = ({ onClick, active }) => {
   return (
     <>
       {active ? (

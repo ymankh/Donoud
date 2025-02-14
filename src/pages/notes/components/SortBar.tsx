@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { FaArrowDown } from "react-icons/fa6";
-import { useContext, useState } from "react";
+import { EventHandler, MouseEventHandler, useContext, useState } from "react";
 import NoteContext from "../../../contexts/NoteContext";
 
 function SortBar() {
@@ -14,15 +14,15 @@ function SortBar() {
     setSortValue: setValue,
     orderReversed,
     setOrderReversed,
-  } = useContext(NoteContext);
+  } = useContext(NoteContext)!;
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | undefined>();
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(undefined);
   };
 
   return (
@@ -63,7 +63,7 @@ function SortBar() {
                 </MenuItem>
               );
             })}
-          </Menu>{" "}
+          </Menu>
           |{" "}
           <button
             className="btn"

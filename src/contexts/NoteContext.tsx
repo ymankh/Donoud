@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-interface Note {
+export interface Note {
   id: string;
   text: string;
   date: Date;
