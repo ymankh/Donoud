@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import Note from "./components/Note";
 import Fab from "@mui/material/Fab";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import NoteContext from "../../contexts/NoteContext";
 import { useNavigate } from "react-router-dom";
 import NoNoteImage from "./components/NoNoteImage";
@@ -29,14 +29,15 @@ const Notes = () => {
     deleteEmptyNotes,
     sortValue,
     orderReversed,
-  } = useContext(NoteContext);
-  const { filter } = useContext(FilterContext);
+  } = useContext(NoteContext)!;
+  const { filter } = useContext(FilterContext)!;
   const notes = allNotes
     .filter((note) => note.text.includes(filter))
     .sort((a, b) => {
       let difference = 0;
-      if (sortValue == "Date created") difference = b.date - a.date;
-      else difference = b.lastChange - a.lastChange;
+      if (sortValue == "Date created")
+        difference = b.date.getTime() - a.date.getTime();
+      else difference = b.lastChange.getTime() - a.lastChange.getTime();
       if (orderReversed) return -difference;
       return difference;
     })

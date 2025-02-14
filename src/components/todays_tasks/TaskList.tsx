@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
+import { Task } from "../../Models/TasksModel";
 
-function congratsTasksFinished() {
+// Function to Get a Random Congrats Message
+function congratsTasksFinished(): string {
   const sentences = [
     "Congratulations on completing all your tasks for today! 🎉",
     "Well done on checking off everything on your to-do list today! 🌟",
@@ -24,6 +26,7 @@ function congratsTasksFinished() {
   return sentences[Math.floor(Math.random() * sentences.length)];
 }
 
+// Motion Variants
 const container = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
@@ -36,23 +39,30 @@ const container = {
   },
 };
 
-// eslint-disable-next-line react/prop-types
-const TaskList = ({ tasks = [{}] }) => {
+const TaskList: React.FC<{
+  tasks: Task[];
+}> = ({ tasks = [] }) => {
   const { width, height } = useWindowSize();
   const [celebrating, setCelebrating] = useState(false);
-  tasks.sort((a, b) => {
-    if (!a.done && b.done) return -1;
-    else return 0;
-  });
   const [isMounted, setIsMounted] = useState(false);
   const [allTasksDone, setAllTasksDone] = useState(false);
+
+  // Sort tasks to show unfinished tasks first
+  tasks.sort((a, b) => (!a.done && b.done ? -1 : 1));
+
   useEffect(() => {
     if (!isMounted) {
       setIsMounted(true);
       if (tasks.length > 0) setAllTasksDone(!tasks.some((task) => !task.done));
       return;
     }
-    if (tasks.every((task) => task.done) && !celebrating && !allTasksDone) {
+
+    if (
+      tasks.length > 0 &&
+      tasks.every((task) => task.done) &&
+      !celebrating &&
+      !allTasksDone
+    ) {
       toast.success(congratsTasksFinished());
       setCelebrating(true);
       setAllTasksDone(true);
@@ -60,7 +70,8 @@ const TaskList = ({ tasks = [{}] }) => {
         setCelebrating(false);
       }, 10 * 1000);
     }
-  }, [tasks]);
+  }, [tasks, celebrating, allTasksDone, isMounted]);
+
   return (
     <section id="notes">
       {celebrating && (
@@ -72,8 +83,8 @@ const TaskList = ({ tasks = [{}] }) => {
           height={height}
         />
       )}
-      <div className="container py-5 h-100 ">
-        <div className="row  d-flex justify-content-center align-items-center h-100">
+      <div className="container py-5 h-100">
+        <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col col-lg-8 col-xl-6">
             <div className="card rounded-3">
               <div className="card-body p-4 shadow">

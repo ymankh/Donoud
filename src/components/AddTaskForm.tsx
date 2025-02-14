@@ -1,6 +1,8 @@
-import { useContext, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import TasksContext from "../contexts/TasksContext";
 import { Bounce, toast } from "react-toastify";
+import { taskCategories, TaskCategory } from "../Models/TasksModel";
+import { set } from "date-fns";
 
 function randomEmoji() {
   const emojis = ["😐", "😑", "😬", "🙄", "🙅‍♀️", "🤷‍♂️", "💁‍♂️", "🚶‍♂️", "👀", "🤦‍♀️"];
@@ -161,13 +163,15 @@ function workSentences() {
 
 const AddTaskForm = () => {
   const [task, setTask] = useState("");
-  const { addTask } = useContext(TasksContext);
+  const [selectedTaskCategory, setSelectedTaskCategory] =
+    useState<TaskCategory>("");
+  const { addTask } = useContext(TasksContext)!;
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (task.length < 5) {
       toast.error("Task should be at least 5 characters" + randomEmoji(), {
@@ -188,15 +192,15 @@ const AddTaskForm = () => {
       meal: ["عشاء", "طعام", "اكل", "شوربة", "تناول", "فطور", "غداء"],
     };
 
-    const showToast = (sentence) => {
+    const showToast = (sentence: string) => {
       toast.success(sentence, { transition: Bounce });
     };
 
-    const checkTask = (task, keywords) => {
+    const checkTask = (task: string, keywords: string[]) => {
       return keywords.some((word) => task.includes(word));
     };
 
-    const handleTask = (task) => {
+    const handleTask = (task: string) => {
       for (const [taskName, keywords] of Object.entries(taskKeywords)) {
         if (checkTask(task, keywords)) {
           showToast(getSentenceForTask(taskName));
@@ -205,7 +209,7 @@ const AddTaskForm = () => {
       }
     };
 
-    const getSentenceForTask = (taskName) => {
+    const getSentenceForTask = (taskName: string) => {
       switch (taskName) {
         case "reading":
           return readingSentence();
@@ -231,25 +235,50 @@ const AddTaskForm = () => {
     };
 
     handleTask(task);
-
-    addTask(task);
+    addTask(task, selectedTaskCategory);
     setTask("");
+    setSelectedTaskCategory("");
   };
+  const changeTaskCategory = (e: ChangeEvent<HTMLSelectElement>) =>
+    setSelectedTaskCategory(e.target.value as TaskCategory);
   return (
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <label htmlFor="Task" className="form-label">
           Add a new task.
         </label>
-        <input
-          type="text"
-          className="form-control"
-          id="Task"
-          aria-describedby="newTask"
-          placeholder="ex  water the planet... "
-          value={task}
-          onChange={onChange}
-        />
+        <div className="row">
+          <div className="col-8">
+            <input
+              type="text"
+              className="form-control"
+              id="Task"
+              aria-describedby="newTask"
+              placeholder="ex  water the planet... "
+              value={task}
+              onChange={onChange}
+            />
+          </div>
+          <div className="col-4">
+            <select
+              className="form-control"
+              id="Task"
+              aria-describedby="newTask"
+              value={selectedTaskCategory}
+              onChange={changeTaskCategory}
+            >
+              <option value={selectedTaskCategory} selected disabled>
+                Category
+              </option>
+              {taskCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         <div id="newTask" className="form-text"></div>
       </div>
       <button type="submit" className="btn btn-primary">
