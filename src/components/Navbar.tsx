@@ -18,7 +18,7 @@ const sentences = [
 
 const Navbar = () => {
   const [clicksCounter, setClickCounter] = useState(0);
-  const { filter, setFilter } = useContext(FilterContext);
+  const { filter, setFilter } = useContext(FilterContext)!;
   // Function to generate a random index
   const getRandomIndex = () => {
     return sentences[Math.floor(Math.random() * sentences.length)];
@@ -59,7 +59,7 @@ const Navbar = () => {
         >
           <input
             className="form-control me-1"
-            style={{width:"150px"}}
+            style={{ width: "150px" }}
             type="search"
             placeholder="Filter"
             aria-label="Search"

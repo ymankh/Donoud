@@ -56,7 +56,7 @@ const ListItem = ({
           className="form-check-input me-3"
           type="checkbox"
           checked={task.done}
-          onChange={() => markTaskFinished(task)}
+          onChange={() => markTaskFinished(task.id)}
         />
         <div className="row" onClick={handleEditTask}>
           <div

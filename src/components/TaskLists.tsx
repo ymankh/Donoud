@@ -4,14 +4,15 @@ import OldTaskList from "./old_tasks/OldTaskList";
 import TaskList from "./todays_tasks/TaskList";
 import { Accordion, Container } from "react-bootstrap";
 import FilterContext from "../contexts/FilterContext";
+import { Task } from "../Models/TasksModel";
 
 const TaskLists = () => {
-  const { filter } = useContext(FilterContext);
-  const { tasks: allTasks } = useContext(TasksContext);
+  const { filter } = useContext(FilterContext)!;
+  const { tasks: allTasks } = useContext(TasksContext)!;
   const today = new Date().toDateString();
-  const tasks = [];
+  const tasks: Task[] = [];
   // Group tasks by date
-  const oldTasks = allTasks.reduce((acc, task) => {
+  const oldTasks = allTasks.reduce((acc, task: Task) => {
     if (!task["task"].includes(filter)) return acc;
 
     // Get the date string in YYYY-MM-DD format
