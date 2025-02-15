@@ -266,7 +266,7 @@ const AddTaskForm = () => {
               value={selectedTaskCategory}
               onChange={changeTaskCategory}
             >
-              <option value={selectedTaskCategory} selected disabled>
+              <option value="" selected disabled>
                 Category
               </option>
               {taskCategories.map((category) => (

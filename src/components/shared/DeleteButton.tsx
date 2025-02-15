@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { MdDeleteForever } from "react-icons/md";
 
 // eslint-disable-next-line react/prop-types
-const DeleteButton = ({ onClick }) => {
+const DeleteButton: FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}

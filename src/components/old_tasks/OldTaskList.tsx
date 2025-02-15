@@ -2,6 +2,7 @@ import ListItem from "../todays_tasks/ListItem";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { Accordion } from "react-bootstrap";
+import { Task } from "../../Models/TasksModel";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -15,8 +16,13 @@ const container = {
   },
 };
 
-// eslint-disable-next-line react/prop-types
-const OldTaskList = ({ tasks = [{}],eventKey }) => {
+const OldTaskList = ({
+  tasks,
+  eventKey,
+}: {
+  tasks: Task[];
+  eventKey: string;
+}) => {
   tasks.sort((a, b) => {
     if (!a.done && b.done) return -1;
     else return 0;
