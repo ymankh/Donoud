@@ -7,7 +7,7 @@ interface TasksContextType {
   editedTask: Task | null;
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   markTaskFinished: (taskId: string) => void;
-  addTask: (taskText: string, taskCategories: TasksContextType) => void;
+  addTask: (taskText: string, taskCategories: TaskCategory) => void;
   deleteTask: (taskId: string) => void;
   setEditedTask: React.Dispatch<React.SetStateAction<Task | null>>;
   saveEditedTask: () => void;

@@ -2,7 +2,6 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import TasksContext from "../contexts/TasksContext";
 import { Bounce, toast } from "react-toastify";
 import { taskCategories, TaskCategory } from "../Models/TasksModel";
-import { set } from "date-fns";
 
 function randomEmoji() {
   const emojis = ["😐", "😑", "😬", "🙄", "🙅‍♀️", "🤷‍♂️", "💁‍♂️", "🚶‍♂️", "👀", "🤦‍♀️"];
@@ -164,7 +163,7 @@ function workSentences() {
 const AddTaskForm = () => {
   const [task, setTask] = useState("");
   const [selectedTaskCategory, setSelectedTaskCategory] =
-    useState<TaskCategory>("");
+    useState<TaskCategory>("" as TaskCategory);
   const { addTask } = useContext(TasksContext)!;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

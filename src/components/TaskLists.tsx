@@ -12,27 +12,30 @@ const TaskLists = () => {
   const today = new Date().toDateString();
   const tasks: Task[] = [];
   // Group tasks by date
-  const oldTasks = allTasks.reduce((acc, task: Task) => {
-    if (!task["task"].includes(filter)) return acc;
+  const oldTasks = allTasks.reduce(
+    (acc: { [key: string]: Task[] }, task: Task) => {
+      if (!task["task"].includes(filter)) return acc;
 
-    // Get the date string in YYYY-MM-DD format
-    const dateKey = task.date.toDateString();
+      // Get the date string in YYYY-MM-DD format
+      const dateKey = task.date.toDateString();
 
-    // Check if the date key already exists in the accumulator
-    if (dateKey === today) {
-      tasks.push(task);
+      // Check if the date key already exists in the accumulator
+      if (dateKey === today) {
+        tasks.push(task);
+        return acc;
+      }
+      if (!acc[dateKey]) {
+        // If not, create a new array for that date
+        acc[dateKey] = [task];
+        return acc;
+      }
+      // If yes, push the task to the existing array
+      acc[dateKey].push(task);
+
       return acc;
-    }
-    if (!acc[dateKey]) {
-      // If not, create a new array for that date
-      acc[dateKey] = [task];
-      return acc;
-    }
-    // If yes, push the task to the existing array
-    acc[dateKey].push(task);
-
-    return acc;
-  }, {});
+    },
+    {}
+  );
 
   return (
     <>
@@ -44,7 +47,10 @@ const TaskLists = () => {
             <div className="col col-lg-8 col-xl-6">
               <Accordion className="shadow">
                 {Object.entries(oldTasks)
-                  .sort((a, b) => new Date(b[0]) - new Date(a[0]))
+                  .sort(
+                    (a, b) =>
+                      new Date(b[0]).getTime() - new Date(a[0]).getTime()
+                  )
                   .map(([key, tasks]) => {
                     return (
                       <OldTaskList key={key} tasks={tasks} eventKey={key} />
