@@ -180,16 +180,50 @@ const AddTaskForm = () => {
     }
 
     const taskKeywords = {
-      reading: ["read", "قراءة", "book"],
-      meditating: ["meditate", "تامل", "تامل", "تنفس"],
-      praying: ["صلاة", "pray", "صلي"],
-      learning: ["learn", "study", "تعلم", "محاضره", "محاضرة"],
-      gratitude: ["يمان", "yaman", "yman", "Yman", "Yaman"],
-      writing: ["كتابة", "write", "Write", "أكتب", "اكتب"],
-      family: "عمر حمزة سرى حنين ابي  امي ماما بابا".split(" "),
-      work: ["جلي", "تكنيس", "مساعدة", "طبخ", "شغل", "ترتيب", "تنطيف"],
-      meal: ["عشاء", "طعام", "اكل", "شوربة", "تناول", "فطور", "غداء"],
+      reading: [
+        "read", "reading", "قراءة", "book", "books", "novel", "article", "magazine",
+        "story", "قصص", "رواية", "كتب", "مقال", "قصة", "literature"
+      ],
+      meditating: [
+        "meditate", "meditating", "تأمل", "تنفس", "breathing", "healing", "relaxation",
+        "yoga", "calm", "peace", "silence", "mindfulness", "جلسة", "راحة", "هدوء",
+        "استرخاء",  "تأمل", "صفاء", "وعي"
+      ],
+      praying: [
+        "pray", "prayer", "صلاة", "صلي", "دعاء", "اذكار", "ركعة", "ركعات", "استغفار",
+        "تسبيح", "تحميد", "صيام", "صليت", "قرآن", "quran", "fasting"
+      ],
+      learning: [
+        "learn", "learning", "study", "studying", "تعلم", "دورة", "course", "lecture",
+        "محاضرة", "كورس", "درس", "مذاكرة", "تعليمي", "فهم", "استيعاب", "تحضير",
+        "revision", "homework", "assignment", "quiz", "امتحان"
+      ],
+      gratitude: [
+        "يمان", "yaman", "yman", "Yman", "Yaman", "gratitude", "grateful", "thankful",
+        "thanks", "امتنان", "شكرا", "شكر", "عرفان", "امتن", "blessed", "الحمدلله"
+      ],
+      writing: [
+        "write", "writing", "written", "كتابة", "أكتب", "اكتب", "مقالة", "note",
+        "notes", "diary", "journal", "تدوين", "دفتر", "مذكرة", "نص", "سرد", "رسالة"
+      ],
+      family: [
+        ...("عمر حمزة سرى حنين ابي امي ماما بابا اخي اختي زوجي زوجتي ابن بنت عائلة اهل اولاد بنتي ابني أختي أخي زوج أمي زوجة أبي خال عم خالة عمة".split(" ")),
+        "family", "dad", "mom", "father", "mother", "brother", "sister", "wife", "husband",
+        "son", "daughter", "parents", "kids", "relatives", "cousin", "uncle", "aunt", "grandma", "grandpa"
+      ],
+      work: [
+        "جلي", "تكنيس", "مساعدة", "طبخ", "شغل", "ترتيب", "تنطيف", "عمل", "دوام",
+        "مكتب", "مهام", "تسليم", "مشروع", "مقابلة", "زوم", "وظيفة", "شغلي",
+        "work", "job", "office", "meeting", "project", "deadline", "task", "tasks",
+        "meeting", "assignment", "business", "freelance", "client"
+      ],
+      meal: [
+        "عشاء", "غداء", "فطور", "سحور", "افطار", "اكل", "وجبة", "شوربة", "طعام",
+        "تناول", "snack", "meal", "dinner", "lunch", "breakfast", "food", "eat",
+        "eating", "soup", "sandwich", "drink", "juice"
+      ]
     };
+
 
     const showToast = (sentence: string) => {
       toast.success(sentence, { transition: Bounce });
