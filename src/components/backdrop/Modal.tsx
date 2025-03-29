@@ -27,10 +27,10 @@ const dropIn = {
 };
 
 const Modal = () => {
-  const { close } = useContext(ModalContext);
+  const { close } = useContext(ModalContext)!;
   const { saveEditedTask, editedTask, setEditedTask } =
-    useContext(TasksContext);
-  const handleSubmit = (e) => {
+    useContext(TasksContext)!;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     saveEditedTask();
     close();
@@ -59,9 +59,9 @@ const Modal = () => {
               className="form-control"
               id="taskContent"
               placeholder="ex water the planet..."
-              value={editedTask.task}
+              value={editedTask?.task}
               onChange={(e) =>
-                setEditedTask({ ...editedTask, task: e.target.value })
+                setEditedTask({ ...editedTask!, task: e.target.value })
               }
             />
           </div>
@@ -72,8 +72,8 @@ const Modal = () => {
             <textarea
               className="form-control"
               id="taskDetails"
-              rows="3"
-              value={editedTask.details}
+              rows={3}
+              value={editedTask?.details}
               onChange={(e) =>
                 setEditedTask({ ...editedTask, details: e.target.value })
               }

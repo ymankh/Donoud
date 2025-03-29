@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
+import { FC, ReactNode } from "react";
 
-const Backdrop = ({ children, onClick }) => {
- 
+const Backdrop: FC<{ children: ReactNode, onClick: () => void }> = ({ children, onClick }) => {
+
   return (
     <motion.div
       onClick={onClick}

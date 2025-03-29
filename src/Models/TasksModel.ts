@@ -19,4 +19,5 @@ export interface Task {
   done: boolean;
   date: Date;
   category: TaskCategory;
+  details?: string
 }
