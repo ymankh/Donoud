@@ -1,14 +1,12 @@
 import { Container } from "react-bootstrap";
 import Note from "./components/Note";
-import Fab from "@mui/material/Fab";
 import { useContext, useEffect } from "react";
 import NoteContext from "../../contexts/NoteContext";
-import { useNavigate } from "react-router-dom";
 import NoNoteImage from "./components/NoNoteImage";
 import { motion } from "framer-motion";
 import FilterContext from "../../contexts/FilterContext";
 import SortBar from "./components/SortBar";
-import NoteAdd from "@mui/icons-material/NoteAdd";
+import AddNoteFloatButton from "./components/AddNoteFloatButton";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -25,7 +23,6 @@ const container = {
 const Notes = () => {
   const {
     notes: allNotes,
-    createNewNote,
     deleteEmptyNotes,
     sortValue,
     orderReversed,
@@ -50,7 +47,6 @@ const Notes = () => {
         return 0;
       }
     });
-  const navigate = useNavigate();
   useEffect(() => {
     deleteEmptyNotes();
   }, []);
@@ -65,24 +61,7 @@ const Notes = () => {
       exit={{ opacity: 0, x: 100 }}
     >
       <SortBar />
-      <Fab
-        color="primary"
-        style={{
-          margin: 0,
-          top: "auto",
-          right: 20,
-          bottom: 80,
-          left: "auto",
-          position: "fixed",
-        }}
-        aria-label="add"
-        onClick={() => {
-          const newNoteId = createNewNote();
-          navigate(newNoteId);
-        }}
-      >
-        <NoteAdd />
-      </Fab>
+      <AddNoteFloatButton />
       <Container>
         <div className="m-2" />
         <motion.div
@@ -98,7 +77,7 @@ const Notes = () => {
           )}
         </motion.div>
       </Container>
-      <div className="my-4 p-4 "></div>
+      <div className="my-4 p-4"></div>
     </motion.div>
   );
 };
