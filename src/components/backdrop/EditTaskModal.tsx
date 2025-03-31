@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import Backdrop from "./Backdrop";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalContext from "../../contexts/ModalContext";
 import TasksContext from "../../contexts/TasksContext";
 import { useLocation } from "react-router-dom";
+import SelectCategory from "../SelectCategory";
+import { TaskCategory } from "../../Models/TasksModel";
 
 const dropIn = {
   hidden: {
@@ -26,8 +28,10 @@ const dropIn = {
   },
 };
 
-const Modal = () => {
+const EditTaskModal = () => {
+  const location = useLocation();
   const { close } = useContext(ModalContext)!;
+  useState<TaskCategory>("" as TaskCategory);
   const { saveEditedTask, editedTask, setEditedTask } =
     useContext(TasksContext)!;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,10 +39,9 @@ const Modal = () => {
     saveEditedTask();
     close();
   };
-  const location = useLocation();
-  useEffect(() => {
-    if (location.pathname.includes("notes")) close();
-  }, [location]);
+
+  useEffect(() => { if (location.pathname.includes("notes")) close(); }, [location]);
+
   return (
     <Backdrop onClick={close}>
       <motion.div
@@ -50,20 +53,25 @@ const Modal = () => {
         exit="exit"
       >
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
+          <div className="mb-3 row">
             <label htmlFor="taskContent" className="form-label">
               The task
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="taskContent"
-              placeholder="ex water the planet..."
-              value={editedTask?.task}
-              onChange={(e) =>
-                setEditedTask({ ...editedTask!, task: e.target.value })
-              }
-            />
+            <div className="col-8">
+              <input
+                type="text"
+                className="form-control"
+                id="taskContent"
+                placeholder="ex water the planet..."
+                value={editedTask?.task}
+                onChange={(e) =>
+                  setEditedTask({ ...editedTask!, task: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-4">
+              <SelectCategory selectedTaskCategory={editedTask?.category ?? ""} handelSelect={(value: TaskCategory) => setEditedTask({ ...editedTask!, category: value })} />
+            </div>
           </div>
           <div className="mb-3">
             <label htmlFor="taskDetails" className="form-label">
@@ -75,7 +83,7 @@ const Modal = () => {
               rows={3}
               value={editedTask?.details}
               onChange={(e) =>
-                setEditedTask({ ...editedTask, details: e.target.value })
+                setEditedTask({ ...editedTask!, details: e.target.value })
               }
             ></textarea>
           </div>
@@ -95,4 +103,4 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default EditTaskModal;

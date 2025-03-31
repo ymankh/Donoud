@@ -43,19 +43,17 @@ const ListItem: React.FC<{ task: Task }> = ({
         onChange={() => markTaskFinished(task.id)}
       />
       <div className="row flex-grow-1" onClick={handleEditTask}>
-        <div
-          style={task.done ? { textDecoration: "line-through" } : {}}
-          className="col-12"
-        >
-          <div className="row">
-            <div className="col-8">{task.task}</div>
-            <div className="col-4">{task.category}</div>
-          </div>
+        <div className="col-8" style={task.done ? { textDecoration: "line-through" } : {}}>
+          <div>{task.task}</div>
+          <div className="small text-muted">{formatDate(task.date)}</div>
         </div>
-        <div className="small text-muted col-12">{formatDate(task.date)}</div>
+        <div className="col-4 d-flex align-items-center justify-content-end">
+          <div className="me-2">{task.category}</div>
+        </div>
       </div>
-
-      <div className="flex-shrink-1"><DeleteButton onClick={() => deleteTask(task.id)} /></div>
+      <div className="flex-shrink-1">
+        <DeleteButton onClick={() => deleteTask(task.id)} />
+      </div>
     </motion.li>
   );
 };

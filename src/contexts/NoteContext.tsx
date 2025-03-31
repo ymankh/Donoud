@@ -11,16 +11,18 @@ export interface Note {
 
 interface NoteContextType {
   notes: Note[];
+  sortOptions: string[];
+  sortValue: string;
+  selectedFolder: string;
+  orderReversed: boolean;
+  setOrderReversed: React.Dispatch<React.SetStateAction<boolean>>;
+  setSortValue: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedFolder: React.Dispatch<React.SetStateAction<string>>;
   getNoteById: (id: string) => Note | undefined;
   deleteNote: (deletedNote: Note) => void;
   updateNote: (updatedNote: Note) => void;
   createNewNote: () => string;
   deleteEmptyNotes: () => void;
-  orderReversed: boolean;
-  setOrderReversed: React.Dispatch<React.SetStateAction<boolean>>;
-  sortValue: string;
-  setSortValue: React.Dispatch<React.SetStateAction<string>>;
-  sortOptions: string[];
 }
 
 const NoteContext = createContext<NoteContextType | undefined>(undefined);
@@ -42,15 +44,15 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
   const sortOptions = ["Date created", "Date modified"];
   const [orderReversed, setOrderReversed] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>(sortOptions[0]);
-
+  const [selectedFolder, setSelectedFolder] = useState<string>("");
   let initialNotes: Note[] = [];
   try {
     initialNotes = makeNotes(localStorage.getItem("notes"));
   } catch (error) {
     console.error("Error loading notes from localStorage:", error);
   }
-
   const [notes, setNotes] = useState<Note[]>(initialNotes);
+
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -94,16 +96,18 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
     <NoteContext.Provider
       value={{
         notes,
+        orderReversed,
+        sortOptions,
+        selectedFolder,
+        sortValue,
         getNoteById,
         deleteNote,
         updateNote,
         createNewNote,
         deleteEmptyNotes,
-        orderReversed,
         setOrderReversed,
-        sortValue,
         setSortValue,
-        sortOptions,
+        setSelectedFolder
       }}
     >
       {children}

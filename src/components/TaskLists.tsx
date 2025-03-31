@@ -14,7 +14,7 @@ const TaskLists = () => {
   // Group tasks by date
   const oldTasks = allTasks.reduce(
     (acc: { [key: string]: Task[] }, task: Task) => {
-      if (!task["task"].includes(filter)) return acc;
+      if (isTaskFiltered(task, filter)) return acc;
 
       // Get the date string in YYYY-MM-DD format
       const dateKey = task.date.toDateString();
@@ -66,3 +66,8 @@ const TaskLists = () => {
 };
 
 export default TaskLists;
+
+function isTaskFiltered(task: Task, filter: string) {
+  filter = filter.toLocaleLowerCase();
+  return !(task.task.toLocaleLowerCase().includes(filter) || task.details?.toLocaleLowerCase().includes(filter) || task.category?.toLocaleLowerCase().includes(filter));
+}

@@ -22,8 +22,8 @@ const BottomNavigator = () => {
           setValue(newValue);
         }}
       >
-        <BottomNavigationAction label="Notes" value="notes" icon={<Note />} onClick={()=>{navigate("notes")}}/>
-        <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} onClick={()=>{navigate("tasks")}}/>
+        <BottomNavigationAction label="Notes" value="notes" icon={<Note />} onClick={() => { navigate("notes") }} />
+        <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} onClick={() => { navigate("tasks") }} />
       </BottomNavigation>
     </Paper>
   );

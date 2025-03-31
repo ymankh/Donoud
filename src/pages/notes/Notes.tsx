@@ -26,6 +26,7 @@ const Notes = () => {
     deleteEmptyNotes,
     sortValue,
     orderReversed,
+    selectedFolder
   } = useContext(NoteContext)!;
   const { filter } = useContext(FilterContext)!;
   const notes = allNotes
