@@ -24,7 +24,7 @@ const item = {
 const Note: FC<{ note: NoteType }> = ({ note }) => {
   const navigate = useNavigate();
   const { deleteNote, updateNote } = useContext(NoteContext)!;
-  const noteColor = stickyNoteColors[note.color];
+  const noteColor = stickyNoteColors[note.color?? "gold"];
   const { text: textColor, note: bgColor } = noteColor;
   return (
     <motion.div
