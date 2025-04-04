@@ -7,7 +7,74 @@ export interface Note {
   date: Date;
   lastChange: Date;
   isPined: boolean;
+  color: StickyNoteColor;
 }
+
+export const stickyNoteColors = {
+  gold: {
+    note: '#FFD700',
+    text: '#000000',
+  },
+  darkOrange: {
+    note: '#FF8C00',
+    text: '#000000',
+  },
+  hotPink: {
+    note: '#FF69B4',
+    text: '#000000',
+  },
+  darkTurquoise: {
+    note: '#00CED1',
+    text: '#000000',
+  },
+  greenYellow: {
+    note: '#ADFF2F',
+    text: '#000000',
+  },
+  tomatoRed: {
+    note: '#FF6347',
+    text: '#000000',
+  },
+  lightSkyBlue: {
+    note: '#87CEFA',
+    text: '#000000',
+  },
+  plum: {
+    note: '#DDA0DD',
+    text: '#000000',
+  },
+  mediumSpringGreen: {
+    note: '#00FA9A',
+    text: '#000000',
+  },
+  lightCoral: {
+    note: '#F08080',
+    text: '#000000',
+  },
+  moccasin: {
+    note: '#FFE4B5',
+    text: '#000000',
+  },
+  paleTurquoise: {
+    note: '#AFEEEE',
+    text: '#000000',
+  },
+  lavender: {
+    note: '#E6E6FA',
+    text: '#000000',
+  },
+  wheat: {
+    note: '#F5DEB3',
+    text: '#000000',
+  },
+  lightPink: {
+    note: '#FFB6C1',
+    text: '#000000',
+  },
+} as const
+
+export type StickyNoteColor = keyof typeof stickyNoteColors
+
 
 interface NoteContextType {
   notes: Note[];
@@ -83,6 +150,7 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
       date: new Date(),
       lastChange: new Date(),
       isPined: false,
+      color: "wheat"
     };
     setNotes((prev) => [...prev, { ...newNote, lastChange: new Date() }]);
     return newNote.id;

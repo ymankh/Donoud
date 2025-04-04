@@ -73,7 +73,6 @@ button .delete {
 .note-footer {
   display: flex;
   align-items: center;
-  background: linear-gradient(0deg, #272727 0%, #272727 70%, #0057b300 100%);
   justify-content: space-between;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -93,4 +92,7 @@ button .delete {
   );
   justify-content: space-between;
   z-index: 50;
+}
+.mdxeditor-root-contenteditable {
+  --baseTextContrast: var(--noteTextColor) !important;
 }

@@ -16,10 +16,11 @@ import {
 import "@mdxeditor/editor/style.css";
 import { Paper } from "@mui/material";
 import { FormEventHandler, useContext, useEffect, useState } from "react";
-import { redirect, useNavigate, useParams } from "react-router-dom";
-import NoteContext, { Note } from "../../contexts/NoteContext";
+import { useNavigate, useParams } from "react-router-dom";
+import NoteContext, { Note, stickyNoteColors } from "../../contexts/NoteContext";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import SelectNoteColor from "./editNoteToolbar/SelectNoteColor";
 
 const NoteEdit = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const NoteEdit = () => {
   let editedNote: Note | undefined;
   try {
     if (noteId) editedNote = getNoteById(noteId);
-  } catch (error) {}
+  } catch (error) { }
   const [note, setNote] = useState(editedNote);
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -73,6 +74,7 @@ const NoteEdit = () => {
                           <BlockTypeSelect />
                           <InsertTable />
                           <ListsToggle />
+                          <SelectNoteColor handelSelectNoteColor={(color) => setNote(note => note === undefined ? undefined : { ...note, color })} selectedColor={note?.color ?? "darkOrange"} />
                         </>
                       ),
                     }),

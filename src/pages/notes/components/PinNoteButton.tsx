@@ -4,14 +4,15 @@ import { TiPinOutline, TiPin } from "react-icons/ti";
 const PinNoteButton: FC<{
   onClick: MouseEventHandler<SVGElement>;
   active: boolean;
-}> = ({ onClick, active }) => {
+  color: string;
+}> = ({ onClick, active, color }) => {
   return (
     <>
       {active ? (
-        <TiPin style={{ fontSize: 20, color: "#E8E0E8" }} onClick={onClick} />
+        <TiPin style={{ fontSize: 20, color }} onClick={onClick} />
       ) : (
         <TiPinOutline
-          style={{ fontSize: 20, color: "#E8E0E8" }}
+          style={{ fontSize: 20, color }}
           onClick={onClick}
         />
       )}

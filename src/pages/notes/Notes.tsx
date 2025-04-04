@@ -71,15 +71,17 @@ const Notes = () => {
           animate="visible"
           className="notes-list"
         >
-          {notes.length > 0 ? (
-            notes.map((note) => <Note key={note.id} note={note} />)
-          ) : (
-            <NoNoteImage />
-          )}
+          {
+            notes.length > 0 ? (
+              notes.map((note) => <Note key={note.id} note={note} />)
+            ) : (
+              <NoNoteImage />
+            )
+          }
         </motion.div>
-      </Container>
+      </Container >
       <div className="my-4 p-4"></div>
-    </motion.div>
+    </motion.div >
   );
 };
 

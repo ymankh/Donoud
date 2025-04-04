@@ -7,7 +7,7 @@ import {
   tablePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
-import { Note as NoteType } from "../../../contexts/NoteContext";
+import { Note as NoteType, stickyNoteColors } from "../../../contexts/NoteContext";
 import ModalComponent from "../../../components/ModalComponent";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -18,16 +18,14 @@ import { motion } from "framer-motion";
 import PinNoteButton from "./PinNoteButton";
 const item = {
   hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
+  visible: { y: 0, opacity: 1 },
 };
 
-// eslint-disable-next-line react/prop-types
 const Note: FC<{ note: NoteType }> = ({ note }) => {
   const navigate = useNavigate();
   const { deleteNote, updateNote } = useContext(NoteContext)!;
+  const noteColor = stickyNoteColors[note.color];
+  const { text: textColor, note: bgColor } = noteColor;
   return (
     <motion.div
       className="note"
@@ -35,13 +33,12 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
       exit={item.hidden}
       transition={{ duration: 0.2 }}
       layout="position"
+      style={{ backgroundColor: bgColor, color: textColor, "--noteTextColor": textColor } as React.CSSProperties}
     >
       <div className="note-heder">
         <small style={{ fontSize: "0.6em" }}></small>
-        <PinNoteButton
-          onClick={() =>
-            updateNote({ ...note, isPined: !note.isPined } as NoteType)
-          }
+        <PinNoteButton color={textColor}
+          onClick={() => updateNote({ ...note, isPined: !note.isPined })}
           active={Boolean(note.isPined)}
         />
       </div>
@@ -65,11 +62,11 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           readOnly={true}
         />
       </span>
-      <div className="note-footer">
-        <small style={{ fontSize: "0.6em" }}>
+      <div className="note-footer" style={{ background: `linear-gradient(${noteColor} 0%, ${noteColor} 70%, ${noteColor} 100%)` }}>
+        <small >
           {format(note.date, "yyy MMM d p")}
         </small>
-        <DeleteNoteButton onClick={() => deleteNote(note)} />
+        <DeleteNoteButton onClick={() => deleteNote(note)} color={textColor} />
       </div>
       <ModalComponent />
     </motion.div>
