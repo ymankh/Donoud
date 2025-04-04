@@ -77,6 +77,12 @@ button .delete {
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
   z-index: 50;
+  background: linear-gradient(
+    0deg,
+    var(--bgColor) 0%,
+    var(--bgColor) 70%,
+    #00000000 100%
+  );
 }
 .note-heder {
   display: flex;

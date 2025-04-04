@@ -62,7 +62,8 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           readOnly={true}
         />
       </span>
-      <div className="note-footer" style={{ background: `linear-gradient(${noteColor} 0%, ${noteColor} 70%, ${noteColor} 100%)` }}>
+      <div className="note-footer" style={{ color: textColor, "--bgColor": bgColor } as React.CSSProperties}
+      >
         <small >
           {format(note.date, "yyy MMM d p")}
         </small>
