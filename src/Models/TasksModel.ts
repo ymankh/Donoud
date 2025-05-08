@@ -1,14 +1,14 @@
 export const taskCategories = [
-  "Personal 🏡",
+  "Personal ✨",
   "Work 💼",
-  "Health & Fitness 💪",
+  "Health 💪",
   "Finance 💰",
   "Shopping 🛍️",
-  "Home & Family 🏠",
+  "Family 🏠",
   "Education 📚",
-  "Social & Events 🎉",
+  "Social 🎉",
   "Travel ✈️",
-  "Tech & Digital 💻",
+  "Tech 💻",
 ] as const;
 
 export type TaskCategory = (typeof taskCategories)[number] | "";
