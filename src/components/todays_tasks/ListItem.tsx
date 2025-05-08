@@ -18,7 +18,7 @@ const ListItem: React.FC<{ task: Task }> = ({
     done: false,
     date: new Date(),
     category: "",
-  } as Task,
+  },
 }) => {
   const { modalOpen, open, close } = useContext(ModalContext)!;
   const { markTaskFinished, deleteTask, setEditedTask } =
