@@ -43,8 +43,8 @@ const ListItem: React.FC<{ task: Task }> = ({
         onChange={() => markTaskFinished(task.id)}
       />
       <div className="row flex-grow-1" onClick={handleEditTask}>
-        <div className="col-8" style={task.done ? { textDecoration: "line-through" } : {}}>
-          <div>{task.task}</div>
+        <div className="col-8">
+          <div className={task.done ? "text-decoration-line-through" : ""}>{task.task}</div>
           <div className="small text-muted">{formatDate(task.date)}</div>
         </div>
         <div className="col-4 d-flex align-items-center justify-content-end">

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Task, TaskCategory } from "../Models/TasksModel";
+import { Task, TaskCategory } from "@/Models/TasksModel";
 
 interface TasksContextType {
   tasks: Task[];

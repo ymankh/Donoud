@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { FC, useContext } from "react";
+import { motion } from "framer-motion";
 import {
   MDXEditor,
   headingsPlugin,
@@ -7,14 +10,11 @@ import {
   tablePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
-import { Note as NoteType, stickyNoteColors } from "../../../contexts/NoteContext";
-import ModalComponent from "../../../components/ModalComponent";
-import { useNavigate } from "react-router-dom";
+import { Note as NoteType, stickyNoteColors } from "@/contexts/NoteContext";
+import NoteContext from "@/contexts/NoteContext";
+import ModalComponent from "@/components/ModalComponent";
 import { format } from "date-fns";
 import DeleteNoteButton from "./DeleteNoteButton";
-import { FC, useContext } from "react";
-import NoteContext from "../../../contexts/NoteContext";
-import { motion } from "framer-motion";
 import PinNoteButton from "./PinNoteButton";
 const item = {
   hidden: { y: 20, opacity: 0 },

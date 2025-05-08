@@ -69,5 +69,9 @@ export default TaskLists;
 
 function isTaskFiltered(task: Task, filter: string) {
   filter = filter.toLocaleLowerCase();
-  return !(task.task.toLocaleLowerCase().includes(filter) || task.details?.toLocaleLowerCase().includes(filter) || task.category?.toLocaleLowerCase().includes(filter));
+  return !(
+    task.task.toLocaleLowerCase().includes(filter) ||
+    task.details?.toLocaleLowerCase().includes(filter) ||
+    task.category?.toLocaleLowerCase().includes(filter)
+  );
 }
