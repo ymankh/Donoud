@@ -2,10 +2,8 @@ import noNotes from "../../../assets/noNotes.svg";
 
 const NoNoteImage = () => {
   return (
-    <div className="row">
-      <div className="col">
-        <img className="w-100" src={noNotes} alt="no notes" />
-      </div>
+    <div className="d-flex justify-content-center align-items-center ">
+      <img src={noNotes} alt="no notes" className="img-fluid" />
     </div>
   );
 };

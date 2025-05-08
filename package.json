@@ -36,6 +36,7 @@
     "react-use": "^17.5.0",
     "rollup": "^4.38.0",
     "styled-components": "^6.1.8",
+    "use-sound": "^5.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
