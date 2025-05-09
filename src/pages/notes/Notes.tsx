@@ -26,7 +26,7 @@ const Notes = () => {
     deleteEmptyNotes,
     sortValue,
     orderReversed,
-    selectedFolder
+    selectedFolder,
   } = useContext(NoteContext)!;
   const { filter } = useContext(FilterContext)!;
   const notes = allNotes
@@ -63,25 +63,25 @@ const Notes = () => {
     >
       <SortBar />
       <AddNoteFloatButton />
-      <Container>
-        <div className="m-2" />
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="notes-list"
-        >
-          {
-            notes.length > 0 ? (
-              notes.map((note) => <Note key={note.id} note={note} />)
-            ) : (
-              <NoNoteImage />
-            )
-          }
-        </motion.div>
-      </Container >
+      {notes.length > 0 ? (
+        <Container>
+          <div className="m-2" />
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="notes-list"
+          >
+            {notes.map((note) => (
+              <Note key={note.id} note={note} />
+            ))}
+          </motion.div>
+        </Container>
+      ) : (
+        <NoNoteImage />
+      )}
       <div className="my-4 p-4"></div>
-    </motion.div >
+    </motion.div>
   );
 };
 

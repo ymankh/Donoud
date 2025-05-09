@@ -18,7 +18,7 @@ const ListItem: React.FC<{ task: Task }> = ({
     done: false,
     date: new Date(),
     category: "",
-  } as Task,
+  },
 }) => {
   const { modalOpen, open, close } = useContext(ModalContext)!;
   const { markTaskFinished, deleteTask, setEditedTask } =
@@ -44,7 +44,9 @@ const ListItem: React.FC<{ task: Task }> = ({
       />
       <div className="row flex-grow-1" onClick={handleEditTask}>
         <div className="col-8">
-          <div className={task.done ? "text-decoration-line-through" : ""}>{task.task}</div>
+          <div className={"animated-strikethrough " + (task.done ? "active" : "")}>
+            {task.task}
+          </div>
           <div className="small text-muted">{formatDate(task.date)}</div>
         </div>
         <div className="col-4 d-flex align-items-center justify-content-end">

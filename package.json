@@ -1,5 +1,5 @@
 {
-  "name": "donoud",
+  "name": "Donoud",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -22,8 +22,7 @@
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.13",
     "@mui/styled-engine-sc": "^6.0.0-alpha.17",
-    "@reduxjs/toolkit": "^2.7.0",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.6",
     "date-fns": "^3.3.1",
     "framer-motion": "^11.0.8",
     "node-sass": "^9.0.0",
@@ -40,6 +39,7 @@
     "react-use": "^17.5.0",
     "rollup": "^4.38.0",
     "styled-components": "^6.1.8",
+    "use-sound": "^5.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -56,7 +56,7 @@
     "eslint-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "eslint-plugin-react-hooks": "^6.0.0-rc.1",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "sass": "^1.74.1",
+    "sass": "^1.87.0",
     "typescript": "^5.7.3",
     "vite": "^5.1.4",
     "vite-plugin-pwa": "^1.0.0",
