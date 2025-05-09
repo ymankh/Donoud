@@ -3,6 +3,8 @@ import Tasks from "../pages/tasks/Tasks";
 import NoteEdit from "../pages/notes/NoteEdit";
 import Notes from "../pages/notes/Notes";
 import { NotFound } from "./NotFound";
+
+
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (

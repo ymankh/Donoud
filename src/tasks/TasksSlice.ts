@@ -1,4 +1,3 @@
-// features/tasks/tasksSlice.ts
 import { Task, TaskCategory } from '@/Models/TasksModel';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
