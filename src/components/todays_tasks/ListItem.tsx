@@ -5,6 +5,8 @@ import ModalContext from "../../contexts/ModalContext";
 import DeleteButton from "../shared/DeleteButton";
 import { formatDate } from "../../utils/dates";
 import { Task } from "../../Models/TasksModel";
+import { useAudio } from "react-use";
+import strikethroughSound from "@/sounds/strikethrough.wav";
 
 const item = {
   hidden: { y: 20, opacity: 0 },
@@ -20,6 +22,10 @@ const ListItem: React.FC<{ task: Task }> = ({
     category: "",
   },
 }) => {
+  const [audio, _, soundEffect] = useAudio({
+    src: strikethroughSound,
+    autoPlay: false,
+  });
   const { modalOpen, open, close } = useContext(ModalContext)!;
   const { markTaskFinished, deleteTask, setEditedTask } =
     useContext(TasksContext)!;
@@ -40,11 +46,16 @@ const ListItem: React.FC<{ task: Task }> = ({
         className="form-check-input me-3"
         type="checkbox"
         checked={task.done}
-        onChange={() => markTaskFinished(task.id)}
+        onChange={() => {
+          markTaskFinished(task.id);
+          soundEffect.play();
+        }}
       />
       <div className="row flex-grow-1" onClick={handleEditTask}>
         <div className="col-8">
-          <div className={"animated-strikethrough " + (task.done ? "active" : "")}>
+          <div
+            className={"animated-strikethrough " + (task.done ? "active" : "")}
+          >
             {task.task}
           </div>
           <div className="small text-muted">{formatDate(task.date)}</div>
@@ -56,6 +67,7 @@ const ListItem: React.FC<{ task: Task }> = ({
       <div className="flex-shrink-1">
         <DeleteButton onClick={() => deleteTask(task.id)} />
       </div>
+      {audio}
     </motion.li>
   );
 };
