@@ -84,7 +84,7 @@ button .delete {
     #00000000 100%
   );
 }
-.note-heder {
+.note-header {
   display: flex;
   top: 15px;
   right: 10px;
