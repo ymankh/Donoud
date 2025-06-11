@@ -35,7 +35,7 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
       layout="position"
       style={{ backgroundColor: bgColor, color: textColor, "--noteTextColor": textColor } as React.CSSProperties}
     >
-      <div className="note-heder">
+      <div className="note-header">
         <small style={{ fontSize: "0.6em" }}></small>
         <PinNoteButton color={textColor}
           onClick={() => updateNote({ ...note, isPined: !note.isPined })}
