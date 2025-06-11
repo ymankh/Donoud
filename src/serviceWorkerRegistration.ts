@@ -2,11 +2,11 @@ export function register() {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
-                .register('../public/manifest.webmanifest')
-                .then(reg => {
+                .register('/sw.js')
+                .then((reg) => {
                     console.log('SW registered: ', reg);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log('SW registration failed: ', err);
                 });
         });
