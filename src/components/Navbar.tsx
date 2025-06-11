@@ -19,7 +19,7 @@ const sentences = [
 const Navbar = () => {
   const [clicksCounter, setClickCounter] = useState(0);
   const { filter, setFilter } = useContext(FilterContext)!;
-  // Function to generate a random index
+  // Function that returns a random sentence/message
   const getRandomIndex = () => {
     return sentences[Math.floor(Math.random() * sentences.length)];
   };
