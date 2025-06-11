@@ -5,6 +5,6 @@ export const NotFound = () => {
   const navigate = useNavigate();
   useEffect(() => {
     navigate("/tasks");
-  });
+  }, []);
   return <div></div>;
 };
