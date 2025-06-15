@@ -26,6 +26,18 @@
     Content-Type = "image/png"
 
 [[redirects]]
+  from = "/sw.js"
+  to = "/sw.js"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/workbox-*"
+  to = "/workbox-:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 404
