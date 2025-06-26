@@ -18,6 +18,7 @@ Donoud is a straightforward to-do list and note-taking application built with Re
 - Color-code notes and edit them using a rich text editor.
 - Pin important notes so they stay at the top.
 - Sort notes by creation date or last update.
+- Organize notes into folders for easier filtering.
 
 ## Installation
 
@@ -37,6 +38,7 @@ To run the app locally, follow these steps:
 4. Use the input fields and buttons provided to make changes.
 5. Changes are automatically saved to local storage.
 6. Use the filtering options to efficiently organize and find tasks and notes.
+7. Create and manage note folders from the notes toolbar to keep related notes together.
 
 ## Contributing
 
