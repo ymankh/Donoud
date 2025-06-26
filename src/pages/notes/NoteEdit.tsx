@@ -25,7 +25,7 @@ import SelectNoteColor from "./editNoteToolbar/SelectNoteColor";
 const NoteEdit = () => {
   const navigate = useNavigate();
   const { noteId } = useParams();
-  const { getNoteById, updateNote } = useContext(NoteContext)!;
+  const { getNoteById, updateNote, folders } = useContext(NoteContext)!;
   let editedNote: Note | undefined;
   try {
     if (noteId) editedNote = getNoteById(noteId);
@@ -55,6 +55,24 @@ const NoteEdit = () => {
       >
         <div className=" container mt-4">
           <form onSubmit={handleSubmit}>
+            <div className="mb-2">
+              <select
+                className="form-select"
+                value={note?.folderId ?? ""}
+                onChange={(e) =>
+                  setNote((n) =>
+                    n ? { ...n, folderId: e.target.value || undefined } : n
+                  )
+                }
+              >
+                <option value="">No Folder</option>
+                {folders.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div>
               <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh" }}>
                 <MDXEditor

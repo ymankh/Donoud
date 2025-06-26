@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { Folder } from "@/Models/NoteFolder";
 
 export interface Note {
   id: string;
@@ -8,6 +9,7 @@ export interface Note {
   lastChange: Date;
   isPined: boolean;
   color: StickyNoteColor;
+  folderId?: string;
 }
 
 export const stickyNoteColors = {
@@ -78,6 +80,7 @@ export type StickyNoteColor = keyof typeof stickyNoteColors
 
 interface NoteContextType {
   notes: Note[];
+  folders: Folder[];
   sortOptions: string[];
   sortValue: string;
   selectedFolder: string;
@@ -85,6 +88,9 @@ interface NoteContextType {
   setOrderReversed: React.Dispatch<React.SetStateAction<boolean>>;
   setSortValue: React.Dispatch<React.SetStateAction<string>>;
   setSelectedFolder: React.Dispatch<React.SetStateAction<string>>;
+  createFolder: (name: string) => void;
+  renameFolder: (id: string, name: string) => void;
+  deleteFolder: (id: string) => void;
   getNoteById: (id: string) => Note | undefined;
   deleteNote: (deletedNote: Note) => void;
   updateNote: (updatedNote: Note) => void;
@@ -112,6 +118,14 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
   const [orderReversed, setOrderReversed] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>(sortOptions[0]);
   const [selectedFolder, setSelectedFolder] = useState<string>("");
+  const loadFolders = (): Folder[] => {
+    try {
+      return JSON.parse(localStorage.getItem("folders") || "[]");
+    } catch (error) {
+      console.error("Error loading folders from localStorage:", error);
+      return [];
+    }
+  };
   let initialNotes: Note[] = [];
   try {
     initialNotes = makeNotes(localStorage.getItem("notes"));
@@ -119,11 +133,16 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
     console.error("Error loading notes from localStorage:", error);
   }
   const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const [folders, setFolders] = useState<Folder[]>(loadFolders());
 
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
+
+  useEffect(() => {
+    localStorage.setItem("folders", JSON.stringify(folders));
+  }, [folders]);
 
   const deleteNote = (deletedNote: Note) => {
     setNotes((prev) => prev.filter((note) => note.id !== deletedNote.id));
@@ -139,6 +158,22 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
     );
   };
 
+  const createFolder = (name: string) => {
+    const newFolder: Folder = { id: uuidv4(), name };
+    setFolders((prev) => [...prev, newFolder]);
+    setSelectedFolder(newFolder.id);
+  };
+
+  const renameFolder = (id: string, name: string) => {
+    setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name } : f)));
+  };
+
+  const deleteFolder = (id: string) => {
+    setFolders((prev) => prev.filter((f) => f.id !== id));
+    setNotes((prev) => prev.map((n) => (n.folderId === id ? { ...n, folderId: undefined } : n)));
+    if (selectedFolder === id) setSelectedFolder("");
+  };
+
   const getNoteById = (id: string): Note | undefined => {
     return notes.find((note) => note.id === id);
   };
@@ -150,7 +185,8 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
       date: new Date(),
       lastChange: new Date(),
       isPined: false,
-      color: "wheat"
+      color: "wheat",
+      folderId: selectedFolder || undefined
     };
     setNotes((prev) => [...prev, { ...newNote, lastChange: new Date() }]);
     return newNote.id;
@@ -164,10 +200,14 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
     <NoteContext.Provider
       value={{
         notes,
+        folders,
         orderReversed,
         sortOptions,
         selectedFolder,
         sortValue,
+        createFolder,
+        renameFolder,
+        deleteFolder,
         getNoteById,
         deleteNote,
         updateNote,
