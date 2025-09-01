@@ -6,6 +6,7 @@ import Fade from "@mui/material/Fade";
 import { FaArrowDown } from "react-icons/fa6";
 import { EventHandler, MouseEventHandler, useContext, useState } from "react";
 import NoteContext from "../../../contexts/NoteContext";
+import FolderMenu from "./FolderMenu";
 
 function SortBar() {
   const {
@@ -27,7 +28,8 @@ function SortBar() {
 
   return (
     <Container>
-      <div className="d-flex flex-row-reverse">
+      <div className="d-flex justify-content-between">
+        <FolderMenu />
         <div>
           <button
             id="fade-button"

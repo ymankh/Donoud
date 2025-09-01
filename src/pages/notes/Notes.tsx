@@ -32,11 +32,15 @@ const Notes = () => {
     deleteEmptyNotes,
     sortValue,
     orderReversed,
+    selectedFolder,
   } = useContext(NoteContext)!;
   const { filter } = useContext(FilterContext)!;
 
   const notes = allNotes
-    .filter((note) => note.text.includes(filter))
+    .filter((note) =>
+      note.text.includes(filter) &&
+      (selectedFolder ? note.folderId === selectedFolder : true)
+    )
     .sort((a, b) => {
       let difference = 0;
       if (sortValue === "Date created")
