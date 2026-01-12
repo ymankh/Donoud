@@ -1,6 +1,12 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useMemo, useState, ReactNode, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Task, TaskCategory } from "@/Models/TasksModel";
+import {
+  fromTaskRecord,
+  tasksCollection,
+  toTaskRecord,
+} from "@/db/collections";
+import { useLiveQuery } from "@tanstack/react-db";
 
 interface TasksContextType {
   tasks: Task[];
@@ -15,10 +21,6 @@ interface TasksContextType {
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
-const parseTasks = (jsonTasks: any[] = [{ date: "" }]): Task[] => {
-  return jsonTasks.map((task) => ({ ...task, date: new Date(task.date) }));
-};
-
 interface TasksContextProviderProps {
   children: ReactNode;
 }
@@ -27,53 +29,81 @@ export const TasksContextProvider = ({
   children,
 }: TasksContextProviderProps) => {
   const [editedTask, setEditedTask] = useState<Task | null>(null);
+  const { data: taskRecords = [] } = useLiveQuery((q) =>
+    q.from({ tasks: tasksCollection })
+  );
+  const tasks = useMemo(
+    () =>
+      taskRecords.map((task) => ({
+        ...fromTaskRecord(task),
+        category: (task.category || "") as TaskCategory,
+      })),
+    [taskRecords]
+  );
 
-  const loadTasksFromStorage = (): Task[] => {
-    try {
-      const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-      return parseTasks(storedTasks);
-    } catch (error) {
-      console.error("Error loading tasks from localStorage:", error);
-      return [];
-    }
-  };
+  const setTasks = useCallback<React.Dispatch<React.SetStateAction<Task[]>>>(
+    (next) => {
+      const nextTasks = typeof next === "function" ? next(tasks) : next;
+      const nextRecords = nextTasks.map((task) =>
+        toTaskRecord({
+          ...task,
+          category: task.category || "",
+        })
+      );
+      const existingIds = Array.from(tasksCollection.state.keys());
+      if (existingIds.length) {
+        tasksCollection.delete(existingIds);
+      }
+      if (nextRecords.length) {
+        tasksCollection.insert(nextRecords);
+      }
+    },
+    [tasks]
+  );
 
-  const [tasks, setTasks] = useState<Task[]>(loadTasksFromStorage);
+  const markTaskFinished = useCallback((taskId: string) => {
+    tasksCollection.update(taskId, (draft) => {
+      draft.done = !draft.done;
+    });
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  const deleteTask = useCallback((taskId: string) => {
+    tasksCollection.delete(taskId);
+  }, []);
 
-  const markTaskFinished = (taskId: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, done: !task.done } : task
-      )
-    );
-  };
+  const addTask = useCallback(
+    (taskText: string, taskCategory: TaskCategory) => {
+      const newTask: Task = {
+        id: uuidv4(),
+        task: taskText,
+        done: false,
+        date: new Date(),
+        category: taskCategory,
+      };
+      tasksCollection.insert(
+        toTaskRecord({
+          ...newTask,
+          category: newTask.category || "",
+        })
+      );
+    },
+    []
+  );
 
-  const deleteTask = (taskId: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-  };
-
-  const addTask = (taskText: string, taskCategory: TaskCategory) => {
-    const newTask: Task = {
-      id: uuidv4(),
-      task: taskText,
-      done: false,
-      date: new Date(),
-      category: taskCategory,
-    };
-    setTasks((prevTasks) => [newTask, ...prevTasks]);
-  };
-
-  const saveEditedTask = () => {
+  const saveEditedTask = useCallback(() => {
     if (!editedTask) return;
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => (task.id === editedTask.id ? editedTask : task))
-    );
+    tasksCollection.update(editedTask.id, (draft) => {
+      draft.task = editedTask.task;
+      draft.done = editedTask.done;
+      draft.category = editedTask.category || "";
+      draft.date = toTaskRecord({
+        ...editedTask,
+        category: editedTask.category || "",
+      }).date;
+      draft.details = editedTask.details;
+    });
     setEditedTask(null);
-  };
+  }, [editedTask]);
 
   return (
     <TasksContext.Provider

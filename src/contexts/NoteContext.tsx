@@ -1,6 +1,13 @@
-import { createContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useMemo, useState, ReactNode, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Folder } from "@/Models/NoteFolder";
+import {
+  foldersCollection,
+  fromNoteRecord,
+  notesCollection,
+  toNoteRecord,
+} from "@/db/collections";
+import { useLiveQuery } from "@tanstack/react-db";
 
 export interface Note {
   id: string;
@@ -14,69 +21,68 @@ export interface Note {
 
 export const stickyNoteColors = {
   gold: {
-    note: '#FFD700',
-    text: '#000000',
+    note: "#FFD700",
+    text: "#000000",
   },
   darkOrange: {
-    note: '#FF8C00',
-    text: '#000000',
+    note: "#FF8C00",
+    text: "#000000",
   },
   hotPink: {
-    note: '#FF69B4',
-    text: '#000000',
+    note: "#FF69B4",
+    text: "#000000",
   },
   darkTurquoise: {
-    note: '#00CED1',
-    text: '#000000',
+    note: "#00CED1",
+    text: "#000000",
   },
   greenYellow: {
-    note: '#ADFF2F',
-    text: '#000000',
+    note: "#ADFF2F",
+    text: "#000000",
   },
   tomatoRed: {
-    note: '#FF6347',
-    text: '#000000',
+    note: "#FF6347",
+    text: "#000000",
   },
   lightSkyBlue: {
-    note: '#87CEFA',
-    text: '#000000',
+    note: "#87CEFA",
+    text: "#000000",
   },
   plum: {
-    note: '#DDA0DD',
-    text: '#000000',
+    note: "#DDA0DD",
+    text: "#000000",
   },
   mediumSpringGreen: {
-    note: '#00FA9A',
-    text: '#000000',
+    note: "#00FA9A",
+    text: "#000000",
   },
   lightCoral: {
-    note: '#F08080',
-    text: '#000000',
+    note: "#F08080",
+    text: "#000000",
   },
   moccasin: {
-    note: '#FFE4B5',
-    text: '#000000',
+    note: "#FFE4B5",
+    text: "#000000",
   },
   paleTurquoise: {
-    note: '#AFEEEE',
-    text: '#000000',
+    note: "#AFEEEE",
+    text: "#000000",
   },
   lavender: {
-    note: '#E6E6FA',
-    text: '#000000',
+    note: "#E6E6FA",
+    text: "#000000",
   },
   wheat: {
-    note: '#F5DEB3',
-    text: '#000000',
+    note: "#F5DEB3",
+    text: "#000000",
   },
   lightPink: {
-    note: '#FFB6C1',
-    text: '#000000',
+    note: "#FFB6C1",
+    text: "#000000",
   },
-} as const
+} as const;
 
-export type StickyNoteColor = keyof typeof stickyNoteColors
-
+export type StickyNoteColor = keyof typeof stickyNoteColors;
 
 interface NoteContextType {
   notes: Note[];
@@ -100,15 +106,6 @@ interface NoteContextType {
 
 const NoteContext = createContext<NoteContextType | undefined>(undefined);
 
-function makeNotes(notes: string | null): Note[] {
-  if (!notes) return [];
-  return JSON.parse(notes).map((note: any) => ({
-    ...note,
-    date: new Date(note.date),
-    lastChange: new Date(note.lastChange),
-  }));
-}
-
 interface NoteContextProviderProps {
   children: ReactNode;
 }
@@ -118,67 +115,89 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
   const [orderReversed, setOrderReversed] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>(sortOptions[0]);
   const [selectedFolder, setSelectedFolder] = useState<string>("");
-  const loadFolders = (): Folder[] => {
-    try {
-      return JSON.parse(localStorage.getItem("folders") || "[]");
-    } catch (error) {
-      console.error("Error loading folders from localStorage:", error);
-      return [];
-    }
-  };
-  let initialNotes: Note[] = [];
-  try {
-    initialNotes = makeNotes(localStorage.getItem("notes"));
-  } catch (error) {
-    console.error("Error loading notes from localStorage:", error);
-  }
-  const [notes, setNotes] = useState<Note[]>(initialNotes);
-  const [folders, setFolders] = useState<Folder[]>(loadFolders());
 
+  const { data: noteRecords = [] } = useLiveQuery((q) =>
+    q.from({ notes: notesCollection })
+  );
+  const { data: folderRecords = [] } = useLiveQuery((q) =>
+    q.from({ folders: foldersCollection })
+  );
 
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+  const notes = useMemo<Note[]>(
+    () =>
+      noteRecords.map((note) => ({
+        ...fromNoteRecord(note),
+        color: note.color as StickyNoteColor,
+      })),
+    [noteRecords]
+  );
 
-  useEffect(() => {
-    localStorage.setItem("folders", JSON.stringify(folders));
-  }, [folders]);
+  const folders = useMemo<Folder[]>(
+    () => folderRecords.map((folder) => ({ ...folder })),
+    [folderRecords]
+  );
 
-  const deleteNote = (deletedNote: Note) => {
-    setNotes((prev) => prev.filter((note) => note.id !== deletedNote.id));
-  };
+  const deleteNote = useCallback((deletedNote: Note) => {
+    notesCollection.delete(deletedNote.id);
+  }, []);
 
-  const updateNote = (updatedNote: Note) => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === updatedNote.id
-          ? { ...updatedNote, lastChange: new Date() }
-          : note
-      )
-    );
-  };
+  const updateNote = useCallback((updatedNote: Note) => {
+    const nextNote = toNoteRecord({
+      ...updatedNote,
+      lastChange: new Date(),
+      color: updatedNote.color,
+    });
+    notesCollection.update(updatedNote.id, (draft) => {
+      draft.text = nextNote.text;
+      draft.lastChange = nextNote.lastChange;
+      draft.isPined = nextNote.isPined;
+      draft.color = nextNote.color;
+      draft.folderId = nextNote.folderId;
+    });
+  }, []);
 
-  const createFolder = (name: string) => {
-    const newFolder: Folder = { id: uuidv4(), name };
-    setFolders((prev) => [...prev, newFolder]);
-    setSelectedFolder(newFolder.id);
-  };
+  const createFolder = useCallback(
+    (name: string) => {
+      const newFolder: Folder = { id: uuidv4(), name };
+      foldersCollection.insert(newFolder);
+      setSelectedFolder(newFolder.id);
+    },
+    [setSelectedFolder]
+  );
 
-  const renameFolder = (id: string, name: string) => {
-    setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name } : f)));
-  };
+  const renameFolder = useCallback((id: string, name: string) => {
+    foldersCollection.update(id, (draft) => {
+      draft.name = name;
+    });
+  }, []);
 
-  const deleteFolder = (id: string) => {
-    setFolders((prev) => prev.filter((f) => f.id !== id));
-    setNotes((prev) => prev.map((n) => (n.folderId === id ? { ...n, folderId: undefined } : n)));
-    if (selectedFolder === id) setSelectedFolder("");
-  };
+  const deleteFolder = useCallback(
+    (id: string) => {
+      foldersCollection.delete(id);
+      const notesToUpdate = notes.filter((note) => note.folderId === id);
+      if (notesToUpdate.length) {
+        notesCollection.update(
+          notesToUpdate.map((note) => note.id),
+          (drafts) => {
+            drafts.forEach((draft) => {
+              draft.folderId = undefined;
+            });
+          }
+        );
+      }
+      if (selectedFolder === id) setSelectedFolder("");
+    },
+    [notes, selectedFolder]
+  );
 
-  const getNoteById = (id: string): Note | undefined => {
-    return notes.find((note) => note.id === id);
-  };
+  const getNoteById = useCallback(
+    (id: string): Note | undefined => {
+      return notes.find((note) => note.id === id);
+    },
+    [notes]
+  );
 
-  const createNewNote = (): string => {
+  const createNewNote = useCallback((): string => {
     const newNote: Note = {
       id: uuidv4(),
       text: "",
@@ -186,15 +205,25 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
       lastChange: new Date(),
       isPined: false,
       color: "wheat",
-      folderId: selectedFolder || undefined
+      folderId: selectedFolder || undefined,
     };
-    setNotes((prev) => [...prev, { ...newNote, lastChange: new Date() }]);
+    notesCollection.insert(
+      toNoteRecord({
+        ...newNote,
+        color: newNote.color,
+      })
+    );
     return newNote.id;
-  };
+  }, [selectedFolder]);
 
-  const deleteEmptyNotes = () => {
-    setNotes((prev) => prev.filter((note) => note.text !== ""));
-  };
+  const deleteEmptyNotes = useCallback(() => {
+    const emptyIds = notes
+      .filter((note) => note.text === "")
+      .map((note) => note.id);
+    if (emptyIds.length) {
+      notesCollection.delete(emptyIds);
+    }
+  }, [notes]);
 
   return (
     <NoteContext.Provider
@@ -215,7 +244,7 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
         deleteEmptyNotes,
         setOrderReversed,
         setSortValue,
-        setSelectedFolder
+        setSelectedFolder,
       }}
     >
       {children}

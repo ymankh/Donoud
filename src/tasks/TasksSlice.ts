@@ -1,43 +1,68 @@
-import { Task, TaskCategory } from '@/Models/TasksModel';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
+import { Task, TaskCategory } from "@/Models/TasksModel";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
+import {
+  fromTaskRecord,
+  tasksCollection,
+  toTaskRecord,
+} from "@/db/collections";
 
 interface TasksState {
   tasks: Task[];
   editedTask: Task | null;
 }
 
-const loadTasksFromStorage = (): Task[] => {
-  try {
-    const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    return storedTasks.map((task: any) => ({ ...task, date: new Date(task.date) }));
-  } catch (error) {
-    console.error('Error loading tasks from localStorage:', error);
-    return [];
-  }
+const loadTasksFromDb = (): Task[] => {
+  const records = Array.from(tasksCollection.state.values());
+  return records.map((task) => ({
+    ...fromTaskRecord(task),
+    category: (task.category || "") as TaskCategory,
+  }));
 };
 
 const initialState: TasksState = {
-  tasks: loadTasksFromStorage(),
+  tasks: loadTasksFromDb(),
   editedTask: null,
 };
 
+const replaceTasksInDb = (tasks: Task[]) => {
+  const existingIds = Array.from(tasksCollection.state.keys());
+  if (existingIds.length) {
+    tasksCollection.delete(existingIds);
+  }
+  if (tasks.length) {
+    tasksCollection.insert(
+      tasks.map((task) =>
+        toTaskRecord({
+          ...task,
+          category: task.category || "",
+        })
+      )
+    );
+  }
+};
+
 export const tasksSlice = createSlice({
-  name: 'tasks',
+  name: "tasks",
   initialState,
   reducers: {
     setTasks: (state, action: PayloadAction<Task[]>) => {
       state.tasks = action.payload;
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+      replaceTasksInDb(state.tasks);
     },
     markTaskFinished: (state, action: PayloadAction<string>) => {
       const taskId = action.payload;
       state.tasks = state.tasks.map((task) =>
         task.id === taskId ? { ...task, done: !task.done } : task
       );
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+      tasksCollection.update(taskId, (draft) => {
+        draft.done = !draft.done;
+      });
     },
-    addTask: (state, action: PayloadAction<{ taskText: string; taskCategory: TaskCategory }>) => {
+    addTask: (
+      state,
+      action: PayloadAction<{ taskText: string; taskCategory: TaskCategory }>
+    ) => {
       const { taskText, taskCategory } = action.payload;
       const newTask: Task = {
         id: uuidv4(),
@@ -47,24 +72,38 @@ export const tasksSlice = createSlice({
         category: taskCategory,
       };
       state.tasks = [newTask, ...state.tasks];
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+      tasksCollection.insert(
+        toTaskRecord({
+          ...newTask,
+          category: newTask.category || "",
+        })
+      );
     },
     deleteTask: (state, action: PayloadAction<string>) => {
       const taskId = action.payload;
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+      tasksCollection.delete(taskId);
     },
     setEditedTask: (state, action: PayloadAction<Task | null>) => {
       state.editedTask = action.payload;
     },
     saveEditedTask: (state) => {
       if (!state.editedTask) return;
-      
-      state.tasks = state.tasks.map((task) => 
+
+      state.tasks = state.tasks.map((task) =>
         task.id === state.editedTask?.id ? state.editedTask : task
       );
+      tasksCollection.update(state.editedTask.id, (draft) => {
+        draft.task = state.editedTask?.task ?? draft.task;
+        draft.done = state.editedTask?.done ?? draft.done;
+        draft.category = state.editedTask?.category || "";
+        draft.date = toTaskRecord({
+          ...state.editedTask,
+          category: state.editedTask?.category || "",
+        }).date;
+        draft.details = state.editedTask?.details;
+      });
       state.editedTask = null;
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
     },
   },
 });
