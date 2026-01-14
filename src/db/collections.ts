@@ -1,4 +1,8 @@
-import { createCollection, localStorageCollectionOptions } from "@tanstack/db";
+import {
+  createCollection,
+  localStorageCollectionOptions,
+  type LocalStorageCollectionUtils,
+} from "@tanstack/db";
 
 export interface TaskRecord {
   id: string;
@@ -24,22 +28,34 @@ export interface FolderRecord {
   name: string;
 }
 
-export const tasksCollection = createCollection<TaskRecord>(
-  localStorageCollectionOptions({
+export const tasksCollection = createCollection<
+  TaskRecord,
+  string,
+  LocalStorageCollectionUtils
+>(
+  localStorageCollectionOptions<TaskRecord, string>({
     storageKey: "tasks",
     getKey: (task) => task.id,
   })
 );
 
-export const notesCollection = createCollection<NoteRecord>(
-  localStorageCollectionOptions({
+export const notesCollection = createCollection<
+  NoteRecord,
+  string,
+  LocalStorageCollectionUtils
+>(
+  localStorageCollectionOptions<NoteRecord, string>({
     storageKey: "notes",
     getKey: (note) => note.id,
   })
 );
 
-export const foldersCollection = createCollection<FolderRecord>(
-  localStorageCollectionOptions({
+export const foldersCollection = createCollection<
+  FolderRecord,
+  string,
+  LocalStorageCollectionUtils
+>(
+  localStorageCollectionOptions<FolderRecord, string>({
     storageKey: "folders",
     getKey: (folder) => folder.id,
   })

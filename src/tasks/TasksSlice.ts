@@ -89,19 +89,20 @@ export const tasksSlice = createSlice({
     },
     saveEditedTask: (state) => {
       if (!state.editedTask) return;
+      const editedTask = state.editedTask;
 
       state.tasks = state.tasks.map((task) =>
-        task.id === state.editedTask?.id ? state.editedTask : task
+        task.id === editedTask.id ? editedTask : task
       );
-      tasksCollection.update(state.editedTask.id, (draft) => {
-        draft.task = state.editedTask?.task ?? draft.task;
-        draft.done = state.editedTask?.done ?? draft.done;
-        draft.category = state.editedTask?.category || "";
+      tasksCollection.update(editedTask.id, (draft) => {
+        draft.task = editedTask.task;
+        draft.done = editedTask.done;
+        draft.category = editedTask.category || "";
         draft.date = toTaskRecord({
-          ...state.editedTask,
-          category: state.editedTask?.category || "",
+          ...editedTask,
+          category: editedTask.category || "",
         }).date;
-        draft.details = state.editedTask?.details;
+        draft.details = editedTask.details;
       });
       state.editedTask = null;
     },

@@ -92,15 +92,16 @@ export const TasksContextProvider = ({
 
   const saveEditedTask = useCallback(() => {
     if (!editedTask) return;
-    tasksCollection.update(editedTask.id, (draft) => {
-      draft.task = editedTask.task;
-      draft.done = editedTask.done;
-      draft.category = editedTask.category || "";
+    const nextTask = editedTask;
+    tasksCollection.update(nextTask.id, (draft) => {
+      draft.task = nextTask.task;
+      draft.done = nextTask.done;
+      draft.category = nextTask.category || "";
       draft.date = toTaskRecord({
-        ...editedTask,
-        category: editedTask.category || "",
+        ...nextTask,
+        category: nextTask.category || "",
       }).date;
-      draft.details = editedTask.details;
+      draft.details = nextTask.details;
     });
     setEditedTask(null);
   }, [editedTask]);
