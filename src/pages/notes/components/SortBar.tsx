@@ -28,7 +28,7 @@ function SortBar() {
 
   return (
     <Container>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center">
         <FolderMenu />
         <div>
           <button

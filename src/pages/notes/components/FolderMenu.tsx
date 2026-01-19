@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { FaFolder } from "react-icons/fa";
 import NoteContext from "@/contexts/NoteContext";
 
 const FolderMenu = () => {
@@ -6,15 +7,9 @@ const FolderMenu = () => {
     folders,
     selectedFolder,
     setSelectedFolder,
-    createFolder,
     renameFolder,
     deleteFolder,
   } = useContext(NoteContext)!;
-
-  const addFolder = () => {
-    const name = prompt("Folder name?");
-    if (name) createFolder(name);
-  };
 
   const rename = () => {
     const folder = folders.find((f) => f.id === selectedFolder);
@@ -27,35 +22,47 @@ const FolderMenu = () => {
   };
 
   return (
-    <div className="d-flex align-items-center gap-1">
-      <select
-        className="form-select"
-        value={selectedFolder}
-        onChange={(e) => setSelectedFolder(e.target.value)}
-      >
-        <option value="">All Notes</option>
-        {folders.map((f) => (
-          <option key={f.id} value={f.id}>
-            {f.name}
-          </option>
+    <div className="note-folders">
+      <div className="note-folders-list">
+        <button
+          className={`note-folder-button${selectedFolder ? "" : " active"}`}
+          onClick={() => setSelectedFolder("")}
+          type="button"
+        >
+          All Notes
+        </button>
+        {folders.map((folder) => (
+          <button
+            key={folder.id}
+            className={`note-folder-button${selectedFolder === folder.id ? " active" : ""}`}
+            onClick={() => setSelectedFolder(folder.id)}
+            type="button"
+          >
+            <FaFolder className="me-2" />
+            {folder.name}
+          </button>
         ))}
-      </select>
-      <button className="btn btn-sm btn-secondary" onClick={addFolder}>
-        +
-      </button>
+      </div>
       {selectedFolder && (
-        <>
-          <button className="btn btn-sm btn-secondary" onClick={rename}>
+        <div className="note-folders-actions">
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={rename}
+            type="button"
+          >
             Rename
           </button>
-          <button className="btn btn-sm btn-danger" onClick={remove}>
+          <button
+            className="btn btn-sm btn-outline-danger"
+            onClick={remove}
+            type="button"
+          >
             Delete
           </button>
-        </>
+        </div>
       )}
     </div>
   );
 };
 
 export default FolderMenu;
-
