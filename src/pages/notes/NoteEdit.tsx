@@ -74,15 +74,15 @@ const NoteEdit = () => {
               </select>
             </div>
             <div>
-              <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh" }}>
+              <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh", display: 'flex', flexDirection: 'column' }}>
                 <MDXEditor
                   autoFocus={true}
                   onChange={(text) => {
                     setNote({ ...note!, text });
                     updateNote(note!);
                   }}
-                  className="dark-theme"
-                  contentEditableClassName="prose"
+                  className="dark-theme flex-grow-1 d-flex flex-column"
+                  contentEditableClassName="prose flex-grow-1"
                   plugins={[
                     toolbarPlugin({
                       toolbarContents: () => (

@@ -140,8 +140,41 @@ button .delete {
   justify-content: space-between;
   z-index: 50;
 }
+/* MDXEditor Height Fixes */
+.dark-theme {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100%;
+}
+
+/* The area below the toolbar */
+.dark-theme > div:not([role="toolbar"]) {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* The root content editable wrapper */
 .mdxeditor-root-contenteditable {
-  --baseTextContrast: var(--noteTextColor) !important;
+    flex: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0;
+}
+
+/* The intermediate div inside the wrapper */
+.mdxeditor-root-contenteditable > div {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0;
+}
+
+/* The actual contenteditable area */
+.mdxeditor-root-contenteditable [contenteditable="true"] {
+    flex: 1;
+    min-height: 100%;
+    outline: none !important;
 }
 
 .animated-strikethrough {
