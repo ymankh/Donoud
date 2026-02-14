@@ -12,6 +12,24 @@ Donoud is a straightforward to-do list and note-taking application built with Re
 -   **React-Bootstrap**: For styling and layout.
 -   **Framer Motion**: For animations.
 
+## Project Structure
+
+The codebase follows a **feature-based modular architecture**. Instead of grouping files by technical role (`components/`, `hooks/`, etc.), code is organized by domain:
+
+```
+src/
+├── app/          # App shell — root component, routing, layout
+├── features/
+│   ├── tasks/    # 📋 Tasks module (components, hooks, models, pages)
+│   └── notes/    # 📝 Notes module (components, hooks, models, pages)
+├── shared/       # 🔧 Cross-cutting code (DB, global hooks, utilities)
+├── assets/       # SCSS and SVG assets
+├── images/       # Raster images
+└── sounds/       # Audio files
+```
+
+Each feature exposes a clean public API through a barrel `index.ts` file. For a full breakdown of every directory, conventions, and how to add new features, see **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
+
 ## Features
 
 - Create tasks: Users can easily create new tasks to organize their work.
