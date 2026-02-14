@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import { motion } from "framer-motion";
-import TasksContext from "../../contexts/TasksContext";
-import ModalContext from "../../contexts/ModalContext";
 import DeleteButton from "../shared/DeleteButton";
 import { formatDate } from "../../utils/dates";
 import { Task } from "../../Models/TasksModel";
 import { useAudio } from "react-use";
 import strikethroughSound from "@/sounds/strikethrough.wav";
+import { useTasks } from "@/hooks/useTasks";
+import { useModal } from "@/hooks/useModal";
 
 const item = {
   hidden: { y: 20, opacity: 0 },
@@ -26,9 +25,8 @@ const ListItem: React.FC<{ task: Task }> = ({
     src: strikethroughSound,
     autoPlay: false,
   });
-  const { modalOpen, open, close } = useContext(ModalContext)!;
-  const { markTaskFinished, deleteTask, setEditedTask } =
-    useContext(TasksContext)!;
+  const { modalOpen, open, close } = useModal();
+  const { markTaskFinished, deleteTask, setEditedTask } = useTasks();
 
   const handleEditTask = () => {
     setEditedTask(task);

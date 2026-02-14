@@ -1,14 +1,13 @@
-import { useContext } from "react";
-import TasksContext from "../contexts/TasksContext";
 import OldTaskList from "./old_tasks/OldTaskList";
 import TaskList from "./todays_tasks/TaskList";
 import { Accordion, Container } from "react-bootstrap";
-import FilterContext from "../contexts/FilterContext";
 import { Task } from "../Models/TasksModel";
+import { useTasks } from "@/hooks/useTasks";
+import { useFilter } from "@/hooks/useFilter";
 
 const TaskLists = () => {
-  const { filter } = useContext(FilterContext)!;
-  const { tasks: allTasks } = useContext(TasksContext)!;
+  const { filter } = useFilter();
+  const { tasks: allTasks } = useTasks();
   const today = new Date().toDateString();
   const tasks: Task[] = [];
   // Group tasks by date

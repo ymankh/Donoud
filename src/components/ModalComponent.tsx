@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import ModalContext from "../contexts/ModalContext";
 import EditTaskModal from "./backdrop/EditTaskModal";
+import { useModal } from "@/hooks/useModal";
 
 const ModalComponent = () => {
-  const { modalOpen } = useContext(ModalContext)!;
+  const { modalOpen } = useModal();
   return modalOpen && <EditTaskModal />;
 };
 

@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
 import Note from "./components/Note";
-import { useContext, useEffect } from "react";
-import NoteContext from "../../contexts/NoteContext";
+import { useEffect } from "react";
 import NoNoteImage from "./components/NoNoteImage";
 import { motion, AnimatePresence } from "framer-motion";
-import FilterContext from "../../contexts/FilterContext";
 import SortBar from "./components/SortBar";
 import AddNoteFloatButton from "./components/AddNoteFloatButton";
+import { useNotes } from "@/hooks/useNotes";
+import { useFilter } from "@/hooks/useFilter";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -33,8 +33,8 @@ const Notes = () => {
     sortValue,
     orderReversed,
     selectedFolder,
-  } = useContext(NoteContext)!;
-  const { filter } = useContext(FilterContext)!;
+  } = useNotes();
+  const { filter } = useFilter();
 
   const notes = allNotes
     .filter((note) =>

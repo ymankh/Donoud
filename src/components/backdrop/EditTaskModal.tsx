@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import Backdrop from "./Backdrop";
-import { useContext, useEffect, useState } from "react";
-import ModalContext from "../../contexts/ModalContext";
-import TasksContext from "../../contexts/TasksContext";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SelectCategory from "../SelectCategory";
 import { TaskCategory } from "../../Models/TasksModel";
+import { useTasks } from "@/hooks/useTasks";
+import { useModal } from "@/hooks/useModal";
 
 const dropIn = {
   hidden: {
@@ -30,10 +30,9 @@ const dropIn = {
 
 const EditTaskModal = () => {
   const location = useLocation();
-  const { close } = useContext(ModalContext)!;
+  const { close } = useModal();
   useState<TaskCategory>("" as TaskCategory);
-  const { saveEditedTask, editedTask, setEditedTask } =
-    useContext(TasksContext)!;
+  const { saveEditedTask, editedTask, setEditedTask } = useTasks();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     saveEditedTask();

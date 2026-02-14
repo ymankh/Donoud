@@ -15,17 +15,17 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { Paper } from "@mui/material";
-import { FormEventHandler, useContext, useEffect, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import NoteContext, { Note, stickyNoteColors } from "../../contexts/NoteContext";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import SelectNoteColor from "./editNoteToolbar/SelectNoteColor";
+import { Note, useNotes } from "@/hooks/useNotes";
 
 const NoteEdit = () => {
   const navigate = useNavigate();
   const { noteId } = useParams();
-  const { getNoteById, updateNote, folders } = useContext(NoteContext)!;
+  const { getNoteById, updateNote, folders } = useNotes();
   let editedNote: Note | undefined;
   try {
     if (noteId) editedNote = getNoteById(noteId);

@@ -4,9 +4,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { FaArrowDown } from "react-icons/fa6";
-import { EventHandler, MouseEventHandler, useContext, useState } from "react";
-import NoteContext from "../../../contexts/NoteContext";
+import { MouseEventHandler, useState } from "react";
 import FolderMenu from "./FolderMenu";
+import { useNotes } from "@/hooks/useNotes";
 
 function SortBar() {
   const {
@@ -15,7 +15,7 @@ function SortBar() {
     setSortValue: setValue,
     orderReversed,
     setOrderReversed,
-  } = useContext(NoteContext)!;
+  } = useNotes();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | undefined>();
   const open = Boolean(anchorEl);

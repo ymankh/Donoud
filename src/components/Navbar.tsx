@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GiSwan } from "react-icons/gi";
 import { toast } from "react-toastify";
-import FilterContext from "../contexts/FilterContext";
+import { useFilter } from "@/hooks/useFilter";
 
 const sentences = [
   "Cease interfering with the swan's territory! 🛑",
@@ -18,7 +18,7 @@ const sentences = [
 
 const Navbar = () => {
   const [clicksCounter, setClickCounter] = useState(0);
-  const { filter, setFilter } = useContext(FilterContext)!;
+  const { filter, setFilter } = useFilter();
   // Function that returns a random sentence/message
   const getRandomIndex = () => {
     return sentences[Math.floor(Math.random() * sentences.length)];

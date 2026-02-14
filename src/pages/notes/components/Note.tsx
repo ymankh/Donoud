@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { motion } from "framer-motion";
 import {
   MDXEditor,
@@ -10,8 +10,7 @@ import {
   tablePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
-import { Note as NoteType, stickyNoteColors } from "@/contexts/NoteContext";
-import NoteContext from "@/contexts/NoteContext";
+import { Note as NoteType, stickyNoteColors, useNotes } from "@/hooks/useNotes";
 import ModalComponent from "@/components/ModalComponent";
 import { format } from "date-fns";
 import DeleteNoteButton from "./DeleteNoteButton";
@@ -23,7 +22,7 @@ const item = {
 
 const Note: FC<{ note: NoteType }> = ({ note }) => {
   const navigate = useNavigate();
-  const { deleteNote, updateNote } = useContext(NoteContext)!;
+  const { deleteNote, updateNote } = useNotes();
   const noteColor = stickyNoteColors[note.color?? "gold"];
   const { text: textColor, note: bgColor } = noteColor;
   return (

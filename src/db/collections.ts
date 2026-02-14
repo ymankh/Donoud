@@ -92,3 +92,24 @@ export const toNoteRecord = (
   date: parseDate(note.date).toISOString(),
   lastChange: parseDate(note.lastChange).toISOString(),
 });
+
+export interface UIStateRecord {
+  id: string;
+  modalOpen: boolean;
+  filter: string;
+  editingTask: TaskRecord | null;
+  selectedFolder: string;
+  sortValue: string;
+  orderReversed: boolean;
+}
+
+export const uiStateCollection = createCollection<
+  UIStateRecord,
+  string,
+  LocalStorageCollectionUtils
+>(
+  localStorageCollectionOptions<UIStateRecord, string>({
+    storageKey: "ui_state",
+    getKey: (state) => state.id,
+  })
+);

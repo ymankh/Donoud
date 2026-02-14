@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { StickyNoteColor, stickyNoteColors } from '../../../contexts/NoteContext'
+import { StickyNoteColor, stickyNoteColors } from "@/hooks/useNotes";
 
 
 

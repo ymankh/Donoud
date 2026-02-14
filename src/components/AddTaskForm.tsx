@@ -1,16 +1,16 @@
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
-import TasksContext from "../contexts/TasksContext";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { TaskCategory } from "../Models/TasksModel";
 import { getSentenceForTask, randomEmoji, taskKeywords } from "./sentencesGenerator";
 import SelectCategory from "./SelectCategory";
+import { useTasks } from "@/hooks/useTasks";
 
 
 const AddTaskForm = () => {
   const [task, setTask] = useState("");
   const [selectedTaskCategory, setSelectedTaskCategory] =
     useState<TaskCategory>("" as TaskCategory);
-  const { addTask } = useContext(TasksContext)!;
+  const { addTask } = useTasks();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);

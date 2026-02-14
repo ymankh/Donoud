@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { FaFolder } from "react-icons/fa";
-import NoteContext from "@/contexts/NoteContext";
+import { useNotes } from "@/hooks/useNotes";
 
 const FolderMenu = () => {
   const {
@@ -9,7 +8,7 @@ const FolderMenu = () => {
     setSelectedFolder,
     renameFolder,
     deleteFolder,
-  } = useContext(NoteContext)!;
+  } = useNotes();
 
   const rename = () => {
     const folder = folders.find((f) => f.id === selectedFolder);

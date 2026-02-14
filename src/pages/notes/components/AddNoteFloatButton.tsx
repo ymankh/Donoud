@@ -1,12 +1,12 @@
 import { CreateNewFolder, NoteAdd } from "@mui/icons-material";
 import { Fab, Menu, MenuItem } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NoteContext from "../../../contexts/NoteContext";
+import { useNotes } from "@/hooks/useNotes";
 
 export default function AddNoteFloatButton() {
   const navigate = useNavigate();
-  const { createNewNote, createFolder } = useContext(NoteContext)!;
+  const { createNewNote, createFolder } = useNotes();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 

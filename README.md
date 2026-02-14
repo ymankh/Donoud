@@ -1,8 +1,16 @@
 # Donoud To-Do List App
 
-Donoud is a straightforward to-do list and note-taking application built with React and Vite. It helps you keep tasks and notes together and offers quick filtering to stay organized. All data lives in your browser via local storage so the app works even offline.
+Donoud is a straightforward to-do list and note-taking application built with React and Vite. It helps you keep tasks and notes together and offers quick filtering to stay organized. All data lives in your browser via **TanStack DB** (persisted to local storage), ensuring the app works even offline.
 
 **Live demo**: [https://donude.netlify.app/](https://donude.netlify.app/)
+
+## Technologies Used
+
+-   **React** (with Hooks)
+-   **Vite**
+-   **TanStack DB**: For robust, reactive local state management of tasks, notes, and UI state (replacing Redux/Context).
+-   **React-Bootstrap**: For styling and layout.
+-   **Framer Motion**: For animations.
 
 ## Features
 
