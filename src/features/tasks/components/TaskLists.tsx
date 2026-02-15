@@ -1,6 +1,6 @@
 import OldTaskList from "./OldTaskList";
 import TaskList from "./TaskList";
-import { Accordion, Container } from "react-bootstrap";
+import { Container, Box } from "@mui/material";
 import { Task } from "../models/TasksModel";
 import { useTasks } from "../hooks/useTasks";
 import { useFilter } from "@/shared/hooks/useFilter";
@@ -40,25 +40,28 @@ const TaskLists = () => {
     <>
       <TaskList tasks={tasks} />
 
-      <Container>
-        <div className="container py-5 h-100 ">
-          <div className="row  d-flex justify-content-center align-items-center h-100">
-            <div className="col col-lg-8 col-xl-6">
-              <Accordion className="shadow">
-                {Object.entries(oldTasks)
-                  .sort(
-                    (a, b) =>
-                      new Date(b[0]).getTime() - new Date(a[0]).getTime()
-                  )
-                  .map(([key, tasks]) => {
-                    return (
-                      <OldTaskList key={key} tasks={tasks} eventKey={key} />
-                    );
-                  })}
-              </Accordion>
-            </div>
-          </div>
-        </div>
+      <Container maxWidth="sm" sx={{ py: 5, height: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Box sx={{ width: "100%" }}>
+            {Object.entries(oldTasks)
+              .sort(
+                (a, b) =>
+                  new Date(b[0]).getTime() - new Date(a[0]).getTime()
+              )
+              .map(([key, tasks]) => {
+                return (
+                  <OldTaskList key={key} tasks={tasks} eventKey={key} />
+                );
+              })}
+          </Box>
+        </Box>
       </Container>
     </>
   );

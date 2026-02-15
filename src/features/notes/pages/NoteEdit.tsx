@@ -14,7 +14,7 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Paper } from "@mui/material";
+import { Box, Container, FormControl, MenuItem, Paper, Select } from "@mui/material";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -53,36 +53,37 @@ const NoteEdit = () => {
         }}
         exit={{ opacity: 0, x: 100 }}
       >
-        <div className=" container mt-4">
+        <Container sx={{ mt: 4 }}>
           <form onSubmit={handleSubmit}>
-            <div className="mb-2">
-              <select
-                className="form-select"
-                value={note?.folderId ?? ""}
-                onChange={(e) =>
-                  setNote((n) =>
-                    n ? { ...n, folderId: e.target.value || undefined } : n
-                  )
-                }
-              >
-                <option value="">No Folder</option>
-                {folders.map((f) => (
-                  <option key={f.id} value={f.id}>
-                    {f.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh", display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ mb: 2 }}>
+              <FormControl fullWidth size="small">
+                <Select
+                  value={note?.folderId ?? ""}
+                  onChange={(e) =>
+                    setNote((n) =>
+                      n ? { ...n, folderId: String(e.target.value) || undefined } : n
+                    )
+                  }
+                >
+                  <MenuItem value="">No Folder</MenuItem>
+                  {folders.map((f) => (
+                    <MenuItem key={f.id} value={f.id}>
+                      {f.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box>
+              <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh", display: "flex", flexDirection: "column" }}>
                 <MDXEditor
                   autoFocus={true}
                   onChange={(text) => {
                     setNote({ ...note!, text });
                     updateNote(note!);
                   }}
-                  className="dark-theme flex-grow-1 d-flex flex-column"
-                  contentEditableClassName="prose flex-grow-1"
+                  className="dark-theme"
+                  contentEditableClassName="prose"
                   plugins={[
                     toolbarPlugin({
                       toolbarContents: () => (
@@ -106,10 +107,10 @@ const NoteEdit = () => {
                   markdown={note!.text}
                 />
               </Paper>
-            </div>
+            </Box>
           </form>
-        </div>
-        <div className="my-4 p-4"></div>
+        </Container>
+        <Box sx={{ my: 4, p: 4 }} />
       </motion.div>
     );
   else {

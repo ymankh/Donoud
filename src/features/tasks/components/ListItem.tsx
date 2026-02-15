@@ -6,6 +6,7 @@ import { useAudio } from "react-use";
 import strikethroughSound from "@/sounds/strikethrough.wav";
 import { useTasks } from "../hooks/useTasks";
 import { useModal } from "../hooks/useModal";
+import { Box, Checkbox, Typography } from "@mui/material";
 
 const item = {
   hidden: { y: 20, opacity: 0 },
@@ -38,33 +39,60 @@ const ListItem: React.FC<{ task: Task }> = ({
       variants={item}
       exit={item.hidden}
       layout
-      className="task list-group-item border-0 d-flex align-items-center ps-0"
+      className="task"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        listStyle: "none",
+        paddingLeft: 0,
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        paddingTop: 4,
+        paddingBottom: 4,
+      }}
     >
-      <input
-        className="form-check-input me-3"
-        type="checkbox"
+      <Checkbox
         checked={task.done}
         onChange={() => {
           markTaskFinished(task.id);
           soundEffect.play();
         }}
+        sx={{ mr: 1 }}
       />
-      <div className="row flex-grow-1" onClick={handleEditTask}>
-        <div className="col-8">
-          <div
-            className={"animated-strikethrough " + (task.done ? "active" : "")}
-          >
-            {task.task}
-          </div>
-          <div className="small text-muted">{formatDate(task.date)}</div>
-        </div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          <div className="me-2">{task.category}</div>
-        </div>
-      </div>
-      <div className="flex-shrink-1">
+      <Box
+        sx={{ display: "flex", flexGrow: 1, cursor: "pointer" }}
+        onClick={handleEditTask}
+      >
+        <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
+          <Box>
+            <span
+              className={
+                "animated-strikethrough " + (task.done ? "active" : "")
+              }
+            >
+              {task.task}
+            </span>
+          </Box>
+          <Typography variant="caption" color="text.secondary">
+            {formatDate(task.date)}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            flex: "0 0 33.33%",
+            maxWidth: "33.33%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Typography variant="body2" sx={{ mr: 1 }}>
+            {task.category}
+          </Typography>
+        </Box>
+      </Box>
+      <Box sx={{ flexShrink: 1 }}>
         <DeleteButton onClick={() => deleteTask(task.id)} />
-      </div>
+      </Box>
       {audio}
     </motion.li>
   );

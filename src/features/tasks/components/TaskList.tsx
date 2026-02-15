@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import { Task } from "../models/TasksModel";
+import { Container, Card, CardContent, Typography, Box } from "@mui/material";
 
 // Function to Get a Random Congrats Message
 function congratsTasksFinished(): string {
@@ -83,24 +84,37 @@ const TaskList: React.FC<{
           height={height}
         />
       )}
-      <div className="container py-5 h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col col-lg-8 col-xl-6">
-            <div className="card rounded-3">
-              <div className="card-body p-4 shadow">
-                <p className="mb-2">
-                  <span className="h2 me-2">Today&rsquo;s Tasks</span>
-                </p>
-                <p className="text-muted pb-2">
+      <Container maxWidth="sm" sx={{ py: 5, height: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Box sx={{ width: "100%" }}>
+            <Card sx={{ borderRadius: 3 }}>
+              <CardContent sx={{ p: 4, boxShadow: 3 }}>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="h4" component="span" sx={{ mr: 2 }}>
+                    Today&rsquo;s Tasks
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ pb: 2 }}
+                >
                   {format(new Date(), "EE, d MMM")}
-                </p>
+                </Typography>
                 <AddTaskForm />
-                <div className="mb-3 form-check"></div>
+                <Box sx={{ mb: 3 }} />
                 <motion.ul
                   variants={container}
                   initial="hidden"
                   animate="visible"
-                  className="list-group rounded-0"
+                  style={{ listStyle: "none", padding: 0, margin: 0 }}
                 >
                   {tasks.length === 0 ? (
                     <NoListImage />
@@ -108,11 +122,11 @@ const TaskList: React.FC<{
                     tasks.map((task) => <ListItem key={task.id} task={task} />)
                   )}
                 </motion.ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </CardContent>
+            </Card>
+          </Box>
+        </Box>
+      </Container>
     </section>
   );
 };

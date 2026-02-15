@@ -30,14 +30,7 @@ export default function AddNoteFloatButton() {
     <>
       <Fab
         color="primary"
-        style={{
-          margin: 0,
-          top: "auto",
-          right: 20,
-          bottom: 80,
-          left: "auto",
-          position: "fixed",
-        }}
+        sx={{ m: 0, top: "auto", right: 20, bottom: 80, left: "auto", position: "fixed" }}
         aria-label="add"
         aria-controls={open ? "notes-add-menu" : undefined}
         aria-haspopup="true"
@@ -55,11 +48,11 @@ export default function AddNoteFloatButton() {
         transformOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <MenuItem onClick={handleAddNote}>
-          <NoteAdd className="me-2" />
+          <NoteAdd style={{ marginRight: 8 }} />
           Add note
         </MenuItem>
         <MenuItem onClick={handleAddFolder}>
-          <CreateNewFolder className="me-2" />
+          <CreateNewFolder style={{ marginRight: 8 }} />
           Add folder
         </MenuItem>
       </Menu>

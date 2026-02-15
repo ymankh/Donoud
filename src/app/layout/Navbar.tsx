@@ -2,6 +2,27 @@ import { useEffect, useState } from "react";
 import { GiSwan } from "react-icons/gi";
 import { toast } from "react-toastify";
 import { useFilter } from "@/shared/hooks/useFilter";
+import { AppBar, Toolbar, Typography, InputBase, Box } from "@mui/material";
+import { styled, alpha } from "@mui/material/styles";
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  width: "150px",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  width: "100%",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 1.5),
+    width: "100%",
+  },
+}));
 
 const sentences = [
   "Cease interfering with the swan's territory! 🛑",
@@ -44,31 +65,26 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="navbar bg-body-tertiary">
-      <div className="container-fluid">
-        <span className="navbar-brand">
-          <span style={{ fontSize: 30 }}>
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box component="span" sx={{ fontSize: 30, display: "flex", cursor: "pointer" }}>
             <GiSwan onClick={onClick} />
-          </span>{" "}
-          DoNoud
-        </span>
-        <form
-          className="d-flex"
-          role="search"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <input
-            className="form-control me-1"
-            style={{ width: "150px" }}
-            type="search"
+          </Box>
+          <Typography variant="h6" component="span">
+            DoNoud
+          </Typography>
+        </Box>
+        <Search>
+          <StyledInputBase
             placeholder="Filter"
-            aria-label="Search"
+            inputProps={{ "aria-label": "search" }}
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
-        </form>
-      </div>
-    </nav>
+        </Search>
+      </Toolbar>
+    </AppBar>
   );
 };
 

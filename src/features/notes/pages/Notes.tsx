@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap";
+import { Box, Container } from "@mui/material";
 import Note from "../components/Note";
 import { useEffect } from "react";
 import NoNoteImage from "../components/NoNoteImage";
@@ -72,7 +72,7 @@ const Notes = () => {
       <AnimatePresence mode="wait">
         {notes.length > 0 ? (
           <Container key="notes-list">
-            <div className="m-2" />
+            <Box sx={{ m: 1 }} />
             <motion.div
               variants={container}
               initial="hidden"
@@ -92,7 +92,7 @@ const Notes = () => {
           <NoNoteImage key="no-notes" />
         )}
       </AnimatePresence>
-      <div className="my-4 p-4"></div>
+      <Box sx={{ my: 4, p: 4 }} />
     </motion.div>
   );
 };

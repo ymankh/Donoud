@@ -1,6 +1,7 @@
 import ModalComponent from "../components/ModalComponent";
 import TaskLists from "../components/TaskLists";
 import { motion, AnimatePresence } from "framer-motion";
+import { Box } from "@mui/material";
 
 const Tasks = () => {
   return (
@@ -13,7 +14,7 @@ const Tasks = () => {
         transition={{ duration: 0.3 }}
       >
         <TaskLists />
-        <div className="mb-4"></div>
+        <Box sx={{ mb: 4 }} />
         <ModalComponent />
       </motion.div>
     </AnimatePresence>

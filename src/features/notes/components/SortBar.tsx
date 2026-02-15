@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import { FaArrowUp, FaSortAmountDown } from "react-icons/fa";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,6 +6,7 @@ import { FaArrowDown } from "react-icons/fa6";
 import { MouseEventHandler, useState } from "react";
 import FolderMenu from "./FolderMenu";
 import { useNotes } from "../hooks/useNotes";
+import { Box, Button, Container, IconButton, Stack } from "@mui/material";
 
 function SortBar() {
   const {
@@ -17,31 +17,37 @@ function SortBar() {
     setOrderReversed,
   } = useNotes();
 
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | undefined>();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(undefined);
+    setAnchorEl(null);
   };
 
   return (
     <Container>
-      <div className="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center">
+      <Stack
+        direction={{ xs: "column", lg: "row" }}
+        justifyContent="space-between"
+        spacing={2}
+        alignItems={{ lg: "center" }}
+      >
         <FolderMenu />
-        <div>
-          <button
+        <Box>
+          <Button
             id="fade-button"
             aria-controls={open ? "fade-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
-            className="btn"
+            variant="text"
+            color="inherit"
+            startIcon={<FaSortAmountDown />}
           >
-            <FaSortAmountDown className="me-2" />
             {value}
-          </button>
+          </Button>
           <Menu
             id="fade-menu"
             MenuListProps={{
@@ -66,15 +72,15 @@ function SortBar() {
               );
             })}
           </Menu>
-          |{" "}
-          <button
-            className="btn"
+          <IconButton
+            color="inherit"
             onClick={() => setOrderReversed((pre) => !pre)}
+            size="small"
           >
             {orderReversed ? <FaArrowUp /> : <FaArrowDown />}
-          </button>
-        </div>
-      </div>
+          </IconButton>
+        </Box>
+      </Stack>
     </Container>
   );
 }

@@ -1,7 +1,8 @@
 import ListItem from "./ListItem";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { Accordion } from "react-bootstrap";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, List } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Task } from "../models/TasksModel";
 
 const container = {
@@ -28,21 +29,23 @@ const OldTaskList = ({
     else return 0;
   });
   return (
-    <Accordion.Item eventKey={eventKey}>
-      <Accordion.Header>{format(tasks[0].date, "E, d MMM")} </Accordion.Header>
-      <Accordion.Body>
+    <Accordion sx={{ boxShadow: 3 }}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>{format(tasks[0].date, "E, d MMM")}</Typography>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 0 }}>
         <motion.ul
           variants={container}
           initial="hidden"
           animate="visible"
-          className="list-group rounded-0"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
         >
           {tasks.map((task) => (
             <ListItem key={task.id} task={task} />
           ))}
         </motion.ul>
-      </Accordion.Body>
-    </Accordion.Item>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 

@@ -1,15 +1,16 @@
 import { type FC } from "react";
 import { MdDeleteForever } from "react-icons/md";
+import { IconButton } from "@mui/material";
 
 const DeleteNoteButton: FC<{ onClick: () => void, color?: string }> = ({ onClick, color }) => {
   return (
-    <button
+    <IconButton
       onClick={onClick}
-      className="btn rounded-circle btn-sm delete delete-note"
-      style={{ marginLeft: "auto" }}
+      size="small"
+      sx={{ ml: "auto" }}
     >
-      <MdDeleteForever className="delete" color={color}/>
-    </button>
+      <MdDeleteForever className="delete" color={color} />
+    </IconButton>
   );
 };
 

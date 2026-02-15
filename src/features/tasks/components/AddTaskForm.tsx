@@ -4,6 +4,7 @@ import { TaskCategory } from "../models/TasksModel";
 import { getSentenceForTask, randomEmoji, taskKeywords } from "../utils/sentencesGenerator";
 import SelectCategory from "./SelectCategory";
 import { useTasks } from "../hooks/useTasks";
+import { Box, TextField, Button, Typography } from "@mui/material";
 
 
 const AddTaskForm = () => {
@@ -47,35 +48,32 @@ const AddTaskForm = () => {
     setTask("");
     setSelectedTaskCategory("");
   };
-  const changeTaskCategory = (e: ChangeEvent<HTMLSelectElement>) =>
-    setSelectedTaskCategory(e.target.value as TaskCategory);
+
   return (
     <form onSubmit={onSubmit}>
-      <div className="mb-3">
-        <label htmlFor="Task" className="form-label">
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="body2" sx={{ mb: 1 }}>
           Add a new task.
-        </label>
-        <div className="row">
-          <div className="col-8">
-            <input
-              type="text"
-              className="form-control"
+        </Typography>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
+            <TextField
+              fullWidth
+              size="small"
               id="Task"
-              aria-describedby="newTask"
               placeholder="ex  water the planet... "
               value={task}
               onChange={onChange}
             />
-          </div>
-          <div className="col-4">
+          </Box>
+          <Box sx={{ flex: "0 0 33.33%", maxWidth: "33.33%" }}>
             <SelectCategory selectedTaskCategory={selectedTaskCategory} handelSelect={(value: TaskCategory) => setSelectedTaskCategory(value)} />
-          </div>
-        </div>
-        <div id="newTask" className="form-text"></div>
-      </div>
-      <button type="submit" className="btn btn-primary">
+          </Box>
+        </Box>
+      </Box>
+      <Button type="submit" variant="contained" color="primary">
         add
-      </button>
+      </Button>
     </form>
   );
 };

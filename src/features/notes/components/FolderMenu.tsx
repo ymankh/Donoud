@@ -1,4 +1,5 @@
 import { FaFolder } from "react-icons/fa";
+import { Box, Button, Stack } from "@mui/material";
 import { useNotes } from "../hooks/useNotes";
 
 const FolderMenu = () => {
@@ -21,46 +22,54 @@ const FolderMenu = () => {
   };
 
   return (
-    <div className="note-folders">
-      <div className="note-folders-list">
-        <button
-          className={`note-folder-button${selectedFolder ? "" : " active"}`}
+    <Box className="note-folders">
+      <Stack className="note-folders-list" direction="row" useFlexGap flexWrap="wrap" spacing={1}>
+        <Button
+          variant={selectedFolder ? "outlined" : "contained"}
+          color="primary"
+          sx={{ borderRadius: 999 }}
           onClick={() => setSelectedFolder("")}
           type="button"
         >
           All Notes
-        </button>
+        </Button>
         {folders.map((folder) => (
-          <button
+          <Button
             key={folder.id}
-            className={`note-folder-button${selectedFolder === folder.id ? " active" : ""}`}
+            variant={selectedFolder === folder.id ? "contained" : "outlined"}
+            color="primary"
+            startIcon={<FaFolder />}
+            sx={{ borderRadius: 999 }}
             onClick={() => setSelectedFolder(folder.id)}
             type="button"
           >
-            <FaFolder className="me-2" />
             {folder.name}
-          </button>
+          </Button>
         ))}
-      </div>
+      </Stack>
       {selectedFolder && (
-        <div className="note-folders-actions">
-          <button
-            className="btn btn-sm btn-outline-secondary"
+        <Stack className="note-folders-actions" direction="row" useFlexGap flexWrap="wrap" spacing={1}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            size="small"
             onClick={rename}
             type="button"
           >
             Rename
-          </button>
-          <button
-            className="btn btn-sm btn-outline-danger"
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
             onClick={remove}
             type="button"
           >
             Delete
-          </button>
-        </div>
+          </Button>
+        </Stack>
       )}
-    </div>
+    </Box>
   );
 };
 

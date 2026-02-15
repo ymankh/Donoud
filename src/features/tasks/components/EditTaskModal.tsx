@@ -6,6 +6,7 @@ import SelectCategory from "./SelectCategory";
 import { TaskCategory } from "../models/TasksModel";
 import { useTasks } from "../hooks/useTasks";
 import { useModal } from "../hooks/useModal";
+import { Box, TextField, Button, ButtonGroup, Typography } from "@mui/material";
 
 const dropIn = {
   hidden: {
@@ -52,14 +53,14 @@ const EditTaskModal = () => {
         exit="exit"
       >
         <form onSubmit={handleSubmit}>
-          <div className="mb-3 row">
-            <label htmlFor="taskContent" className="form-label">
+          <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 2 }}>
+            <Typography variant="body2" sx={{ width: "100%", mb: 1 }}>
               The task
-            </label>
-            <div className="col-8">
-              <input
-                type="text"
-                className="form-control"
+            </Typography>
+            <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
+              <TextField
+                fullWidth
+                size="small"
                 id="taskContent"
                 placeholder="ex water the planet..."
                 value={editedTask?.task}
@@ -67,35 +68,34 @@ const EditTaskModal = () => {
                   setEditedTask({ ...editedTask!, task: e.target.value })
                 }
               />
-            </div>
-            <div className="col-4">
+            </Box>
+            <Box sx={{ flex: 1 }}>
               <SelectCategory selectedTaskCategory={editedTask?.category ?? ""} handelSelect={(value: TaskCategory) => setEditedTask({ ...editedTask!, category: value })} />
-            </div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="taskDetails" className="form-label">
+            </Box>
+          </Box>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
               Details
-            </label>
-            <textarea
-              className="form-control"
-              id="taskDetails"
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
               rows={3}
+              id="taskDetails"
               value={editedTask?.details}
               onChange={(e) =>
                 setEditedTask({ ...editedTask!, details: e.target.value })
               }
-            ></textarea>
-          </div>
-          <div className="row">
-            <div className="btn-group ">
-              <button type="submit" className="btn btn-primary col-8">
-                Save
-              </button>
-              <button onClick={close} className="btn btn-outline-primary col-4">
-                Cancel
-              </button>
-            </div>
-          </div>
+            />
+          </Box>
+          <ButtonGroup fullWidth>
+            <Button type="submit" variant="contained" sx={{ flex: 2 }}>
+              Save
+            </Button>
+            <Button onClick={close} variant="outlined" sx={{ flex: 1 }}>
+              Cancel
+            </Button>
+          </ButtonGroup>
         </form>
       </motion.div>
     </Backdrop>

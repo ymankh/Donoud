@@ -1,14 +1,9 @@
-// overwrite theme variables
+// Custom theme variables (no longer using Bootstrap)
+// These are kept as SCSS variables for reference but are not used by Bootstrap anymore.
+// MUI theme is configured in App.tsx
 
-
-//quick test
 $primary: #783370;
 $secondary: #c4274f;
 $info: #4c75ee;
 $warning: #d7cc1d;
 $success: #1c9d68;
-
-
-
-// import bootstrap style at the bottom!
-@import 'bootstrap/scss/bootstrap.scss'
