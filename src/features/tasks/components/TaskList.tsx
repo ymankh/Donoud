@@ -74,7 +74,7 @@ const TaskList: React.FC<{
   }, [tasks, celebrating, allTasksDone, isMounted]);
 
   return (
-    <section id="notes">
+    <Box component="section" sx={{ pb: 2 }}>
       {celebrating && (
         <Confetti
           numberOfPieces={800}
@@ -84,7 +84,7 @@ const TaskList: React.FC<{
           height={height}
         />
       )}
-      <Container maxWidth="sm" sx={{ py: 5, height: "100%" }}>
+      <Container maxWidth="md" sx={{ py: 4, height: "100%" }}>
         <Box
           sx={{
             display: "flex",
@@ -94,20 +94,16 @@ const TaskList: React.FC<{
           }}
         >
           <Box sx={{ width: "100%" }}>
-            <Card sx={{ borderRadius: 3 }}>
-              <CardContent sx={{ p: 4, boxShadow: 3 }}>
+            <Card>
+              <CardContent sx={{ p: { xs: 2.2, md: 3 } }}>
                 <Box sx={{ mb: 2 }}>
-                  <Typography variant="h4" component="span" sx={{ mr: 2 }}>
+                  <Typography variant="h4" component="h1">
                     Today&rsquo;s Tasks
                   </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    {format(new Date(), "EE, d MMM")}
+                  </Typography>
                 </Box>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ pb: 2 }}
-                >
-                  {format(new Date(), "EE, d MMM")}
-                </Typography>
                 <AddTaskForm />
                 <Box sx={{ mb: 3 }} />
                 <motion.ul
@@ -127,7 +123,7 @@ const TaskList: React.FC<{
           </Box>
         </Box>
       </Container>
-    </section>
+    </Box>
   );
 };
 

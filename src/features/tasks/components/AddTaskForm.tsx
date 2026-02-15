@@ -4,7 +4,7 @@ import { TaskCategory } from "../models/TasksModel";
 import { getSentenceForTask, randomEmoji, taskKeywords } from "../utils/sentencesGenerator";
 import SelectCategory from "./SelectCategory";
 import { useTasks } from "../hooks/useTasks";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, TextField, Button, Typography, Stack } from "@mui/material";
 
 
 const AddTaskForm = () => {
@@ -53,26 +53,26 @@ const AddTaskForm = () => {
     <form onSubmit={onSubmit}>
       <Box sx={{ mb: 3 }}>
         <Typography variant="body2" sx={{ mb: 1 }}>
-          Add a new task.
+          Add a new task
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+          <Box sx={{ flex: "1 1 auto" }}>
             <TextField
               fullWidth
               size="small"
               id="Task"
-              placeholder="ex  water the planet... "
+              placeholder="ex water the plant..."
               value={task}
               onChange={onChange}
             />
           </Box>
-          <Box sx={{ flex: "0 0 33.33%", maxWidth: "33.33%" }}>
+          <Box sx={{ width: { xs: "100%", sm: 180 } }}>
             <SelectCategory selectedTaskCategory={selectedTaskCategory} handelSelect={(value: TaskCategory) => setSelectedTaskCategory(value)} />
           </Box>
-        </Box>
+        </Stack>
       </Box>
-      <Button type="submit" variant="contained" color="primary">
-        add
+      <Button type="submit" variant="contained" color="primary" size="large">
+        Add task
       </Button>
     </form>
   );

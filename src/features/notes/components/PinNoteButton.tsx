@@ -1,22 +1,20 @@
-import { FC, MouseEventHandler } from "react";
+import { FC } from "react";
 import { TiPinOutline, TiPin } from "react-icons/ti";
+import { IconButton } from "@mui/material";
 
 const PinNoteButton: FC<{
-  onClick: MouseEventHandler<SVGElement>;
+  onClick: () => void;
   active: boolean;
   color: string;
 }> = ({ onClick, active, color }) => {
   return (
-    <>
+    <IconButton onClick={onClick} size="small" sx={{ color }}>
       {active ? (
-        <TiPin style={{ fontSize: 20, color }} onClick={onClick} />
+        <TiPin style={{ fontSize: 20, color }} />
       ) : (
-        <TiPinOutline
-          style={{ fontSize: 20, color }}
-          onClick={onClick}
-        />
+        <TiPinOutline style={{ fontSize: 20, color }} />
       )}
-    </>
+    </IconButton>
   );
 };
 

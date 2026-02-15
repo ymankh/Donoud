@@ -71,13 +71,17 @@ const Notes = () => {
       <AddNoteFloatButton />
       <AnimatePresence mode="wait">
         {notes.length > 0 ? (
-          <Container key="notes-list">
+          <Container key="notes-list" sx={{ pb: 12 }}>
             <Box sx={{ m: 1 }} />
             <motion.div
               variants={container}
               initial="hidden"
               animate="visible"
-              className="notes-list"
+              style={{
+                display: "grid",
+                gap: "1rem",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+              }}
             >
               <AnimatePresence>
                 {notes.map((note) => (
@@ -92,7 +96,6 @@ const Notes = () => {
           <NoNoteImage key="no-notes" />
         )}
       </AnimatePresence>
-      <Box sx={{ my: 4, p: 4 }} />
     </motion.div>
   );
 };

@@ -27,7 +27,7 @@ function SortBar() {
   };
 
   return (
-    <Container>
+    <Container sx={{ pt: 2 }}>
       <Stack
         direction={{ xs: "column", lg: "row" }}
         justifyContent="space-between"
@@ -72,11 +72,7 @@ function SortBar() {
               );
             })}
           </Menu>
-          <IconButton
-            color="inherit"
-            onClick={() => setOrderReversed((pre) => !pre)}
-            size="small"
-          >
+          <IconButton color="inherit" onClick={() => setOrderReversed((pre) => !pre)} size="small">
             {orderReversed ? <FaArrowUp /> : <FaArrowDown />}
           </IconButton>
         </Box>

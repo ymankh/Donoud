@@ -39,15 +39,14 @@ const ListItem: React.FC<{ task: Task }> = ({
       variants={item}
       exit={item.hidden}
       layout
-      className="task"
       style={{
         display: "flex",
         alignItems: "center",
         listStyle: "none",
         paddingLeft: 0,
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
-        paddingTop: 4,
-        paddingBottom: 4,
+        borderBottom: "1px solid rgba(16,34,58,0.08)",
+        paddingTop: 8,
+        paddingBottom: 8,
       }}
     >
       <Checkbox
@@ -61,17 +60,22 @@ const ListItem: React.FC<{ task: Task }> = ({
       <Box
         sx={{ display: "flex", flexGrow: 1, cursor: "pointer" }}
         onClick={handleEditTask}
+        style={{ alignItems: "center" }}
       >
-        <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
-          <Box>
-            <span
-              className={
-                "animated-strikethrough " + (task.done ? "active" : "")
-              }
-            >
-              {task.task}
-            </span>
-          </Box>
+        <Box sx={{ flex: "1 1 66.67%", minWidth: 0 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              textDecoration: task.done ? "line-through" : "none",
+              textDecorationThickness: "2px",
+              textDecorationColor: "primary.main",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {task.task}
+          </Typography>
           <Typography variant="caption" color="text.secondary">
             {formatDate(task.date)}
           </Typography>

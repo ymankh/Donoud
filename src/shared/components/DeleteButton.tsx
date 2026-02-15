@@ -10,7 +10,7 @@ const DeleteButton: FC<{ onClick: () => void }> = ({ onClick }) => {
       size="small"
       sx={{ ml: "auto" }}
     >
-      <MdDeleteForever className="delete" />
+      <MdDeleteForever size={18} />
     </IconButton>
   );
 };

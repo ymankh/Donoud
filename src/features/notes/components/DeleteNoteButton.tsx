@@ -9,7 +9,7 @@ const DeleteNoteButton: FC<{ onClick: () => void, color?: string }> = ({ onClick
       size="small"
       sx={{ ml: "auto" }}
     >
-      <MdDeleteForever className="delete" color={color} />
+      <MdDeleteForever color={color} size={18} />
     </IconButton>
   );
 };

@@ -1,7 +1,7 @@
 import ListItem from "./ListItem";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { Accordion, AccordionSummary, AccordionDetails, Typography, List } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Task } from "../models/TasksModel";
 
@@ -19,7 +19,7 @@ const container = {
 
 const OldTaskList = ({
   tasks,
-  eventKey,
+  eventKey: _eventKey,
 }: {
   tasks: Task[];
   eventKey: string;
@@ -29,7 +29,7 @@ const OldTaskList = ({
     else return 0;
   });
   return (
-    <Accordion sx={{ boxShadow: 3 }}>
+    <Accordion sx={{ mb: 1.5 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>{format(tasks[0].date, "E, d MMM")}</Typography>
       </AccordionSummary>

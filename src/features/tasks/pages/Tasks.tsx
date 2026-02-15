@@ -14,7 +14,7 @@ const Tasks = () => {
         transition={{ duration: 0.3 }}
       >
         <TaskLists />
-        <Box sx={{ mb: 4 }} />
+        <Box sx={{ mb: 2 }} />
         <ModalComponent />
       </motion.div>
     </AnimatePresence>

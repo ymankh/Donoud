@@ -12,7 +12,7 @@ const Search = styled("div")(({ theme }) => ({
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: "150px",
+  width: "min(260px, 48vw)",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({

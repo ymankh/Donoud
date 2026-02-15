@@ -14,7 +14,7 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Box, Container, FormControl, MenuItem, Paper, Select } from "@mui/material";
+import { Box, Container, FormControl, MenuItem, Paper, Select, Stack, Typography } from "@mui/material";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -53,37 +53,56 @@ const NoteEdit = () => {
         }}
         exit={{ opacity: 0, x: 100 }}
       >
-        <Container sx={{ mt: 4 }}>
+        <Container sx={{ mt: 4, mb: 12 }}>
           <form onSubmit={handleSubmit}>
-            <Box sx={{ mb: 2 }}>
-              <FormControl fullWidth size="small">
-                <Select
-                  value={note?.folderId ?? ""}
-                  onChange={(e) =>
-                    setNote((n) =>
-                      n ? { ...n, folderId: String(e.target.value) || undefined } : n
-                    )
+            <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
+              <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+                <FormControl fullWidth size="small">
+                  <Select
+                    value={note?.folderId ?? ""}
+                    onChange={(e) =>
+                      setNote((n) =>
+                        n ? { ...n, folderId: String(e.target.value) || undefined } : n
+                      )
+                    }
+                  >
+                    <MenuItem value="">No Folder</MenuItem>
+                    {folders.map((f) => (
+                      <MenuItem key={f.id} value={f.id}>
+                        {f.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <SelectNoteColor
+                  handelSelectNoteColor={(color) =>
+                    setNote((note) => (note === undefined ? undefined : { ...note, color }))
                   }
-                >
-                  <MenuItem value="">No Folder</MenuItem>
-                  {folders.map((f) => (
-                    <MenuItem key={f.id} value={f.id}>
-                      {f.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box>
-              <Paper elevation={4} sx={{ width: "auto", minHeight: "70vh", display: "flex", flexDirection: "column" }}>
+                  selectedColor={note?.color ?? "darkOrange"}
+                />
+              </Stack>
+              <Typography variant="body2" color="text.secondary">
+                Compose your note
+              </Typography>
+              <Box
+                sx={{
+                  minHeight: "68vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  "& .mdxeditor": { height: "100%", display: "flex", flexDirection: "column" },
+                  "& .mdxeditor > div:not([role='toolbar'])": {
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  },
+                }}
+              >
                 <MDXEditor
                   autoFocus={true}
                   onChange={(text) => {
                     setNote({ ...note!, text });
                     updateNote(note!);
                   }}
-                  className="dark-theme"
-                  contentEditableClassName="prose"
                   plugins={[
                     toolbarPlugin({
                       toolbarContents: () => (
@@ -93,7 +112,6 @@ const NoteEdit = () => {
                           <BlockTypeSelect />
                           <InsertTable />
                           <ListsToggle />
-                          <SelectNoteColor handelSelectNoteColor={(color) => setNote(note => note === undefined ? undefined : { ...note, color })} selectedColor={note?.color ?? "darkOrange"} />
                         </>
                       ),
                     }),
@@ -106,11 +124,10 @@ const NoteEdit = () => {
                   ]}
                   markdown={note!.text}
                 />
-              </Paper>
-            </Box>
+              </Box>
+            </Paper>
           </form>
         </Container>
-        <Box sx={{ my: 4, p: 4 }} />
       </motion.div>
     );
   else {

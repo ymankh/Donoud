@@ -22,12 +22,11 @@ const FolderMenu = () => {
   };
 
   return (
-    <Box className="note-folders">
-      <Stack className="note-folders-list" direction="row" useFlexGap flexWrap="wrap" spacing={1}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <Stack direction="row" useFlexGap flexWrap="wrap" spacing={1}>
         <Button
           variant={selectedFolder ? "outlined" : "contained"}
           color="primary"
-          sx={{ borderRadius: 999 }}
           onClick={() => setSelectedFolder("")}
           type="button"
         >
@@ -39,7 +38,6 @@ const FolderMenu = () => {
             variant={selectedFolder === folder.id ? "contained" : "outlined"}
             color="primary"
             startIcon={<FaFolder />}
-            sx={{ borderRadius: 999 }}
             onClick={() => setSelectedFolder(folder.id)}
             type="button"
           >
@@ -48,7 +46,7 @@ const FolderMenu = () => {
         ))}
       </Stack>
       {selectedFolder && (
-        <Stack className="note-folders-actions" direction="row" useFlexGap flexWrap="wrap" spacing={1}>
+        <Stack direction="row" useFlexGap flexWrap="wrap" spacing={1}>
           <Button
             variant="outlined"
             color="inherit"

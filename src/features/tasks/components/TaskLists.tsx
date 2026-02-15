@@ -40,7 +40,7 @@ const TaskLists = () => {
     <>
       <TaskList tasks={tasks} />
 
-      <Container maxWidth="sm" sx={{ py: 5, height: "100%" }}>
+      <Container maxWidth="md" sx={{ py: 2, height: "100%", mb: 12 }}>
         <Box
           sx={{
             display: "flex",

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
 import AppRoutes from "./routes";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -12,10 +13,8 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import "@/assets/custom.scss";
-import "@/index.css";
 
-const darkTheme = createTheme({
+const appTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
@@ -29,8 +28,30 @@ const darkTheme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={appTheme}>
       <CssBaseline />
+      <GlobalStyles
+        styles={{
+          "#root": { minHeight: "100vh" },
+          ".mdxeditor-root-contenteditable": {
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+          },
+          ".mdxeditor-root-contenteditable > div": {
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+          },
+          '.mdxeditor-root-contenteditable [contenteditable="true"]': {
+            flex: 1,
+            minHeight: "100%",
+            outline: "none",
+          },
+        }}
+      />
       <BrowserRouter>
         <ToastContainer position="top-center" theme="colored" />
         <Navbar />

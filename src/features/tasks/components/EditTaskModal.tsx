@@ -6,7 +6,7 @@ import SelectCategory from "./SelectCategory";
 import { TaskCategory } from "../models/TasksModel";
 import { useTasks } from "../hooks/useTasks";
 import { useModal } from "../hooks/useModal";
-import { Box, TextField, Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, TextField, Button, Typography, Paper, Stack } from "@mui/material";
 
 const dropIn = {
   hidden: {
@@ -46,57 +46,62 @@ const EditTaskModal = () => {
     <Backdrop onClick={close}>
       <motion.div
         onClick={(e) => e.stopPropagation()}
-        className="modal-new"
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
+        style={{ width: "min(760px, calc(100vw - 24px))" }}
       >
-        <form onSubmit={handleSubmit}>
-          <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 2 }}>
-            <Typography variant="body2" sx={{ width: "100%", mb: 1 }}>
-              The task
+        <Paper elevation={3} sx={{ p: { xs: 2, md: 3 } }}>
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Edit task
             </Typography>
-            <Box sx={{ flex: "0 0 66.67%", maxWidth: "66.67%" }}>
+            <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 2 }}>
+              <Typography variant="body2" sx={{ width: "100%", mb: 1 }}>
+                The task
+              </Typography>
+              <Box sx={{ flex: "1 1 360px" }}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  id="taskContent"
+                  placeholder="ex water the plant..."
+                  value={editedTask?.task}
+                  onChange={(e) =>
+                    setEditedTask({ ...editedTask!, task: e.target.value })
+                  }
+                />
+              </Box>
+              <Box sx={{ flex: "1 1 180px" }}>
+                <SelectCategory selectedTaskCategory={editedTask?.category ?? ""} handelSelect={(value: TaskCategory) => setEditedTask({ ...editedTask!, category: value })} />
+              </Box>
+            </Box>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                Details
+              </Typography>
               <TextField
                 fullWidth
-                size="small"
-                id="taskContent"
-                placeholder="ex water the planet..."
-                value={editedTask?.task}
+                multiline
+                rows={4}
+                id="taskDetails"
+                value={editedTask?.details}
                 onChange={(e) =>
-                  setEditedTask({ ...editedTask!, task: e.target.value })
+                  setEditedTask({ ...editedTask!, details: e.target.value })
                 }
               />
             </Box>
-            <Box sx={{ flex: 1 }}>
-              <SelectCategory selectedTaskCategory={editedTask?.category ?? ""} handelSelect={(value: TaskCategory) => setEditedTask({ ...editedTask!, category: value })} />
-            </Box>
-          </Box>
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              Details
-            </Typography>
-            <TextField
-              fullWidth
-              multiline
-              rows={3}
-              id="taskDetails"
-              value={editedTask?.details}
-              onChange={(e) =>
-                setEditedTask({ ...editedTask!, details: e.target.value })
-              }
-            />
-          </Box>
-          <ButtonGroup fullWidth>
-            <Button type="submit" variant="contained" sx={{ flex: 2 }}>
-              Save
-            </Button>
-            <Button onClick={close} variant="outlined" sx={{ flex: 1 }}>
-              Cancel
-            </Button>
-          </ButtonGroup>
-        </form>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+              <Button type="submit" variant="contained" sx={{ flex: 2 }}>
+                Save
+              </Button>
+              <Button onClick={close} variant="outlined" sx={{ flex: 1 }}>
+                Cancel
+              </Button>
+            </Stack>
+          </form>
+        </Paper>
       </motion.div>
     </Backdrop>
   );
