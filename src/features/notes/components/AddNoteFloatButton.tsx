@@ -3,11 +3,14 @@ import { Fab, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotes } from "../hooks/useNotes";
+import TextInputDialog from "@/shared/components/TextInputDialog";
 
 export default function AddNoteFloatButton() {
   const navigate = useNavigate();
   const { createNewNote, createFolder } = useNotes();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [folderDialogOpen, setFolderDialogOpen] = useState(false);
+  const [folderName, setFolderName] = useState("");
   const open = Boolean(anchorEl);
 
   const handleClose = () => {
@@ -21,9 +24,15 @@ export default function AddNoteFloatButton() {
   };
 
   const handleAddFolder = () => {
-    const name = prompt("Folder name?");
-    if (name) createFolder(name);
+    setFolderDialogOpen(true);
     handleClose();
+  };
+
+  const handleCreateFolder = () => {
+    const name = folderName.trim();
+    if (name) createFolder(name);
+    setFolderName("");
+    setFolderDialogOpen(false);
   };
 
   return (
@@ -56,6 +65,17 @@ export default function AddNoteFloatButton() {
           Add folder
         </MenuItem>
       </Menu>
+
+      <TextInputDialog
+        open={folderDialogOpen}
+        title="Create folder"
+        label="Folder name"
+        value={folderName}
+        confirmLabel="Create"
+        onChange={setFolderName}
+        onClose={() => setFolderDialogOpen(false)}
+        onConfirm={handleCreateFolder}
+      />
     </>
   );
 }

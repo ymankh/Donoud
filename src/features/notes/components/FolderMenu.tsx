@@ -1,6 +1,9 @@
 import { FaFolder } from "react-icons/fa";
 import { Box, Button, Stack } from "@mui/material";
+import { useMemo, useState } from "react";
 import { useNotes } from "../hooks/useNotes";
+import ConfirmDialog from "@/shared/components/ConfirmDialog";
+import TextInputDialog from "@/shared/components/TextInputDialog";
 
 const FolderMenu = () => {
   const {
@@ -10,15 +13,35 @@ const FolderMenu = () => {
     renameFolder,
     deleteFolder,
   } = useNotes();
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [renameValue, setRenameValue] = useState("");
+
+  const selectedFolderName = useMemo(
+    () => folders.find((f) => f.id === selectedFolder)?.name ?? "",
+    [folders, selectedFolder]
+  );
 
   const rename = () => {
-    const folder = folders.find((f) => f.id === selectedFolder);
-    const name = prompt("Rename folder", folder?.name);
-    if (name && selectedFolder) renameFolder(selectedFolder, name);
+    if (!selectedFolder) return;
+    setRenameValue(selectedFolderName);
+    setRenameOpen(true);
   };
 
   const remove = () => {
-    if (selectedFolder && confirm("Delete folder?")) deleteFolder(selectedFolder);
+    if (!selectedFolder) return;
+    setDeleteOpen(true);
+  };
+
+  const handleRenameConfirm = () => {
+    const name = renameValue.trim();
+    if (name && selectedFolder) renameFolder(selectedFolder, name);
+    setRenameOpen(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedFolder) deleteFolder(selectedFolder);
+    setDeleteOpen(false);
   };
 
   return (
@@ -67,6 +90,27 @@ const FolderMenu = () => {
           </Button>
         </Stack>
       )}
+
+      <TextInputDialog
+        open={renameOpen}
+        title="Rename folder"
+        label="Folder name"
+        value={renameValue}
+        confirmLabel="Rename"
+        onChange={setRenameValue}
+        onClose={() => setRenameOpen(false)}
+        onConfirm={handleRenameConfirm}
+      />
+
+      <ConfirmDialog
+        open={deleteOpen}
+        title="Delete folder?"
+        description="This action will keep notes but remove the folder."
+        confirmLabel="Delete"
+        confirmColor="error"
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </Box>
   );
 };

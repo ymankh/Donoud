@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   MDXEditor,
@@ -24,8 +24,29 @@ const item = {
 const Note: FC<{ note: NoteType }> = ({ note }) => {
   const navigate = useNavigate();
   const { deleteNote, updateNote } = useNotes();
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const [hasOverflow, setHasOverflow] = useState(false);
   const noteColor = stickyNoteColors[note.color ?? "gold"];
   const { text: textColor, note: bgColor } = noteColor;
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const el = previewRef.current;
+      if (!el) return;
+      setHasOverflow(el.scrollHeight - el.clientHeight > 4);
+    };
+
+    const raf = requestAnimationFrame(checkOverflow);
+    const timeout = window.setTimeout(checkOverflow, 120);
+    window.addEventListener("resize", checkOverflow);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timeout);
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, [note.text]);
+
   return (
     <motion.div
       variants={item}
@@ -40,7 +61,9 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
         display: "flex",
         flexDirection: "column",
         gap: "0.5rem",
-        minHeight: 220,
+        width: 280,
+        height: 240,
+        overflow: "hidden",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
@@ -51,17 +74,21 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
         />
       </Box>
       <Box
+        ref={previewRef}
         onClick={() => {
           navigate(`${note.id}`);
         }}
         sx={{
           display: "block",
           fontSize: ".8em",
-          minHeight: 118,
+          flex: 1,
           cursor: "pointer",
           overflow: "hidden",
+          position: "relative",
           "& .mdxeditor-toolbar": { display: "none" },
           "& .mdxeditor": {
+            height: "100%",
+            overflow: "hidden",
             backgroundColor: "transparent",
             color: "inherit",
           },
@@ -79,6 +106,19 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           ]}
           readOnly={true}
         />
+        {hasOverflow ? (
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 28,
+              pointerEvents: "none",
+              background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, ${bgColor} 95%)`,
+            }}
+          />
+        ) : null}
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: "auto" }}>
         <Typography variant="caption" sx={{ color: textColor }}>
