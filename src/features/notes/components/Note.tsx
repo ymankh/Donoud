@@ -57,16 +57,17 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
         backgroundColor: bgColor,
         color: textColor,
         borderRadius: 8,
-        padding: "0.75rem",
+        padding: "0.75rem 0.75rem 0.5rem",
         display: "flex",
         flexDirection: "column",
-        gap: "0.5rem",
+        gap: 0,
         width: 280,
-        height: 240,
+        height: 180,
         overflow: "hidden",
+        position: "relative",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+      <Box sx={{ position: "absolute", top: 6, right: 6, zIndex: 1 }}>
         <PinNoteButton
           color={textColor}
           onClick={() => updateNote({ ...note, isPined: !note.isPined })}
@@ -85,6 +86,8 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           cursor: "pointer",
           overflow: "hidden",
           position: "relative",
+          pt: 0.5,
+          pr: 3,
           "& .mdxeditor-toolbar": { display: "none" },
           "& .mdxeditor": {
             height: "100%",
@@ -106,21 +109,31 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           ]}
           readOnly={true}
         />
-        {hasOverflow ? (
-          <Box
-            sx={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: 28,
-              pointerEvents: "none",
-              background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, ${bgColor} 95%)`,
-            }}
-          />
-        ) : null}
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: "auto" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mt: 0.5,
+          position: "relative",
+          zIndex: 2,
+          ...(hasOverflow
+            ? {
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: "100%",
+                  height: 28,
+                  pointerEvents: "none",
+                  background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, ${bgColor} 95%)`,
+                },
+              }
+            : {}),
+        }}
+      >
         <Typography variant="caption" sx={{ color: textColor }}>
           {format(note.date, "yyy MMM d p")}
         </Typography>

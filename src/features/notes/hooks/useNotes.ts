@@ -85,6 +85,11 @@ export const useNotes = () => {
     [folderRecords]
   );
 
+  const folderMap = useMemo(
+    () => new Map(folders.map((folder) => [folder.id, folder])),
+    [folders]
+  );
+
   const sortOptions = ["Date created", "Date modified"];
   const sortValue = uiState.sortValue;
   const orderReversed = uiState.orderReversed;
@@ -139,8 +144,11 @@ export const useNotes = () => {
   }, []);
 
   const createFolder = useCallback(
-    (name: string) => {
-      const newFolder: FolderRecord = { id: uuidv4(), name };
+    (name: string, parentId?: string) => {
+      const currentUI = uiStateCollection.state.get("global");
+      const resolvedParentId =
+        parentId === undefined ? currentUI?.selectedFolder || undefined : parentId || undefined;
+      const newFolder: FolderRecord = { id: uuidv4(), name, parentId: resolvedParentId };
       foldersCollection.insert(newFolder);
       setSelectedFolder(newFolder.id);
     },
@@ -155,9 +163,30 @@ export const useNotes = () => {
 
   const deleteFolder = useCallback(
     (id: string) => {
-      foldersCollection.delete(id);
+      const allFolders = Array.from(foldersCollection.state.values());
+      const byParent = new Map<string, string[]>();
+      allFolders.forEach((folder) => {
+        const parentKey = folder.parentId ?? "";
+        const ids = byParent.get(parentKey) ?? [];
+        ids.push(folder.id);
+        byParent.set(parentKey, ids);
+      });
+
+      const deletedIds = new Set<string>();
+      const stack = [id];
+      while (stack.length) {
+        const current = stack.pop();
+        if (!current || deletedIds.has(current)) continue;
+        deletedIds.add(current);
+        const childIds = byParent.get(current) ?? [];
+        childIds.forEach((childId) => stack.push(childId));
+      }
+
+      foldersCollection.delete(Array.from(deletedIds));
       const currentNotes = Array.from(notesCollection.state.values());
-      const notesToUpdate = currentNotes.filter((note) => note.folderId === id);
+      const notesToUpdate = currentNotes.filter(
+        (note) => note.folderId && deletedIds.has(note.folderId)
+      );
       
       if (notesToUpdate.length) {
         notesCollection.update(
@@ -171,8 +200,12 @@ export const useNotes = () => {
       }
       
       const currentUI = uiStateCollection.state.get("global");
-      if (currentUI && currentUI.selectedFolder === id) {
-          updateUIState((draft) => { draft.selectedFolder = ""; });
+      if (currentUI && deletedIds.has(currentUI.selectedFolder)) {
+        const deletedRoot = allFolders.find((folder) => folder.id === id);
+        const fallback = deletedRoot?.parentId ?? "";
+        updateUIState((draft) => {
+          draft.selectedFolder = deletedIds.has(fallback) ? "" : fallback;
+        });
       }
     },
     [updateUIState]
@@ -207,6 +240,21 @@ export const useNotes = () => {
     return newNote.id;
   }, []);
 
+  const selectedFolderPath = useMemo(() => {
+    if (!selectedFolder) return [] as Folder[];
+    const path: Folder[] = [];
+    const visited = new Set<string>();
+    let currentId: string | undefined = selectedFolder;
+    while (currentId && !visited.has(currentId)) {
+      visited.add(currentId);
+      const folder = folderMap.get(currentId);
+      if (!folder) break;
+      path.unshift(folder);
+      currentId = folder.parentId;
+    }
+    return path;
+  }, [folderMap, selectedFolder]);
+
   const deleteEmptyNotes = useCallback(() => {
     const emptyIds = notes
       .filter((note) => note.text === "")
@@ -222,6 +270,7 @@ export const useNotes = () => {
     orderReversed,
     sortOptions,
     selectedFolder,
+    selectedFolderPath,
     sortValue,
     createFolder,
     renameFolder,

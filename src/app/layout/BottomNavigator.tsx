@@ -15,7 +15,25 @@ const BottomNavigator = () => {
       sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 5000 }}
       elevation={4}
     >
-      <BottomNavigation value={value} onChange={(event, newValue) => setValue(newValue)}>
+      <BottomNavigation
+        value={value}
+        onChange={(event, newValue) => setValue(newValue)}
+        showLabels
+        sx={{
+          height: 52,
+          "& .MuiBottomNavigationAction-root": {
+            minWidth: 0,
+            maxWidth: "none",
+            py: 0.25,
+          },
+          "& .MuiBottomNavigationAction-label": {
+            fontSize: "0.7rem",
+          },
+          "& .MuiSvgIcon-root": {
+            fontSize: 20,
+          },
+        }}
+      >
         <BottomNavigationAction label="Notes" value="notes" icon={<Note />} onClick={() => { navigate("notes") }} />
         <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} onClick={() => { navigate("tasks") }} />
       </BottomNavigation>

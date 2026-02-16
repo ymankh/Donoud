@@ -26,6 +26,7 @@ export interface NoteRecord {
 export interface FolderRecord {
   id: string;
   name: string;
+  parentId?: string;
 }
 
 export const tasksCollection = createCollection<
