@@ -11,6 +11,7 @@ export interface TaskRecord {
   date: string;
   category: string;
   details?: string;
+  subTasks?: Array<{ id: string; title: string; done: boolean }>;
 }
 
 export interface NoteRecord {

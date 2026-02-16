@@ -2,7 +2,6 @@ import {
   fromTaskRecord,
   tasksCollection,
   toTaskRecord,
-  TaskRecord,
 } from "@/shared/db/collections";
 import { Task, TaskCategory } from "../models/TasksModel";
 import { useLiveQuery } from "@tanstack/react-db";
@@ -133,6 +132,7 @@ export const useTasks = () => {
       draft.category = taskToSave.category || "";
       draft.date = taskToSave.date;
       draft.details = taskToSave.details;
+      draft.subTasks = taskToSave.subTasks ?? [];
     });
     
     // Clear editing state

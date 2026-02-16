@@ -13,11 +13,18 @@ export const taskCategories = [
 
 export type TaskCategory = (typeof taskCategories)[number] | "";
 
+export interface SubTask {
+  id: string;
+  title: string;
+  done: boolean;
+}
+
 export interface Task {
   id: string;
   task: string;
   done: boolean;
   date: Date;
   category: TaskCategory;
-  details?: string
+  details?: string;
+  subTasks?: SubTask[];
 }
