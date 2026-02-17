@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import DeleteNoteButton from "./DeleteNoteButton";
 import PinNoteButton from "./PinNoteButton";
 import { Box, Typography } from "@mui/material";
+import { notesRoutes } from "../routes";
 const item = {
   hidden: { y: 20, opacity: 0 },
   visible: { y: 0, opacity: 1 },
@@ -77,12 +78,13 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
       <Box
         ref={previewRef}
         onClick={() => {
-          navigate(`${note.id}`);
+          navigate(notesRoutes.note(note.id));
         }}
         sx={{
           display: "block",
           fontSize: ".8em",
           flex: 1,
+          minHeight: 0,
           cursor: "pointer",
           overflow: "hidden",
           position: "relative",
@@ -91,9 +93,26 @@ const Note: FC<{ note: NoteType }> = ({ note }) => {
           "& .mdxeditor-toolbar": { display: "none" },
           "& .mdxeditor": {
             height: "100%",
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
             overflow: "hidden",
             backgroundColor: "transparent",
             color: "inherit",
+          },
+          "& .mdxeditor > div": {
+            flex: 1,
+            minHeight: 0,
+          },
+          "& .mdxeditor-root-contenteditable": {
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+          },
+          '& [contenteditable="true"]': {
+            flex: 1,
+            minHeight: "100%",
           },
         }}
       >

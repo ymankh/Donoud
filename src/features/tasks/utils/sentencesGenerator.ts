@@ -722,3 +722,83 @@ export const taskKeywords = {
     "مهام",
   ],
 };
+
+const normalizeText = (value: string): string =>
+  value
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/[^\p{L}\p{N}\s-]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const tokenize = (value: string): Set<string> => {
+  const normalized = normalizeText(value);
+  if (!normalized) return new Set();
+  return new Set(normalized.split(/[\s-]+/u).filter(Boolean));
+};
+
+const hasPhraseMatch = (text: string, phrase: string): boolean => {
+  if (!phrase.includes(" ")) return false;
+  return text.includes(phrase);
+};
+
+export const getBestTaskMatch = (taskText: string): string | undefined => {
+  const normalizedTask = normalizeText(taskText);
+  if (!normalizedTask) return undefined;
+
+  const tokens = tokenize(normalizedTask);
+
+  let bestTaskName: string | undefined;
+  let bestScore = 0;
+  let bestMatchCount = 0;
+  let bestLongestKeyword = 0;
+
+  for (const [taskName, keywords] of Object.entries(taskKeywords)) {
+    let score = 0;
+    let matchCount = 0;
+    let longestKeyword = 0;
+
+    for (const rawKeyword of keywords) {
+      const keyword = normalizeText(rawKeyword);
+      if (!keyword) continue;
+
+      let matched = false;
+
+      if (hasPhraseMatch(normalizedTask, keyword)) {
+        score += 6;
+        matched = true;
+      } else if (tokens.has(keyword)) {
+        score += 4;
+        matched = true;
+      } else if (
+        keyword.length >= 5 &&
+        normalizedTask.includes(keyword) &&
+        !keyword.includes(" ")
+      ) {
+        // fallback for inflected forms that don't tokenize exactly
+        score += 1;
+        matched = true;
+      }
+
+      if (matched) {
+        matchCount += 1;
+        longestKeyword = Math.max(longestKeyword, keyword.length);
+      }
+    }
+
+    const isBetterScore = score > bestScore;
+    const isTieButBetter =
+      score === bestScore &&
+      (matchCount > bestMatchCount ||
+        (matchCount === bestMatchCount && longestKeyword > bestLongestKeyword));
+
+    if (score > 0 && (isBetterScore || isTieButBetter)) {
+      bestTaskName = taskName;
+      bestScore = score;
+      bestMatchCount = matchCount;
+      bestLongestKeyword = longestKeyword;
+    }
+  }
+
+  return bestTaskName;
+};

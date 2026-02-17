@@ -23,7 +23,6 @@ import { v4 as uuidv4 } from "uuid";
 const EditTaskModal = () => {
   const location = useLocation();
   const { modalOpen, close } = useModal();
-  useState<TaskCategory>("" as TaskCategory);
   const { saveEditedTask, editedTask, setEditedTask } = useTasks();
   const [newSubTask, setNewSubTask] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotes } from "../hooks/useNotes";
 import TextInputDialog from "@/shared/components/TextInputDialog";
+import { notesRoutes } from "../routes";
 
 export default function AddNoteFloatButton() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function AddNoteFloatButton() {
 
   const handleAddNote = () => {
     const newNoteId = createNewNote();
-    navigate(newNoteId);
+    navigate(notesRoutes.note(newNoteId));
     handleClose();
   };
 
@@ -30,7 +31,10 @@ export default function AddNoteFloatButton() {
 
   const handleCreateFolder = () => {
     const name = folderName.trim();
-    if (name) createFolder(name);
+    if (name) {
+      const folderId = createFolder(name);
+      navigate(notesRoutes.folder(folderId));
+    }
     setFolderName("");
     setFolderDialogOpen(false);
   };

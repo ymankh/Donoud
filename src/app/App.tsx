@@ -1,4 +1,5 @@
-import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import Navbar from "./layout/Navbar";
 import BottomNavigator from "./layout/BottomNavigator";
 import { BrowserRouter } from "react-router-dom";
@@ -27,6 +28,18 @@ const appTheme = createTheme({
 });
 
 function App() {
+  useEffect(() => {
+    const now = new Date();
+    const isBirthday = now.getMonth() === 1 && now.getDate() === 17; // February 17
+    if (!isBirthday) return;
+
+    const shownKey = `birthday-toast-${now.getFullYear()}-02-17`;
+    if (sessionStorage.getItem(shownKey)) return;
+
+    toast.success("Happy Birthday! 🎂");
+    sessionStorage.setItem(shownKey, "true");
+  }, []);
+
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />

@@ -3,18 +3,22 @@ import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react";
 import manifest from "./public/manifest.json";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", { target: "19" }]],
-      },
-    }),
+    react(
+      command === "build"
+        ? {
+            babel: {
+              plugins: [["babel-plugin-react-compiler", { target: "19" }]],
+            },
+          }
+        : undefined
+    ),
     VitePWA({
       registerType: "autoUpdate",  // Automatically updates the PWA
       manifest,  // Use the existing manifest.json
       devOptions: {
-        enabled: true,  // Enable in development for testing
+        enabled: false,  // Keep SW off in dev to avoid HMR/runtime conflicts
       },
       workbox: {
         runtimeCaching: [
@@ -43,4 +47,4 @@ export default defineConfig({
       "@": "/src",
     },
   },
-});
+}));

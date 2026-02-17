@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { TasksPage } from "@/features/tasks";
-import { NotesPage, NoteEditPage } from "@/features/notes";
+import { NotesPage, NoteEditPage, notesRoutes } from "@/features/notes";
 import { NotFound } from "@/shared/components/NotFound";
 
 
@@ -9,8 +9,10 @@ const AppRoutes = () => {
   return (
     <Routes location={location} key={location.pathname}>
       <Route path="/tasks" element={<TasksPage />} />
-      <Route path="/notes" element={<NotesPage />} />
-      <Route path="/notes/:noteId" element={<NoteEditPage />} />
+      <Route path={notesRoutes.root} element={<NotesPage mode="root" />} />
+      <Route path={notesRoutes.all} element={<NotesPage mode="all-notes" />} />
+      <Route path={notesRoutes.folderPattern} element={<NotesPage mode="folder" />} />
+      <Route path={notesRoutes.notePattern} element={<NoteEditPage />} />
       <Route
         path="*"
         element={

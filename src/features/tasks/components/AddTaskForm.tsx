@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { TaskCategory } from "../models/TasksModel";
-import { getSentenceForTask, randomEmoji, taskKeywords } from "../utils/sentencesGenerator";
+import { getBestTaskMatch, getSentenceForTask, randomEmoji } from "../utils/sentencesGenerator";
 import SelectCategory from "./SelectCategory";
 import { useTasks } from "../hooks/useTasks";
 import { Box, TextField, Button, Typography, Stack } from "@mui/material";
@@ -22,24 +22,28 @@ const AddTaskForm = () => {
     if (task.length < 5) {
       toast.error("Task should be at least 5 characters" + randomEmoji(), {
         transition: Bounce,
+        style: {
+          backgroundColor: "#7F1D1D",
+          color: "#FFFFFF",
+        },
       });
       return;
     }
 
     const showToast = (sentence: string) => {
-      toast.success(sentence, { transition: Bounce });
-    };
-
-    const checkTask = (task: string, keywords: string[]) => {
-      return keywords.some((word) => task.includes(word));
+      toast.success(sentence, {
+        transition: Bounce,
+        style: {
+          backgroundColor: "#14532D",
+          color: "#FFFFFF",
+        },
+      });
     };
 
     const handleTask = (task: string) => {
-      for (const [taskName, keywords] of Object.entries(taskKeywords)) {
-        if (checkTask(task, keywords)) {
-          showToast(getSentenceForTask(taskName));
-          return;
-        }
+      const taskName = getBestTaskMatch(task);
+      if (taskName) {
+        showToast(getSentenceForTask(taskName));
       }
     };
 

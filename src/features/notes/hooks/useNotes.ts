@@ -151,6 +151,7 @@ export const useNotes = () => {
       const newFolder: FolderRecord = { id: uuidv4(), name, parentId: resolvedParentId };
       foldersCollection.insert(newFolder);
       setSelectedFolder(newFolder.id);
+      return newFolder.id;
     },
     [setSelectedFolder]
   );

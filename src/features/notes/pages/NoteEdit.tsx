@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import SelectNoteColor from "../components/SelectNoteColor";
 import { Note, useNotes } from "../hooks/useNotes";
+import { notesRoutes } from "../routes";
 
 const NoteEdit = () => {
   const navigate = useNavigate();
@@ -29,7 +30,10 @@ const NoteEdit = () => {
   let editedNote: Note | undefined;
   try {
     if (noteId) editedNote = getNoteById(noteId);
-  } catch (error) { }
+  } catch (error) { 
+    toast.error(`Some Thing went wrong while trying to get your note. 💀`);
+    console.error(error);
+  }
   const [note, setNote] = useState(editedNote);
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -38,7 +42,7 @@ const NoteEdit = () => {
   useEffect(() => {
     if (note) updateNote(note);
     else {
-      navigate("/notes");
+      navigate(notesRoutes.root);
       toast.error(`Some Thing went wrong while trying to get your note. 💀`);
     }
   }, [note]);
