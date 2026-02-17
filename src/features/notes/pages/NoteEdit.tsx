@@ -57,15 +57,37 @@ const NoteEdit = () => {
         }}
         exit={{ opacity: 0, x: 100 }}
       >
-        <Container sx={{ mt: 4, mb: 12 }}>
-          <form onSubmit={handleSubmit}>
-            <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
+        <Container
+          sx={{
+            mt: 4,
+            mb: 12,
+            height: "calc(100vh - 180px)",
+            display: "flex",
+            minHeight: 0,
+          }}
+        >
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
+          >
+            <Paper
+              elevation={2}
+              sx={{
+                p: { xs: 2, md: 3 },
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                flex: 1,
+                minHeight: 0,
+              }}
+            >
               <Typography variant="body2" color="text.secondary">
                 Compose your note
               </Typography>
               <Box
                 sx={{
-                  minHeight: "68vh",
+                  flex: 1,
+                  minHeight: 0,
                   display: "flex",
                   flexDirection: "column",
                   "& .mdxeditor": { height: "100%", display: "flex", flexDirection: "column" },

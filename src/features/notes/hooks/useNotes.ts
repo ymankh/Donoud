@@ -44,6 +44,13 @@ export interface Note {
   folderId?: string;
 }
 
+export interface NotesSelection {
+  noteIds: string[];
+  folderIds: string[];
+}
+
+export type NotesClipboardMode = "copy" | "move";
+
 /**
  * Custom hook for managing notes and note folders using TanStack DB.
  *
@@ -265,6 +272,188 @@ export const useNotes = () => {
     }
   }, []);
 
+  const deleteSelection = useCallback(
+    ({ noteIds, folderIds }: NotesSelection) => {
+      const folderSet = new Set(folderIds);
+      const allFolders = Array.from(foldersCollection.state.values());
+      const byParent = new Map<string, string[]>();
+      allFolders.forEach((folder) => {
+        const parentKey = folder.parentId ?? "";
+        const ids = byParent.get(parentKey) ?? [];
+        ids.push(folder.id);
+        byParent.set(parentKey, ids);
+      });
+
+      const allDeletedFolderIds = new Set<string>();
+      const stack = [...folderSet];
+      while (stack.length) {
+        const current = stack.pop();
+        if (!current || allDeletedFolderIds.has(current)) continue;
+        allDeletedFolderIds.add(current);
+        const childIds = byParent.get(current) ?? [];
+        childIds.forEach((childId) => stack.push(childId));
+      }
+
+      const currentNotes = Array.from(notesCollection.state.values());
+      const noteIdsFromDeletedFolders = currentNotes
+        .filter((note) => note.folderId && allDeletedFolderIds.has(note.folderId))
+        .map((note) => note.id);
+
+      const allNoteIds = new Set([...noteIds, ...noteIdsFromDeletedFolders]);
+
+      if (allNoteIds.size) {
+        notesCollection.delete(Array.from(allNoteIds));
+      }
+      if (allDeletedFolderIds.size) {
+        foldersCollection.delete(Array.from(allDeletedFolderIds));
+      }
+
+      const currentUI = uiStateCollection.state.get("global");
+      if (currentUI && allDeletedFolderIds.has(currentUI.selectedFolder)) {
+        updateUIState((draft) => {
+          draft.selectedFolder = "";
+        });
+      }
+    },
+    [updateUIState]
+  );
+
+  const pasteSelection = useCallback(
+    (
+      selection: NotesSelection,
+      targetFolderId: string,
+      mode: NotesClipboardMode
+    ) => {
+      const normalizedTarget = targetFolderId || undefined;
+      const selectedFolderIds = new Set(selection.folderIds);
+      const folderMap = new Map(
+        Array.from(foldersCollection.state.values()).map((folder) => [folder.id, folder])
+      );
+      const childrenMap = new Map<string, string[]>();
+      Array.from(folderMap.values()).forEach((folder) => {
+        const parent = folder.parentId ?? "";
+        const ids = childrenMap.get(parent) ?? [];
+        ids.push(folder.id);
+        childrenMap.set(parent, ids);
+      });
+
+      const selectedRootFolderIds = selection.folderIds.filter((folderId) => {
+        const folder = folderMap.get(folderId);
+        if (!folder) return false;
+        return !folder.parentId || !selectedFolderIds.has(folder.parentId);
+      });
+
+      const collectFolderTree = (roots: string[]): Set<string> => {
+        const ids = new Set<string>();
+        const stack = [...roots];
+        while (stack.length) {
+          const current = stack.pop();
+          if (!current || ids.has(current)) continue;
+          ids.add(current);
+          const children = childrenMap.get(current) ?? [];
+          children.forEach((childId) => stack.push(childId));
+        }
+        return ids;
+      };
+
+      const selectedFolderTree = collectFolderTree(selection.folderIds);
+
+      if (mode === "move") {
+        const isTargetInsideFolder = (folderId: string, maybeChildId: string): boolean => {
+          let cursor = folderMap.get(maybeChildId);
+          while (cursor?.parentId) {
+            if (cursor.parentId === folderId) return true;
+            cursor = folderMap.get(cursor.parentId);
+          }
+          return false;
+        };
+
+        const movableFolderRoots = selectedRootFolderIds.filter((folderId) => {
+          if (!normalizedTarget) return true;
+          if (normalizedTarget === folderId) return false;
+          return !isTargetInsideFolder(folderId, normalizedTarget);
+        });
+
+        if (movableFolderRoots.length) {
+          foldersCollection.update(movableFolderRoots, (drafts) => {
+            drafts.forEach((draft) => {
+              draft.parentId = normalizedTarget;
+            });
+          });
+        }
+
+        const movableNoteIds = selection.noteIds.filter((noteId) => {
+          const note = notesCollection.state.get(noteId);
+          if (!note) return false;
+          return !note.folderId || !selectedFolderTree.has(note.folderId);
+        });
+
+        if (movableNoteIds.length) {
+          notesCollection.update(movableNoteIds, (drafts) => {
+            drafts.forEach((draft) => {
+              draft.folderId = normalizedTarget;
+            });
+          });
+        }
+        return;
+      }
+
+      const duplicateNoteRecord = (
+        note: NoteRecord,
+        target: string | undefined
+      ): NoteRecord => ({
+        ...note,
+        id: uuidv4(),
+        date: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
+        folderId: target,
+      });
+
+      const selectedNotes = selection.noteIds
+        .map((noteId) => notesCollection.state.get(noteId))
+        .filter((note): note is NoteRecord => Boolean(note));
+
+      const directNotes = selectedNotes.filter(
+        (note) => !note.folderId || !selectedFolderTree.has(note.folderId)
+      );
+      if (directNotes.length) {
+        notesCollection.insert(directNotes.map((note) => duplicateNoteRecord(note, normalizedTarget)));
+      }
+
+      const cloneFolderTree = (
+        sourceFolderId: string,
+        parentId: string | undefined,
+        isRoot: boolean
+      ) => {
+        const source = folderMap.get(sourceFolderId);
+        if (!source) return;
+        const newFolderId = uuidv4();
+        foldersCollection.insert({
+          id: newFolderId,
+          name: isRoot ? `${source.name} (copy)` : source.name,
+          parentId,
+        });
+
+        const notesInFolder = Array.from(notesCollection.state.values()).filter(
+          (note) => note.folderId === sourceFolderId
+        );
+        if (notesInFolder.length) {
+          notesCollection.insert(
+            notesInFolder.map((note) => duplicateNoteRecord(note, newFolderId))
+          );
+        }
+
+        const childIds = childrenMap.get(sourceFolderId) ?? [];
+        childIds.forEach((childId) => cloneFolderTree(childId, newFolderId, false));
+      };
+
+      selectedRootFolderIds.forEach((folderId) =>
+        cloneFolderTree(folderId, normalizedTarget, true)
+      );
+    },
+    []
+  );
+
   return {
     notes,
     folders,
@@ -281,6 +470,8 @@ export const useNotes = () => {
     updateNote,
     createNewNote,
     deleteEmptyNotes,
+    deleteSelection,
+    pasteSelection,
     setOrderReversed,
     setSortValue,
     setSelectedFolder,

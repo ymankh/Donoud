@@ -56,9 +56,9 @@ const Navbar = () => {
 
   const onSwanHoldStart = () => {
     if (holdTimerRef.current) {
-      window.clearTimeout(holdTimerRef.current);
+      globalThis.clearTimeout(holdTimerRef.current);
     }
-    holdTimerRef.current = window.setTimeout(() => {
+    holdTimerRef.current = globalThis.setTimeout(() => {
       const sessionKey = "swan-long-press-toast";
       if (!sessionStorage.getItem(sessionKey)) {
         toast.info("You found the swan's secret long-press. 🦢");
@@ -69,7 +69,7 @@ const Navbar = () => {
 
   const onSwanHoldEnd = () => {
     if (holdTimerRef.current) {
-      window.clearTimeout(holdTimerRef.current);
+      globalThis.clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
     }
   };
