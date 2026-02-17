@@ -10,6 +10,10 @@ import useWindowSize from "react-use/lib/useWindowSize";
 import { Task } from "../models/TasksModel";
 import { Container, Card, CardContent, Typography, Box } from "@mui/material";
 
+const STREAK_COUNT_KEY = "easter-completion-streak-count";
+const STREAK_LAST_DAY_KEY = "easter-completion-streak-last-day";
+const STREAK_CELEBRATED_DAY_KEY = "easter-completion-streak-celebrated-day";
+
 // Function to Get a Random Congrats Message
 function congratsTasksFinished(): string {
   const sentences = [
@@ -26,6 +30,13 @@ function congratsTasksFinished(): string {
   ];
   return sentences[Math.floor(Math.random() * sentences.length)];
 }
+
+const toDayDate = (day: string): Date => new Date(`${day}T00:00:00`);
+const isYesterday = (lastDay: string, currentDay: string): boolean => {
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const diff = toDayDate(currentDay).getTime() - toDayDate(lastDay).getTime();
+  return diff === msPerDay;
+};
 
 // Motion Variants
 const container = {
@@ -65,6 +76,33 @@ const TaskList: React.FC<{
       !allTasksDone
     ) {
       toast.success(congratsTasksFinished());
+      const now = new Date();
+      const dayKey = format(now, "yyyy-MM-dd");
+
+      const speedrunKey = `easter-speedrun-${dayKey}`;
+      if (now.getHours() < 12 && !sessionStorage.getItem(speedrunKey)) {
+        toast.success("Speedrun achieved: all tasks done before noon. ⚡");
+        sessionStorage.setItem(speedrunKey, "true");
+      }
+
+      const lastStreakDay = localStorage.getItem(STREAK_LAST_DAY_KEY);
+      if (lastStreakDay !== dayKey) {
+        const prevStreak = Number(localStorage.getItem(STREAK_COUNT_KEY) || "0");
+        const nextStreak =
+          lastStreakDay && isYesterday(lastStreakDay, dayKey) ? prevStreak + 1 : 1;
+
+        localStorage.setItem(STREAK_COUNT_KEY, String(nextStreak));
+        localStorage.setItem(STREAK_LAST_DAY_KEY, dayKey);
+
+        if (
+          nextStreak >= 7 &&
+          localStorage.getItem(STREAK_CELEBRATED_DAY_KEY) !== dayKey
+        ) {
+          toast.success("Perfect streak: 7 days in a row. 🔥");
+          localStorage.setItem(STREAK_CELEBRATED_DAY_KEY, dayKey);
+        }
+      }
+
       setCelebrating(true);
       setAllTasksDone(true);
       setTimeout(() => {

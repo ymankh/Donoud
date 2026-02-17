@@ -257,13 +257,13 @@ export const useNotes = () => {
   }, [folderMap, selectedFolder]);
 
   const deleteEmptyNotes = useCallback(() => {
-    const emptyIds = notes
+    const emptyIds = Array.from(notesCollection.state.values())
       .filter((note) => note.text === "")
       .map((note) => note.id);
     if (emptyIds.length) {
       notesCollection.delete(emptyIds);
     }
-  }, [notes]);
+  }, []);
 
   return {
     notes,

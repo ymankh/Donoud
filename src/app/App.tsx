@@ -40,6 +40,19 @@ function App() {
     sessionStorage.setItem(shownKey, "true");
   }, []);
 
+  useEffect(() => {
+    const now = new Date();
+    const inMidnightWindow = now.getHours() === 0 && now.getMinutes() < 5;
+    if (!inMidnightWindow) return;
+
+    const dayKey = now.toISOString().slice(0, 10);
+    const shownKey = `night-owl-toast-${dayKey}`;
+    if (sessionStorage.getItem(shownKey)) return;
+
+    toast.info("Night owl detected. Midnight mode unlocked. 🌙");
+    sessionStorage.setItem(shownKey, "true");
+  }, []);
+
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
@@ -62,6 +75,15 @@ function App() {
             flex: 1,
             minHeight: "100%",
             outline: "none",
+            color: "#F5F7FF",
+            caretColor: "#F5F7FF",
+          },
+          ".mdxeditor-root-contenteditable p, .mdxeditor-root-contenteditable li, .mdxeditor-root-contenteditable span":
+            {
+              color: "#F5F7FF",
+            },
+          ".mdxeditor-root-contenteditable [contenteditable='true']::placeholder": {
+            color: "rgba(245, 247, 255, 0.6)",
           },
         }}
       />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiSwan } from "react-icons/gi";
 import { toast } from "react-toastify";
 import { useFilter } from "@/shared/hooks/useFilter";
@@ -39,6 +39,7 @@ const sentences = [
 
 const Navbar = () => {
   const [clicksCounter, setClickCounter] = useState(0);
+  const holdTimerRef = useRef<number | null>(null);
   const { filter, setFilter } = useFilter();
   // Function that returns a random sentence/message
   const getRandomIndex = () => {
@@ -52,6 +53,26 @@ const Navbar = () => {
       toast.warning(getRandomIndex());
     }
   };
+
+  const onSwanHoldStart = () => {
+    if (holdTimerRef.current) {
+      window.clearTimeout(holdTimerRef.current);
+    }
+    holdTimerRef.current = window.setTimeout(() => {
+      const sessionKey = "swan-long-press-toast";
+      if (!sessionStorage.getItem(sessionKey)) {
+        toast.info("You found the swan's secret long-press. 🦢");
+        sessionStorage.setItem(sessionKey, "true");
+      }
+    }, 3000);
+  };
+
+  const onSwanHoldEnd = () => {
+    if (holdTimerRef.current) {
+      window.clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+  };
   useEffect(() => {
     const intervalId = setInterval(() => {
       setClickCounter((prevCounter) =>
@@ -61,6 +82,7 @@ const Navbar = () => {
 
     return () => {
       clearInterval(intervalId); // Clean up the interval when the component unmounts
+      onSwanHoldEnd();
     };
   }, []);
 
@@ -69,7 +91,14 @@ const Navbar = () => {
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box component="span" sx={{ fontSize: 30, display: "flex", cursor: "pointer" }}>
-            <GiSwan onClick={onClick} />
+            <GiSwan
+              onClick={onClick}
+              onMouseDown={onSwanHoldStart}
+              onMouseUp={onSwanHoldEnd}
+              onMouseLeave={onSwanHoldEnd}
+              onTouchStart={onSwanHoldStart}
+              onTouchEnd={onSwanHoldEnd}
+            />
           </Box>
           <Typography variant="h6" component="span">
             DoNoud

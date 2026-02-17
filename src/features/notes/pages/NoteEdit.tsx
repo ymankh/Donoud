@@ -14,7 +14,7 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Box, Container, FormControl, MenuItem, Paper, Select, Stack, Typography } from "@mui/material";
+import { Box, Container, Paper, Typography } from "@mui/material";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -26,7 +26,7 @@ import { notesRoutes } from "../routes";
 const NoteEdit = () => {
   const navigate = useNavigate();
   const { noteId } = useParams();
-  const { getNoteById, updateNote, folders } = useNotes();
+  const { getNoteById, updateNote } = useNotes();
   let editedNote: Note | undefined;
   try {
     if (noteId) editedNote = getNoteById(noteId);
@@ -60,31 +60,6 @@ const NoteEdit = () => {
         <Container sx={{ mt: 4, mb: 12 }}>
           <form onSubmit={handleSubmit}>
             <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
-              <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-                <FormControl fullWidth size="small">
-                  <Select
-                    value={note?.folderId ?? ""}
-                    onChange={(e) =>
-                      setNote((n) =>
-                        n ? { ...n, folderId: String(e.target.value) || undefined } : n
-                      )
-                    }
-                  >
-                    <MenuItem value="">No Folder</MenuItem>
-                    {folders.map((f) => (
-                      <MenuItem key={f.id} value={f.id}>
-                        {f.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <SelectNoteColor
-                  handelSelectNoteColor={(color) =>
-                    setNote((note) => (note === undefined ? undefined : { ...note, color }))
-                  }
-                  selectedColor={note?.color ?? "darkOrange"}
-                />
-              </Stack>
               <Typography variant="body2" color="text.secondary">
                 Compose your note
               </Typography>
@@ -116,6 +91,14 @@ const NoteEdit = () => {
                           <BlockTypeSelect />
                           <InsertTable />
                           <ListsToggle />
+                          <SelectNoteColor
+                            handelSelectNoteColor={(color) =>
+                              setNote((current) =>
+                                current === undefined ? undefined : { ...current, color }
+                              )
+                            }
+                            selectedColor={note?.color ?? "darkOrange"}
+                          />
                         </>
                       ),
                     }),
