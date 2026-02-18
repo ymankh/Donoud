@@ -66,6 +66,36 @@ To run the app locally, follow these steps:
 6. Use the filtering options to efficiently organize and find tasks and notes.
 7. Create and manage note folders from the notes toolbar to keep related notes together.
 
+## Android App Distribution (Capacitor)
+
+This project is configured to package the Vite app as a native Android app with Capacitor.
+
+1. Install dependencies:
+   `npm install`
+2. Build web assets and sync Capacitor:
+   `npm run android:build`
+3. Create Android project (first time only):
+   `npm run cap:add:android`
+4. Open native project in Android Studio:
+   `npm run android:open`
+5. In Android Studio:
+   - Set app `applicationId` and version in `android/app/build.gradle`
+   - Configure signing (Generate Signed Bundle / APK)
+   - Build one of:
+     - `app-release.apk` for direct install/testing
+     - `app-release.aab` for Google Play upload
+
+CLI alternative (from `android/`):
+
+```bash
+./gradlew assembleRelease   # APK
+./gradlew bundleRelease     # AAB
+```
+
+Output files are generated under:
+- `android/app/build/outputs/apk/release/`
+- `android/app/build/outputs/bundle/release/`
+
 ## Contributing
 
 Contributions are welcome! If you have any suggestions or improvements, feel free to open an issue or submit a pull request.

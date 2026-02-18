@@ -1,9 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { GiSwan } from "react-icons/gi";
+import { Notifications } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useFilter } from "@/shared/hooks/useFilter";
-import { AppBar, Toolbar, Typography, InputBase, Box } from "@mui/material";
+import {
+  clearMessageHistory,
+  engagementUpdateEvent,
+  getMessageHistory,
+  type MessageHistoryEntry,
+  unlockEasterEgg,
+} from "@/shared/utils/engagementTracker";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  InputBase,
+  Box,
+  Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Chip,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
+import { format } from "date-fns";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -38,19 +65,23 @@ const sentences = [
 ];
 
 const Navbar = () => {
-  const [clicksCounter, setClickCounter] = useState(0);
-  const holdTimerRef = useRef<number | null>(null);
+  const [clicksCounter, setClicksCounter] = useState(0);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [messageHistory, setMessageHistory] = useState<MessageHistoryEntry[]>([]);
+  const holdTimerRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const { filter, setFilter } = useFilter();
   // Function that returns a random sentence/message
   const getRandomIndex = () => {
     return sentences[Math.floor(Math.random() * sentences.length)];
   };
   const onClick = () => {
-    setClickCounter((prevCounter) =>
+    setClicksCounter((prevCounter) =>
       prevCounter + 1 <= 3 ? prevCounter + 1 : 0
     );
     if (clicksCounter >= 3) {
-      toast.warning(getRandomIndex());
+      const message = getRandomIndex();
+      toast.warning(message);
+      unlockEasterEgg("swan-guardian", "navbar:swan-click");
     }
   };
 
@@ -61,7 +92,9 @@ const Navbar = () => {
     holdTimerRef.current = globalThis.setTimeout(() => {
       const sessionKey = "swan-long-press-toast";
       if (!sessionStorage.getItem(sessionKey)) {
-        toast.info("You found the swan's secret long-press. 🦢");
+        const message = "You found the swan's secret long-press. 🦢";
+        toast.info(message);
+        unlockEasterEgg("swan-long-press", "navbar:swan-long-press");
         sessionStorage.setItem(sessionKey, "true");
       }
     }, 3000);
@@ -74,13 +107,22 @@ const Navbar = () => {
     }
   };
   useEffect(() => {
+    const reload = () => {
+      setMessageHistory(getMessageHistory());
+    };
+    reload();
+    window.addEventListener("storage", reload);
+    window.addEventListener(engagementUpdateEvent, reload);
+
     const intervalId = setInterval(() => {
-      setClickCounter((prevCounter) =>
+      setClicksCounter((prevCounter) =>
         prevCounter - 1 >= 0 ? prevCounter - 1 : 0
       );
     }, 1000);
 
     return () => {
+      window.removeEventListener("storage", reload);
+      window.removeEventListener(engagementUpdateEvent, reload);
       clearInterval(intervalId); // Clean up the interval when the component unmounts
       onSwanHoldEnd();
     };
@@ -104,15 +146,76 @@ const Navbar = () => {
             DoNoud
           </Typography>
         </Box>
-        <Search>
-          <StyledInputBase
-            placeholder="Filter"
-            inputProps={{ "aria-label": "search" }}
-            onChange={(e) => setFilter(e.target.value)}
-            value={filter}
-          />
-        </Search>
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Search>
+            <StyledInputBase
+              placeholder="Filter"
+              inputProps={{ "aria-label": "search" }}
+              onChange={(e) => setFilter(e.target.value)}
+              value={filter}
+            />
+          </Search>
+          <IconButton
+            color="inherit"
+            aria-label="message history"
+            onClick={() => setHistoryOpen(true)}
+          >
+            <Badge
+              color="error"
+              badgeContent={messageHistory.length > 99 ? "99+" : messageHistory.length}
+            >
+              <Notifications />
+            </Badge>
+          </IconButton>
+        </Stack>
       </Toolbar>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+      >
+        <DialogTitle>Messages History</DialogTitle>
+        <DialogContent dividers>
+          {messageHistory.length === 0 ? (
+            <Typography variant="body2" color="text.secondary">
+              No messages yet.
+            </Typography>
+          ) : (
+            <List dense sx={{ py: 0 }}>
+              {messageHistory.slice(0, 80).map((entry) => (
+                <ListItem key={entry.id} sx={{ px: 0 }}>
+                  <ListItemText
+                    primary={
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Chip size="small" label={entry.type} />
+                        <Typography variant="body2">{entry.message}</Typography>
+                      </Stack>
+                    }
+                    secondary={`${entry.source} • ${format(
+                      new Date(entry.createdAt),
+                      "PPp"
+                    )}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setHistoryOpen(false)}>Close</Button>
+          <Button
+            color="error"
+            disabled={messageHistory.length === 0}
+            onClick={() => {
+              clearMessageHistory();
+              setMessageHistory([]);
+            }}
+          >
+            Clear
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AppBar>
   );
 };

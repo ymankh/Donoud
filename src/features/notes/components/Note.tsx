@@ -41,7 +41,7 @@ const Note: FC<{
   const navigate = useNavigate();
   const { deleteNote, updateNote } = useNotes();
   const previewRef = useRef<HTMLDivElement | null>(null);
-  const longPressTimerRef = useRef<number | null>(null);
+  const longPressTimerRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const longPressTriggeredRef = useRef(false);
   const [hasOverflow, setHasOverflow] = useState(false);
   const noteColor = stickyNoteColors[note.color ?? "gold"];

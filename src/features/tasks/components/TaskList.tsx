@@ -9,6 +9,9 @@ import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import { Task } from "../models/TasksModel";
 import { Container, Card, CardContent, Typography, Box } from "@mui/material";
+import {
+  unlockAchievement,
+} from "@/shared/utils/engagementTracker";
 
 const STREAK_COUNT_KEY = "easter-completion-streak-count";
 const STREAK_LAST_DAY_KEY = "easter-completion-streak-last-day";
@@ -75,13 +78,17 @@ const TaskList: React.FC<{
       !celebrating &&
       !allTasksDone
     ) {
-      toast.success(congratsTasksFinished());
+      const completionMessage = congratsTasksFinished();
+      toast.success(completionMessage);
+      unlockAchievement("daily-completion", "tasks:all-done");
       const now = new Date();
       const dayKey = format(now, "yyyy-MM-dd");
 
       const speedrunKey = `easter-speedrun-${dayKey}`;
       if (now.getHours() < 12 && !sessionStorage.getItem(speedrunKey)) {
-        toast.success("Speedrun achieved: all tasks done before noon. ⚡");
+        const speedrunMessage = "Speedrun achieved: all tasks done before noon. ⚡";
+        toast.success(speedrunMessage);
+        unlockAchievement("speedrun", "tasks:speedrun");
         sessionStorage.setItem(speedrunKey, "true");
       }
 
@@ -98,7 +105,9 @@ const TaskList: React.FC<{
           nextStreak >= 7 &&
           localStorage.getItem(STREAK_CELEBRATED_DAY_KEY) !== dayKey
         ) {
-          toast.success("Perfect streak: 7 days in a row. 🔥");
+          const streakMessage = "Perfect streak: 7 days in a row. 🔥";
+          toast.success(streakMessage);
+          unlockAchievement("streak-7", "tasks:streak");
           localStorage.setItem(STREAK_CELEBRATED_DAY_KEY, dayKey);
         }
       }

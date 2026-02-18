@@ -8,9 +8,15 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest",
+        "cap:add:android": "npx cap add android",
+        "cap:sync": "npm run cap:assets && npx cap sync",
+        "android:open": "npx cap open android",
+        "android:build": "npm run build && npm run cap:sync",
+        "cap:assets": "npx capacitor-assets generate --android"
     },
     "dependencies": {
+        "@capacitor/core": "^8.1.0",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@fontsource/roboto": "^5.2.5",
@@ -33,6 +39,9 @@
         "uuid": "^11.1.0"
     },
     "devDependencies": {
+        "@capacitor/android": "^8.1.0",
+        "@capacitor/assets": "^3.0.5",
+        "@capacitor/cli": "^8.1.0",
         "@eslint/js": "^9.25.0",
         "@types/react": "^19.1.2",
         "@types/react-dom": "^19.1.2",

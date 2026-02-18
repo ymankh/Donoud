@@ -24,7 +24,7 @@ export default function FolderCard({
   onToggleSelect,
   onLongPressSelect,
 }: FolderCardProps) {
-  const longPressTimerRef = useRef<number | null>(null);
+  const longPressTimerRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const longPressTriggeredRef = useRef(false);
 
   const clearPressTimer = () => {

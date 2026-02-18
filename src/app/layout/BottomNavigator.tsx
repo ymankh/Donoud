@@ -1,4 +1,4 @@
-import { Note, Task } from "@mui/icons-material";
+import { AutoAwesome, BarChart, Note, Task } from "@mui/icons-material";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,12 +7,20 @@ const BottomNavigator = () => {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    if (location.pathname.includes("tasks")) setValue("tasks");
-    else setValue("notes")
+    if (location.pathname.includes("/tasks/stats")) setValue("stats");
+    else if (location.pathname.includes("/tasks/easter-eggs")) setValue("easter-eggs");
+    else if (location.pathname.includes("/tasks")) setValue("tasks");
+    else setValue("notes");
   }, [location]);
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 5000 }}
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: (theme) => theme.zIndex.appBar,
+      }}
       elevation={4}
     >
       <BottomNavigation
@@ -36,6 +44,8 @@ const BottomNavigator = () => {
       >
         <BottomNavigationAction label="Notes" value="notes" icon={<Note />} onClick={() => { navigate("/notes") }} />
         <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} onClick={() => { navigate("/tasks") }} />
+        <BottomNavigationAction label="Stats" value="stats" icon={<BarChart />} onClick={() => { navigate("/tasks/stats") }} />
+        <BottomNavigationAction label="Easter" value="easter-eggs" icon={<AutoAwesome />} onClick={() => { navigate("/tasks/easter-eggs") }} />
       </BottomNavigation>
     </Paper>
   );
