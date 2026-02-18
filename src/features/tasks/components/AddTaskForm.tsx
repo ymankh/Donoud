@@ -5,12 +5,14 @@ import { getBestTaskMatch, getSentenceForTask, randomEmoji } from "../utils/sent
 import SelectCategory from "./SelectCategory";
 import { useTasks } from "../hooks/useTasks";
 import { Box, TextField, Button, Typography, Stack } from "@mui/material";
+import { unlockEasterEgg } from "@/shared/utils/engagementTracker";
 
 const EMOJI_COMBO_KEY = "easter-emoji-combo-count";
 const LEGEND_UNLOCK_KEY = "easter-100th-task-unlocked";
 const MAGIC_WORDS = ["moonlight", "stardust", "ضوء القمر", "نجمتي"] as const;
 const FRIDAY_PRAYER_KEY = "easter-friday-prayer-toast";
 const FRIDAY_PRAYER_WORDS = ["pray", "prayer", "صلاة", "دعاء", "quran", "قرآن"] as const;
+const LUCKY_SEVEN_MINUTES = new Set([7, 17, 27, 37, 47, 57]);
 const AUTHOR_EASTER_EGGS = [
   {
     id: "tolkien",
@@ -45,6 +47,8 @@ const AUTHOR_EASTER_EGGS = [
 ] as const;
 const emojiStartRegex =
   /^\s*(?:[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}])/u;
+const hasLettersRegex = /\p{L}/u;
+const nonAlphaNumericRegex = /[^\p{L}\p{N}]/gu;
 
 const AddTaskForm = () => {
   const [task, setTask] = useState("");
@@ -109,6 +113,7 @@ const AddTaskForm = () => {
       }
 
       const lowered = taskText.toLocaleLowerCase();
+      const trimmedTask = taskText.trim();
       const foundMagicWord = MAGIC_WORDS.find((word) =>
         lowered.includes(word.toLocaleLowerCase())
       );
@@ -121,6 +126,54 @@ const AddTaskForm = () => {
       }
 
       const now = new Date();
+      const normalized = lowered.replace(nonAlphaNumericRegex, "");
+      const reversed = normalized.split("").reverse().join("");
+
+      if (
+        normalized.length > 1 &&
+        normalized === reversed &&
+        unlockEasterEgg("palindrome-task", "tasks:add-palindrome")
+      ) {
+        toast.info("Palindrome detected. Mirror words unlocked. 🪞");
+      }
+
+      if (
+        trimmedTask.length > 0 &&
+        hasLettersRegex.test(trimmedTask) &&
+        trimmedTask === trimmedTask.toLocaleUpperCase() &&
+        unlockEasterEgg("caps-lock-prophecy", "tasks:add-caps")
+      ) {
+        toast.info("Caps lock prophecy unlocked. 📣");
+      }
+
+      if (trimmedTask.length === 5 && unlockEasterEgg("tiny-task", "tasks:add-tiny")) {
+        toast.success("Tiny task unlocked: exactly five characters. 🤏");
+      }
+
+      const minutes = now.getMinutes();
+      if (
+        now.getHours() === 5 &&
+        minutes <= 15 &&
+        unlockEasterEgg("sunrise-entry", "tasks:add-sunrise")
+      ) {
+        toast.info("Sunrise entry unlocked. ☀️");
+      }
+
+      if (
+        now.getHours() === 0 &&
+        minutes <= 10 &&
+        unlockEasterEgg("moonwalker-entry", "tasks:add-moonwalker")
+      ) {
+        toast.info("Moonwalker entry unlocked. 🌙");
+      }
+
+      if (
+        LUCKY_SEVEN_MINUTES.has(minutes) &&
+        unlockEasterEgg("lucky-seven", "tasks:add-lucky-seven")
+      ) {
+        toast.info("Lucky seven unlocked. 🎰");
+      }
+
       const isFriday = now.getDay() === 5;
       if (isFriday) {
         const hasPrayerWord = FRIDAY_PRAYER_WORDS.some((word) =>

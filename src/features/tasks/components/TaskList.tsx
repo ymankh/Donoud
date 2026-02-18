@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
-import { Task } from "../models/TasksModel";
+import { taskCategories, Task } from "../models/TasksModel";
 import { Container, Card, CardContent, Typography, Box } from "@mui/material";
 import {
   unlockAchievement,
@@ -39,6 +39,15 @@ const isYesterday = (lastDay: string, currentDay: string): boolean => {
   const msPerDay = 24 * 60 * 60 * 1000;
   const diff = toDayDate(currentDay).getTime() - toDayDate(lastDay).getTime();
   return diff === msPerDay;
+};
+const dayDiff = (lastDay: string, currentDay: string): number => {
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const diff = toDayDate(currentDay).getTime() - toDayDate(lastDay).getTime();
+  return Math.round(diff / msPerDay);
+};
+const hasAllCategoriesCompleted = (tasks: Task[]): boolean => {
+  const usedCategories = new Set(tasks.map((task) => task.category).filter(Boolean));
+  return taskCategories.every((category) => usedCategories.has(category));
 };
 
 // Motion Variants
@@ -92,7 +101,30 @@ const TaskList: React.FC<{
         sessionStorage.setItem(speedrunKey, "true");
       }
 
+      if (now.getHours() < 9 && unlockAchievement("early-bird", "tasks:early-bird")) {
+        toast.success("Early bird unlocked: all tasks done before 9 AM. 🌅");
+      }
+
+      if (now.getHours() >= 22 && unlockAchievement("night-closer", "tasks:night-closer")) {
+        toast.success("Night closer unlocked: late grind complete. 🌙");
+      }
+
+      if (
+        hasAllCategoriesCompleted(tasks) &&
+        unlockAchievement("category-master", "tasks:category-master")
+      ) {
+        toast.success("Category master unlocked: every category completed today. 🧠");
+      }
+
       const lastStreakDay = localStorage.getItem(STREAK_LAST_DAY_KEY);
+      if (
+        lastStreakDay &&
+        dayDiff(lastStreakDay, dayKey) >= 3 &&
+        unlockAchievement("comeback-kid", "tasks:comeback-kid")
+      ) {
+        toast.success("Comeback kid unlocked: strong return after a break. 💪");
+      }
+
       if (lastStreakDay !== dayKey) {
         const prevStreak = Number(localStorage.getItem(STREAK_COUNT_KEY) || "0");
         const nextStreak =
@@ -100,6 +132,10 @@ const TaskList: React.FC<{
 
         localStorage.setItem(STREAK_COUNT_KEY, String(nextStreak));
         localStorage.setItem(STREAK_LAST_DAY_KEY, dayKey);
+
+        if (nextStreak >= 3 && unlockAchievement("triple-finish", "tasks:streak")) {
+          toast.success("Triple finish unlocked: 3-day completion streak. 🥉");
+        }
 
         if (
           nextStreak >= 7 &&
@@ -109,6 +145,10 @@ const TaskList: React.FC<{
           toast.success(streakMessage);
           unlockAchievement("streak-7", "tasks:streak");
           localStorage.setItem(STREAK_CELEBRATED_DAY_KEY, dayKey);
+        }
+
+        if (nextStreak >= 30 && unlockAchievement("streak-30", "tasks:streak")) {
+          toast.success("Unstoppable month unlocked: 30-day streak achieved. 🗓️");
         }
       }
 

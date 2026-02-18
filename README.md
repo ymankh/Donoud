@@ -46,6 +46,8 @@ Each feature exposes a clean public API through a barrel `index.ts` file. For a 
 - Sort notes by creation date or last update.
 - Organize notes into folders for easier filtering.
 
+For hidden/advanced behavior and easter eggs, see **[README_UNDOCUMENTED_FEATURES.md](./README_UNDOCUMENTED_FEATURES.md)**.
+
 ## Installation
 
 To run the app locally, follow these steps:

@@ -49,6 +49,36 @@ export const achievementCatalog: AchievementMeta[] = [
     title: "Perfect Week",
     description: "Reach a 7-day completion streak.",
   },
+  {
+    key: "early-bird",
+    title: "Early Bird",
+    description: "Complete all tasks before 9:00 AM.",
+  },
+  {
+    key: "night-closer",
+    title: "Night Closer",
+    description: "Complete all tasks after 10:00 PM.",
+  },
+  {
+    key: "streak-30",
+    title: "Unstoppable Month",
+    description: "Reach a 30-day completion streak.",
+  },
+  {
+    key: "comeback-kid",
+    title: "Comeback Kid",
+    description: "Complete all tasks after missing at least 2 days.",
+  },
+  {
+    key: "category-master",
+    title: "Category Master",
+    description: "Complete at least one task in every category in one day.",
+  },
+  {
+    key: "triple-finish",
+    title: "Triple Finish",
+    description: "Complete all tasks 3 days in a row.",
+  },
 ];
 
 export const easterEggCatalog: EasterEggMeta[] = [
@@ -75,6 +105,42 @@ export const easterEggCatalog: EasterEggMeta[] = [
     title: "Swan Secret",
     description: "A hidden long-press swan message appears.",
     unlockHint: "Press and hold the swan icon for 3 seconds.",
+  },
+  {
+    key: "palindrome-task",
+    title: "Mirror Words",
+    description: "A palindrome task title is detected.",
+    unlockHint: "Add a task title that reads the same forward and backward.",
+  },
+  {
+    key: "caps-lock-prophecy",
+    title: "Caps Lock Prophecy",
+    description: "A fully uppercase task title triggers a hidden toast.",
+    unlockHint: "Add a task written fully in uppercase letters.",
+  },
+  {
+    key: "tiny-task",
+    title: "Tiny Task",
+    description: "A 5-character task unlocks a compact secret.",
+    unlockHint: "Add a task with exactly 5 characters.",
+  },
+  {
+    key: "sunrise-entry",
+    title: "Sunrise Entry",
+    description: "An early dawn task awakens the app.",
+    unlockHint: "Add a task between 5:00 AM and 5:15 AM.",
+  },
+  {
+    key: "moonwalker-entry",
+    title: "Moonwalker Entry",
+    description: "A midnight task unlocks a moonlit message.",
+    unlockHint: "Add a task between 12:00 AM and 12:10 AM.",
+  },
+  {
+    key: "lucky-seven",
+    title: "Lucky Seven",
+    description: "A lucky minute pattern is discovered.",
+    unlockHint: "Add a task at minute :07, :17, :27, :37, :47, or :57.",
   },
 ];
 
