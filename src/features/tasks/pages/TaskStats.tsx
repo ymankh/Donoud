@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Container } from "@mui/material";
 import { useTasks } from "../hooks/useTasks";
 import TaskStatisticsSummaryModule from "../components/TaskStatisticsSummaryModule";
+import AchievementTrackerModule from "../components/AchievementTrackerModule";
+import EasterEggsModule from "../components/EasterEggsModule";
 
 const TaskStats = () => {
   const { tasks } = useTasks();
@@ -17,6 +19,8 @@ const TaskStats = () => {
       >
         <Container maxWidth="md" sx={{ py: 2, pb: 10 }}>
           <TaskStatisticsSummaryModule tasks={tasks} />
+          <AchievementTrackerModule />
+          <EasterEggsModule />
         </Container>
       </motion.div>
     </AnimatePresence>
