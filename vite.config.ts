@@ -1,22 +1,19 @@
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
-import react from "@vitejs/plugin-react";
+import { VitePWA, type Display } from "vite-plugin-pwa";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import manifest from "./public/manifest.json";
 
-export default defineConfig(({ command }) => ({
+export default defineConfig({
   plugins: [
-    react(
-      command === "build"
-        ? {
-            babel: {
-              plugins: [["babel-plugin-react-compiler", { target: "19" }]],
-            },
-          }
-        : undefined
-    ),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     VitePWA({
       registerType: "autoUpdate",  // Automatically updates the PWA
-      manifest,  // Use the existing manifest.json
+      manifest: {
+        ...manifest,
+        display: manifest.display as Display,
+      },  // Use the existing manifest.json
       devOptions: {
         enabled: false,  // Keep SW off in dev to avoid HMR/runtime conflicts
       },
@@ -47,4 +44,4 @@ export default defineConfig(({ command }) => ({
       "@": "/src",
     },
   },
-}));
+});

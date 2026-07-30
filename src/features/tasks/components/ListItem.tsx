@@ -31,7 +31,8 @@ const ListItem: React.FC<{ task: Task }> = ({
 
   const handleEditTask = () => {
     setEditedTask(task);
-    modalOpen ? close() : open();
+    if (modalOpen) close();
+    else open();
   };
 
   return (

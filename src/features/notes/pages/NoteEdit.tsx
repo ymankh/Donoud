@@ -45,7 +45,7 @@ const NoteEdit = () => {
       navigate(notesRoutes.root);
       toast.error(`Some Thing went wrong while trying to get your note. 💀`);
     }
-  }, [note]);
+  }, [navigate, note, updateNote]);
   if (editedNote)
     return (
       <motion.div

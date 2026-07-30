@@ -9,7 +9,6 @@ import { useCallback, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useUIState } from "@/shared/hooks/useUIState";
 
-const UI_STATE_ID = "global";
 
 /**
  * Custom hook for managing tasks and task-related operations using TanStack DB.

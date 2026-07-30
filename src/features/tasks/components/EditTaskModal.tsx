@@ -31,7 +31,9 @@ const EditTaskModal = () => {
     close();
   };
 
-  useEffect(() => { if (location.pathname.includes("notes")) close(); }, [location]);
+  useEffect(() => {
+    if (location.pathname.includes("notes")) close();
+  }, [close, location.pathname]);
 
   const addSubTask = () => {
     const title = newSubTask.trim();

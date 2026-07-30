@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Confetti from "react-confetti";
-import useWindowSize from "react-use/lib/useWindowSize";
+import { useWindowSize } from "react-use";
 import { taskCategories, Task } from "../models/TasksModel";
 import { Container, Card, CardContent, Typography, Box } from "@mui/material";
 import {
