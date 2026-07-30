@@ -1,17 +1,15 @@
 import { BarChart, Note, Task } from "@mui/icons-material";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const BottomNavigator = () => {
-  const [value, setValue] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    if (location.pathname.includes("/tasks/stats")) setValue("stats");
-    else if (location.pathname.includes("/tasks")) setValue("tasks");
-    else setValue("notes");
-  }, [location]);
+  const bottomNavigationValue = () => {
+    if (location.pathname.includes("/tasks/stats")) return "stats";
+    if (location.pathname.includes("/tasks")) return "tasks";
+    return "notes";
+  };
   return (
     <Paper
       sx={{
@@ -24,8 +22,7 @@ const BottomNavigator = () => {
       elevation={4}
     >
       <BottomNavigation
-        value={value}
-        onChange={(event, newValue) => setValue(newValue)}
+        value={bottomNavigationValue()}
         showLabels
         sx={{
           height: 52,
@@ -42,9 +39,30 @@ const BottomNavigator = () => {
           },
         }}
       >
-        <BottomNavigationAction label="Notes" value="notes" icon={<Note />} onClick={() => { navigate("/notes") }} />
-        <BottomNavigationAction label="Tasks" value="tasks" icon={<Task />} onClick={() => { navigate("/tasks") }} />
-        <BottomNavigationAction label="Stats" value="stats" icon={<BarChart />} onClick={() => { navigate("/tasks/stats") }} />
+        <BottomNavigationAction
+          label="Notes"
+          value="notes"
+          icon={<Note />}
+          onClick={() => {
+            navigate("/notes");
+          }}
+        />
+        <BottomNavigationAction
+          label="Tasks"
+          value="tasks"
+          icon={<Task />}
+          onClick={() => {
+            navigate("/tasks");
+          }}
+        />
+        <BottomNavigationAction
+          label="Stats"
+          value="stats"
+          icon={<BarChart />}
+          onClick={() => {
+            navigate("/tasks/stats");
+          }}
+        />
       </BottomNavigation>
     </Paper>
   );
